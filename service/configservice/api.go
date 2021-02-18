@@ -78,6 +78,14 @@ func (c *ConfigService) BatchGetAggregateResourceConfigRequest(input *BatchGetAg
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * NoSuchConfigurationAggregatorException
 //   You have specified a configuration aggregator that does not exist.
 //
@@ -167,6 +175,14 @@ func (c *ConfigService) BatchGetResourceConfigRequest(input *BatchGetResourceCon
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * NoAvailableConfigurationRecorderException
 //   There are no configuration recorders available to provide the role needed
@@ -964,8 +980,23 @@ func (c *ConfigService) DeleteOrganizationConfigRuleRequest(input *DeleteOrganiz
 //      deletion is in progress. Try your request again later.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -1093,8 +1124,23 @@ func (c *ConfigService) DeleteOrganizationConformancePackRequest(input *DeleteOr
 //      deletion is in progress. Try your request again later.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -1449,6 +1495,14 @@ func (c *ConfigService) DeleteResourceConfigRequest(input *DeleteResourceConfigI
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * NoRunningConfigurationRecorderException
 //   There is no configuration recorder running.
 //
@@ -1553,6 +1607,97 @@ func (c *ConfigService) DeleteRetentionConfiguration(input *DeleteRetentionConfi
 // for more information on using Contexts.
 func (c *ConfigService) DeleteRetentionConfigurationWithContext(ctx aws.Context, input *DeleteRetentionConfigurationInput, opts ...request.Option) (*DeleteRetentionConfigurationOutput, error) {
 	req, out := c.DeleteRetentionConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteStoredQuery = "DeleteStoredQuery"
+
+// DeleteStoredQueryRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteStoredQuery operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteStoredQuery for more information on using the DeleteStoredQuery
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteStoredQueryRequest method.
+//    req, resp := client.DeleteStoredQueryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DeleteStoredQuery
+func (c *ConfigService) DeleteStoredQueryRequest(input *DeleteStoredQueryInput) (req *request.Request, output *DeleteStoredQueryOutput) {
+	op := &request.Operation{
+		Name:       opDeleteStoredQuery,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteStoredQueryInput{}
+	}
+
+	output = &DeleteStoredQueryOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteStoredQuery API operation for AWS Config.
+//
+// Deletes the stored query for a single AWS account and a single AWS Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation DeleteStoredQuery for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
+//   * ResourceNotFoundException
+//   You have specified a resource that does not exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DeleteStoredQuery
+func (c *ConfigService) DeleteStoredQuery(input *DeleteStoredQueryInput) (*DeleteStoredQueryOutput, error) {
+	req, out := c.DeleteStoredQueryRequest(input)
+	return out, req.Send()
+}
+
+// DeleteStoredQueryWithContext is the same as DeleteStoredQuery with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteStoredQuery for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) DeleteStoredQueryWithContext(ctx aws.Context, input *DeleteStoredQueryInput, opts ...request.Option) (*DeleteStoredQueryOutput, error) {
+	req, out := c.DeleteStoredQueryRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1714,6 +1859,14 @@ func (c *ConfigService) DescribeAggregateComplianceByConfigRulesRequest(input *D
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
@@ -3067,10 +3220,6 @@ func (c *ConfigService) DescribeOrganizationConfigRuleStatusesRequest(input *Des
 //
 // Provides organization config rule deployment status for an organization.
 //
-// Only a master account and a delegated administrator account can call this
-// API. When calling this API with a delegated administrator, you must ensure
-// AWS Organizations ListDelegatedAdministrator permissions are added.
-//
 // The status is not considered successful until organization config rule is
 // successfully deployed in all the member accounts with an exception of excluded
 // accounts.
@@ -3099,8 +3248,23 @@ func (c *ConfigService) DescribeOrganizationConfigRuleStatusesRequest(input *Des
 //   returned in the previous response to get the next page of results.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -3174,10 +3338,6 @@ func (c *ConfigService) DescribeOrganizationConfigRulesRequest(input *DescribeOr
 //
 // Returns a list of organization config rules.
 //
-// Only a master account and a delegated administrator account can call this
-// API. When calling this API with a delegated administrator, you must ensure
-// AWS Organizations ListDelegatedAdministrator permissions are added.
-//
 // When you specify the limit and the next token, you receive a paginated response.
 // Limit and next token are not applicable if you specify organization config
 // rule names. It is only applicable, when you request all the organization
@@ -3202,8 +3362,23 @@ func (c *ConfigService) DescribeOrganizationConfigRulesRequest(input *DescribeOr
 //   The specified limit is outside the allowable range.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -3277,10 +3452,6 @@ func (c *ConfigService) DescribeOrganizationConformancePackStatusesRequest(input
 //
 // Provides organization conformance pack deployment status for an organization.
 //
-// Only a master account and a delegated administrator account can call this
-// API. When calling this API with a delegated administrator, you must ensure
-// AWS Organizations ListDelegatedAdministrator permissions are added.
-//
 // The status is not considered successful until organization conformance pack
 // is successfully deployed in all the member accounts with an exception of
 // excluded accounts.
@@ -3313,8 +3484,23 @@ func (c *ConfigService) DescribeOrganizationConformancePackStatusesRequest(input
 //   returned in the previous response to get the next page of results.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -3388,10 +3574,6 @@ func (c *ConfigService) DescribeOrganizationConformancePacksRequest(input *Descr
 //
 // Returns a list of organization conformance packs.
 //
-// Only a master account and a delegated administrator account can call this
-// API. When calling this API with a delegated administrator, you must ensure
-// AWS Organizations ListDelegatedAdministrator permissions are added.
-//
 // When you specify the limit and the next token, you receive a paginated response.
 //
 // Limit and next token are not applicable if you specify organization conformance
@@ -3421,8 +3603,23 @@ func (c *ConfigService) DescribeOrganizationConformancePacksRequest(input *Descr
 //   The specified limit is outside the allowable range.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -4064,6 +4261,14 @@ func (c *ConfigService) GetAggregateComplianceDetailsByConfigRuleRequest(input *
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
 //
@@ -4156,6 +4361,14 @@ func (c *ConfigService) GetAggregateConfigRuleComplianceSummaryRequest(input *Ge
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
@@ -4254,6 +4467,14 @@ func (c *ConfigService) GetAggregateDiscoveredResourceCountsRequest(input *GetAg
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
 //
@@ -4343,6 +4564,14 @@ func (c *ConfigService) GetAggregateResourceConfigRequest(input *GetAggregateRes
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * NoSuchConfigurationAggregatorException
 //   You have specified a configuration aggregator that does not exist.
@@ -4975,6 +5204,14 @@ func (c *ConfigService) GetDiscoveredResourceCountsRequest(input *GetDiscoveredR
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
 //
@@ -5051,10 +5288,6 @@ func (c *ConfigService) GetOrganizationConfigRuleDetailedStatusRequest(input *Ge
 // Returns detailed status for each member account within an organization for
 // a given organization config rule.
 //
-// Only a master account and a delegated administrator account can call this
-// API. When calling this API with a delegated administrator, you must ensure
-// AWS Organizations ListDelegatedAdministrator permissions are added.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -5074,8 +5307,23 @@ func (c *ConfigService) GetOrganizationConfigRuleDetailedStatusRequest(input *Ge
 //   returned in the previous response to get the next page of results.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -5150,10 +5398,6 @@ func (c *ConfigService) GetOrganizationConformancePackDetailedStatusRequest(inpu
 // Returns detailed status for each member account within an organization for
 // a given organization conformance pack.
 //
-// Only a master account and a delegated administrator account can call this
-// API. When calling this API with a delegated administrator, you must ensure
-// AWS Organizations ListDelegatedAdministrator permissions are added.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -5177,8 +5421,23 @@ func (c *ConfigService) GetOrganizationConformancePackDetailedStatusRequest(inpu
 //   returned in the previous response to get the next page of results.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -5282,6 +5541,14 @@ func (c *ConfigService) GetResourceConfigHistoryRequest(input *GetResourceConfig
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * InvalidTimeRangeException
 //   The specified time range is not valid. The earlier time is not chronologically
 //   before the later time.
@@ -5374,6 +5641,96 @@ func (c *ConfigService) GetResourceConfigHistoryPagesWithContext(ctx aws.Context
 	return p.Err()
 }
 
+const opGetStoredQuery = "GetStoredQuery"
+
+// GetStoredQueryRequest generates a "aws/request.Request" representing the
+// client's request for the GetStoredQuery operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetStoredQuery for more information on using the GetStoredQuery
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetStoredQueryRequest method.
+//    req, resp := client.GetStoredQueryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetStoredQuery
+func (c *ConfigService) GetStoredQueryRequest(input *GetStoredQueryInput) (req *request.Request, output *GetStoredQueryOutput) {
+	op := &request.Operation{
+		Name:       opGetStoredQuery,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetStoredQueryInput{}
+	}
+
+	output = &GetStoredQueryOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetStoredQuery API operation for AWS Config.
+//
+// Returns the details of a specific stored query.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation GetStoredQuery for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
+//   * ResourceNotFoundException
+//   You have specified a resource that does not exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetStoredQuery
+func (c *ConfigService) GetStoredQuery(input *GetStoredQueryInput) (*GetStoredQueryOutput, error) {
+	req, out := c.GetStoredQueryRequest(input)
+	return out, req.Send()
+}
+
+// GetStoredQueryWithContext is the same as GetStoredQuery with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetStoredQuery for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) GetStoredQueryWithContext(ctx aws.Context, input *GetStoredQueryInput, opts ...request.Option) (*GetStoredQueryOutput, error) {
+	req, out := c.GetStoredQueryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListAggregateDiscoveredResources = "ListAggregateDiscoveredResources"
 
 // ListAggregateDiscoveredResourcesRequest generates a "aws/request.Request" representing the
@@ -5439,6 +5796,14 @@ func (c *ConfigService) ListAggregateDiscoveredResourcesRequest(input *ListAggre
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
@@ -5542,6 +5907,14 @@ func (c *ConfigService) ListDiscoveredResourcesRequest(input *ListDiscoveredReso
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
 //
@@ -5573,6 +5946,156 @@ func (c *ConfigService) ListDiscoveredResourcesWithContext(ctx aws.Context, inpu
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListStoredQueries = "ListStoredQueries"
+
+// ListStoredQueriesRequest generates a "aws/request.Request" representing the
+// client's request for the ListStoredQueries operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListStoredQueries for more information on using the ListStoredQueries
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListStoredQueriesRequest method.
+//    req, resp := client.ListStoredQueriesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/ListStoredQueries
+func (c *ConfigService) ListStoredQueriesRequest(input *ListStoredQueriesInput) (req *request.Request, output *ListStoredQueriesOutput) {
+	op := &request.Operation{
+		Name:       opListStoredQueries,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListStoredQueriesInput{}
+	}
+
+	output = &ListStoredQueriesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListStoredQueries API operation for AWS Config.
+//
+// Lists the stored queries for a single AWS account and a single AWS Region.
+// The default is 100.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation ListStoredQueries for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
+//   * InvalidNextTokenException
+//   The specified next token is invalid. Specify the nextToken string that was
+//   returned in the previous response to get the next page of results.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/ListStoredQueries
+func (c *ConfigService) ListStoredQueries(input *ListStoredQueriesInput) (*ListStoredQueriesOutput, error) {
+	req, out := c.ListStoredQueriesRequest(input)
+	return out, req.Send()
+}
+
+// ListStoredQueriesWithContext is the same as ListStoredQueries with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListStoredQueries for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) ListStoredQueriesWithContext(ctx aws.Context, input *ListStoredQueriesInput, opts ...request.Option) (*ListStoredQueriesOutput, error) {
+	req, out := c.ListStoredQueriesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListStoredQueriesPages iterates over the pages of a ListStoredQueries operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListStoredQueries method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListStoredQueries operation.
+//    pageNum := 0
+//    err := client.ListStoredQueriesPages(params,
+//        func(page *configservice.ListStoredQueriesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ConfigService) ListStoredQueriesPages(input *ListStoredQueriesInput, fn func(*ListStoredQueriesOutput, bool) bool) error {
+	return c.ListStoredQueriesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListStoredQueriesPagesWithContext same as ListStoredQueriesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) ListStoredQueriesPagesWithContext(ctx aws.Context, input *ListStoredQueriesInput, fn func(*ListStoredQueriesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListStoredQueriesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListStoredQueriesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListStoredQueriesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListTagsForResource = "ListTagsForResource"
@@ -5634,6 +6157,14 @@ func (c *ConfigService) ListTagsForResourceRequest(input *ListTagsForResourceInp
 //
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * InvalidLimitException
 //   The specified limit is outside the allowable range.
@@ -5962,12 +6493,23 @@ func (c *ConfigService) PutConfigurationAggregatorRequest(input *PutConfiguratio
 // accounts and regions. The source account can be individual account(s) or
 // an organization.
 //
+// accountIds that are passed will be replaced with existing accounts. If you
+// want to add additional accounts into the aggregator, call DescribeAggregator
+// to get the previous accounts and then append new ones.
+//
 // AWS Config should be enabled in source accounts and regions you want to aggregate.
 //
-// If your source type is an organization, you must be signed in to the master
-// account and all features must be enabled in your organization. AWS Config
-// calls EnableAwsServiceAccess API to enable integration between AWS Config
-// and AWS Organizations.
+// If your source type is an organization, you must be signed in to the management
+// account or a registered delegated administrator and all the features must
+// be enabled in your organization. If the caller is a management account, AWS
+// Config calls EnableAwsServiceAccess API to enable integration between AWS
+// Config and AWS Organizations. If the caller is a registered delegated administrator,
+// AWS Config calls ListDelegatedAdministrators API to verify whether the caller
+// is a valid delegated administrator.
+//
+// To register a delegated administrator, see Register a Delegated Administrator
+// (https://docs.aws.amazon.com/config/latest/developerguide/set-up-aggregator-cli.html#register-a-delegated-administrator-cli)
+// in the AWS Config developer guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5993,8 +6535,23 @@ func (c *ConfigService) PutConfigurationAggregatorRequest(input *PutConfiguratio
 //   You have provided a null or empty role ARN.
 //
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -6354,6 +6911,9 @@ func (c *ConfigService) PutDeliveryChannelRequest(input *PutDeliveryChannelInput
 //   * InvalidS3KeyPrefixException
 //   The specified Amazon S3 key prefix is not valid.
 //
+//   * InvalidS3KmsKeyArnException
+//   The specified Amazon KMS Key ARN is not valid.
+//
 //   * InvalidSNSTopicARNException
 //   The specified Amazon SNS topic does not exist.
 //
@@ -6466,6 +7026,92 @@ func (c *ConfigService) PutEvaluations(input *PutEvaluationsInput) (*PutEvaluati
 // for more information on using Contexts.
 func (c *ConfigService) PutEvaluationsWithContext(ctx aws.Context, input *PutEvaluationsInput, opts ...request.Option) (*PutEvaluationsOutput, error) {
 	req, out := c.PutEvaluationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutExternalEvaluation = "PutExternalEvaluation"
+
+// PutExternalEvaluationRequest generates a "aws/request.Request" representing the
+// client's request for the PutExternalEvaluation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutExternalEvaluation for more information on using the PutExternalEvaluation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutExternalEvaluationRequest method.
+//    req, resp := client.PutExternalEvaluationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutExternalEvaluation
+func (c *ConfigService) PutExternalEvaluationRequest(input *PutExternalEvaluationInput) (req *request.Request, output *PutExternalEvaluationOutput) {
+	op := &request.Operation{
+		Name:       opPutExternalEvaluation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutExternalEvaluationInput{}
+	}
+
+	output = &PutExternalEvaluationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutExternalEvaluation API operation for AWS Config.
+//
+// Add or updates the evaluations for process checks. This API checks if the
+// rule is a process check when the name of the AWS Config rule is provided.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation PutExternalEvaluation for usage and error information.
+//
+// Returned Error Types:
+//   * NoSuchConfigRuleException
+//   One or more AWS Config rules in the request are invalid. Verify that the
+//   rule names are correct and try again.
+//
+//   * InvalidParameterValueException
+//   One or more of the specified parameters are invalid. Verify that your parameters
+//   are valid and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutExternalEvaluation
+func (c *ConfigService) PutExternalEvaluation(input *PutExternalEvaluationInput) (*PutExternalEvaluationOutput, error) {
+	req, out := c.PutExternalEvaluationRequest(input)
+	return out, req.Send()
+}
+
+// PutExternalEvaluationWithContext is the same as PutExternalEvaluation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutExternalEvaluation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) PutExternalEvaluationWithContext(ctx aws.Context, input *PutExternalEvaluationInput, opts ...request.Option) (*PutExternalEvaluationOutput, error) {
+	req, out := c.PutExternalEvaluationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -6595,9 +7241,32 @@ func (c *ConfigService) PutOrganizationConfigRuleRequest(input *PutOrganizationC
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -6764,9 +7433,32 @@ func (c *ConfigService) PutOrganizationConformancePackRequest(input *PutOrganiza
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * OrganizationAccessDeniedException
-//   For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-//   API.
+//   For PutConfigurationAggregator API, you can see this exception for the following
+//   reasons:
+//
+//      * No permission to call EnableAWSServiceAccess API
+//
+//      * The configuration aggregator cannot be updated because your AWS Organization
+//      management account or the delegated administrator role changed. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * The configuration aggregator is associated with a previous AWS Organization
+//      and AWS Config cannot aggregate data with current AWS Organization. Delete
+//      this aggregator and create a new one with the current AWS Organization.
+//
+//      * You are not a registered delegated administrator for AWS Config with
+//      permissions to call ListDelegatedAdministrators API. Ensure that the management
+//      account registers delagated administrator for AWS Config service principle
+//      name before the delegated administrator creates an aggregator.
 //
 //   For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 //   Config throws an exception if APIs are called from member accounts. All APIs
@@ -6874,6 +7566,10 @@ func (c *ConfigService) PutRemediationConfigurationsRequest(input *PutRemediatio
 // If you make backward incompatible changes to the SSM document, you must call
 // this again to ensure the remediations can run.
 //
+// This API does not support adding remediation configurations for service-linked
+// AWS Config Rules such as Organization Config rules, the rules deployed by
+// conformance packs, and rules deployed by AWS Security Hub.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -6970,7 +7666,7 @@ func (c *ConfigService) PutRemediationExceptionsRequest(input *PutRemediationExc
 // PutRemediationExceptions API operation for AWS Config.
 //
 // A remediation exception is when a specific resource is no longer considered
-// for auto-remediation. This API adds a new exception or updates an exisiting
+// for auto-remediation. This API adds a new exception or updates an existing
 // exception for a specific resource with a specific AWS Config rule.
 //
 // AWS Config generates a remediation exception when a problem occurs executing
@@ -7099,6 +7795,14 @@ func (c *ConfigService) PutResourceConfigRequest(input *PutResourceConfigInput) 
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * InsufficientPermissionsException
 //   Indicates one of the following errors:
@@ -7232,6 +7936,103 @@ func (c *ConfigService) PutRetentionConfiguration(input *PutRetentionConfigurati
 // for more information on using Contexts.
 func (c *ConfigService) PutRetentionConfigurationWithContext(ctx aws.Context, input *PutRetentionConfigurationInput, opts ...request.Option) (*PutRetentionConfigurationOutput, error) {
 	req, out := c.PutRetentionConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutStoredQuery = "PutStoredQuery"
+
+// PutStoredQueryRequest generates a "aws/request.Request" representing the
+// client's request for the PutStoredQuery operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutStoredQuery for more information on using the PutStoredQuery
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutStoredQueryRequest method.
+//    req, resp := client.PutStoredQueryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutStoredQuery
+func (c *ConfigService) PutStoredQueryRequest(input *PutStoredQueryInput) (req *request.Request, output *PutStoredQueryOutput) {
+	op := &request.Operation{
+		Name:       opPutStoredQuery,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutStoredQueryInput{}
+	}
+
+	output = &PutStoredQueryOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutStoredQuery API operation for AWS Config.
+//
+// Saves a new query or updates an existing saved query. The QueryName must
+// be unique for a single AWS account and a single AWS Region. You can create
+// upto 300 queries in a single AWS account and a single AWS Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation PutStoredQuery for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
+//   * TooManyTagsException
+//   You have reached the limit of the number of tags you can use. You have more
+//   than 50 tags.
+//
+//   * ResourceConcurrentModificationException
+//   Two users are trying to modify the same query at the same time. Wait for
+//   a moment and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutStoredQuery
+func (c *ConfigService) PutStoredQuery(input *PutStoredQueryInput) (*PutStoredQueryOutput, error) {
+	req, out := c.PutStoredQueryRequest(input)
+	return out, req.Send()
+}
+
+// PutStoredQueryWithContext is the same as PutStoredQuery with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutStoredQuery for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) PutStoredQueryWithContext(ctx aws.Context, input *PutStoredQueryInput, opts ...request.Option) (*PutStoredQueryOutput, error) {
+	req, out := c.PutStoredQueryRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -7964,6 +8765,14 @@ func (c *ConfigService) TagResourceRequest(input *TagResourceInput) (req *reques
 //   * ValidationException
 //   The requested action is not valid.
 //
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
+//
 //   * ResourceNotFoundException
 //   You have specified a resource that does not exist.
 //
@@ -8050,6 +8859,14 @@ func (c *ConfigService) UntagResourceRequest(input *UntagResourceInput) (req *re
 // Returned Error Types:
 //   * ValidationException
 //   The requested action is not valid.
+//
+//   For PutStoredQuery, you will see this exception if there are missing required
+//   fields or if the input value fails the validation, or if you are trying to
+//   create more than 300 queries.
+//
+//   For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+//   exception if there are missing required fields or if the input value fails
+//   the validation.
 //
 //   * ResourceNotFoundException
 //   You have specified a resource that does not exist.
@@ -9865,7 +10682,7 @@ type ConfigurationItem struct {
 	// The 12-digit AWS account ID associated with the resource.
 	AccountId *string `locationName:"accountId" type:"string"`
 
-	// accoun
+	// Amazon Resource Name (ARN) associated with the resource.
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The Availability Zone associated with the resource.
@@ -10312,14 +11129,15 @@ type ConformancePackDetail struct {
 	// AWS service that created the conformance pack.
 	CreatedBy *string `min:"1" type:"string"`
 
-	// Conformance pack template that is used to create a pack. The delivery bucket
-	// name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*".
+	// Amazon S3 bucket where AWS Config stores conformance pack templates.
 	//
-	// DeliveryS3Bucket is a required field
-	DeliveryS3Bucket *string `min:"3" type:"string" required:"true"`
+	// This field is optional.
+	DeliveryS3Bucket *string `type:"string"`
 
 	// The prefix for the Amazon S3 bucket.
-	DeliveryS3KeyPrefix *string `min:"1" type:"string"`
+	//
+	// This field is optional.
+	DeliveryS3KeyPrefix *string `type:"string"`
 
 	// Last time when conformation pack update was requested.
 	LastUpdateRequestedTime *time.Time `type:"timestamp"`
@@ -11656,6 +12474,61 @@ func (s DeleteRetentionConfigurationOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteStoredQueryInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the query that you want to delete.
+	//
+	// QueryName is a required field
+	QueryName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteStoredQueryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteStoredQueryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteStoredQueryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteStoredQueryInput"}
+	if s.QueryName == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryName"))
+	}
+	if s.QueryName != nil && len(*s.QueryName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetQueryName sets the QueryName field's value.
+func (s *DeleteStoredQueryInput) SetQueryName(v string) *DeleteStoredQueryInput {
+	s.QueryName = &v
+	return s
+}
+
+type DeleteStoredQueryOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteStoredQueryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteStoredQueryOutput) GoString() string {
+	return s.String()
+}
+
 // The input for the DeliverConfigSnapshot action.
 type DeliverConfigSnapshotInput struct {
 	_ struct{} `type:"structure"`
@@ -11750,6 +12623,11 @@ type DeliveryChannel struct {
 	// The prefix for the specified Amazon S3 bucket.
 	S3KeyPrefix *string `locationName:"s3KeyPrefix" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the AWS Key Management Service (KMS) customer
+	// managed key (CMK) used to encrypt objects delivered by AWS Config. Must belong
+	// to the same Region as the destination S3 bucket.
+	S3KmsKeyArn *string `locationName:"s3KmsKeyArn" type:"string"`
+
 	// The Amazon Resource Name (ARN) of the Amazon SNS topic to which AWS Config
 	// sends notifications about configuration changes.
 	//
@@ -11804,6 +12682,12 @@ func (s *DeliveryChannel) SetS3BucketName(v string) *DeliveryChannel {
 // SetS3KeyPrefix sets the S3KeyPrefix field's value.
 func (s *DeliveryChannel) SetS3KeyPrefix(v string) *DeliveryChannel {
 	s.S3KeyPrefix = &v
+	return s
+}
+
+// SetS3KmsKeyArn sets the S3KmsKeyArn field's value.
+func (s *DeliveryChannel) SetS3KmsKeyArn(v string) *DeliveryChannel {
+	s.S3KmsKeyArn = &v
 	return s
 }
 
@@ -14099,6 +14983,110 @@ func (s *ExecutionControls) SetSsmControls(v *SsmControls) *ExecutionControls {
 	return s
 }
 
+// Identifies an AWS resource and indicates whether it complies with the AWS
+// Config rule that it was evaluated against.
+type ExternalEvaluation struct {
+	_ struct{} `type:"structure"`
+
+	// Supplementary information about the reason of compliance. For example, this
+	// task was completed on a specific date.
+	Annotation *string `min:"1" type:"string"`
+
+	// The evaluated compliance resource ID. AWS Config accepts only AWS account
+	// ID.
+	//
+	// ComplianceResourceId is a required field
+	ComplianceResourceId *string `min:"1" type:"string" required:"true"`
+
+	// The evaluated compliance resource type. AWS Config accepts AWS::::Account
+	// resource type.
+	//
+	// ComplianceResourceType is a required field
+	ComplianceResourceType *string `min:"1" type:"string" required:"true"`
+
+	// The compliance of the AWS resource. The valid values are COMPLIANT, NON_COMPLIANT,
+	// and NOT_APPLICABLE.
+	//
+	// ComplianceType is a required field
+	ComplianceType *string `type:"string" required:"true" enum:"ComplianceType"`
+
+	// The time when the compliance was recorded.
+	//
+	// OrderingTimestamp is a required field
+	OrderingTimestamp *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation
+func (s ExternalEvaluation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExternalEvaluation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExternalEvaluation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExternalEvaluation"}
+	if s.Annotation != nil && len(*s.Annotation) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Annotation", 1))
+	}
+	if s.ComplianceResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComplianceResourceId"))
+	}
+	if s.ComplianceResourceId != nil && len(*s.ComplianceResourceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComplianceResourceId", 1))
+	}
+	if s.ComplianceResourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComplianceResourceType"))
+	}
+	if s.ComplianceResourceType != nil && len(*s.ComplianceResourceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ComplianceResourceType", 1))
+	}
+	if s.ComplianceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ComplianceType"))
+	}
+	if s.OrderingTimestamp == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrderingTimestamp"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAnnotation sets the Annotation field's value.
+func (s *ExternalEvaluation) SetAnnotation(v string) *ExternalEvaluation {
+	s.Annotation = &v
+	return s
+}
+
+// SetComplianceResourceId sets the ComplianceResourceId field's value.
+func (s *ExternalEvaluation) SetComplianceResourceId(v string) *ExternalEvaluation {
+	s.ComplianceResourceId = &v
+	return s
+}
+
+// SetComplianceResourceType sets the ComplianceResourceType field's value.
+func (s *ExternalEvaluation) SetComplianceResourceType(v string) *ExternalEvaluation {
+	s.ComplianceResourceType = &v
+	return s
+}
+
+// SetComplianceType sets the ComplianceType field's value.
+func (s *ExternalEvaluation) SetComplianceType(v string) *ExternalEvaluation {
+	s.ComplianceType = &v
+	return s
+}
+
+// SetOrderingTimestamp sets the OrderingTimestamp field's value.
+func (s *ExternalEvaluation) SetOrderingTimestamp(v time.Time) *ExternalEvaluation {
+	s.OrderingTimestamp = &v
+	return s
+}
+
 // List of each of the failed delete remediation exceptions with specific reasons.
 type FailedDeleteRemediationExceptionsBatch struct {
 	_ struct{} `type:"structure"`
@@ -15711,6 +16699,70 @@ func (s *GetResourceConfigHistoryOutput) SetNextToken(v string) *GetResourceConf
 	return s
 }
 
+type GetStoredQueryInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the query.
+	//
+	// QueryName is a required field
+	QueryName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetStoredQueryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetStoredQueryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetStoredQueryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetStoredQueryInput"}
+	if s.QueryName == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryName"))
+	}
+	if s.QueryName != nil && len(*s.QueryName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetQueryName sets the QueryName field's value.
+func (s *GetStoredQueryInput) SetQueryName(v string) *GetStoredQueryInput {
+	s.QueryName = &v
+	return s
+}
+
+type GetStoredQueryOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns a StoredQuery object.
+	StoredQuery *StoredQuery `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetStoredQueryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetStoredQueryOutput) GoString() string {
+	return s.String()
+}
+
+// SetStoredQuery sets the StoredQuery field's value.
+func (s *GetStoredQueryOutput) SetStoredQuery(v *StoredQuery) *GetStoredQueryOutput {
+	s.StoredQuery = v
+	return s
+}
+
 // The count of resources that are grouped by the group name.
 type GroupedResourceCount struct {
 	_ struct{} `type:"structure"`
@@ -16438,6 +17490,62 @@ func (s *InvalidS3KeyPrefixException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// The specified Amazon KMS Key ARN is not valid.
+type InvalidS3KmsKeyArnException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidS3KmsKeyArnException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidS3KmsKeyArnException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidS3KmsKeyArnException(v protocol.ResponseMetadata) error {
+	return &InvalidS3KmsKeyArnException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidS3KmsKeyArnException) Code() string {
+	return "InvalidS3KmsKeyArnException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidS3KmsKeyArnException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidS3KmsKeyArnException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidS3KmsKeyArnException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidS3KmsKeyArnException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidS3KmsKeyArnException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The specified Amazon SNS topic does not exist.
 type InvalidSNSTopicARNException struct {
 	_            struct{}                  `type:"structure"`
@@ -16680,9 +17788,9 @@ type ListAggregateDiscoveredResourcesInput struct {
 	// Filters the results based on the ResourceFilters object.
 	Filters *ResourceFilters `type:"structure"`
 
-	// The maximum number of resource identifiers returned on each page. The default
-	// is 100. You cannot specify a number greater than 100. If you specify 0, AWS
-	// Config uses the default.
+	// The maximum number of resource identifiers returned on each page. You cannot
+	// specify a number greater than 100. If you specify 0, AWS Config uses the
+	// default.
 	Limit *int64 `type:"integer"`
 
 	// The nextToken string returned on a previous page that you use to get the
@@ -16914,6 +18022,75 @@ func (s *ListDiscoveredResourcesOutput) SetNextToken(v string) *ListDiscoveredRe
 // SetResourceIdentifiers sets the ResourceIdentifiers field's value.
 func (s *ListDiscoveredResourcesOutput) SetResourceIdentifiers(v []*ResourceIdentifier) *ListDiscoveredResourcesOutput {
 	s.ResourceIdentifiers = v
+	return s
+}
+
+type ListStoredQueriesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to be returned with a single call.
+	MaxResults *int64 `type:"integer"`
+
+	// The nextToken string returned in a previous request that you use to request
+	// the next page of results in a paginated response.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListStoredQueriesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListStoredQueriesInput) GoString() string {
+	return s.String()
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListStoredQueriesInput) SetMaxResults(v int64) *ListStoredQueriesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStoredQueriesInput) SetNextToken(v string) *ListStoredQueriesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListStoredQueriesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the previous paginated request didn't return all of the remaining results,
+	// the response object's NextToken parameter value is set to a token. To retrieve
+	// the next set of results, call this action again and assign that token to
+	// the request object's NextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
+	NextToken *string `type:"string"`
+
+	// A list of StoredQueryMetadata objects.
+	StoredQueryMetadata []*StoredQueryMetadata `type:"list"`
+}
+
+// String returns the string representation
+func (s ListStoredQueriesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListStoredQueriesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStoredQueriesOutput) SetNextToken(v string) *ListStoredQueriesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStoredQueryMetadata sets the StoredQueryMetadata field's value.
+func (s *ListStoredQueriesOutput) SetStoredQueryMetadata(v []*StoredQueryMetadata) *ListStoredQueriesOutput {
+	s.StoredQueryMetadata = v
 	return s
 }
 
@@ -18476,8 +19653,23 @@ func (s *NoSuchRetentionConfigurationException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// For PutConfigAggregator API, no permission to call EnableAWSServiceAccess
-// API.
+// For PutConfigurationAggregator API, you can see this exception for the following
+// reasons:
+//
+//    * No permission to call EnableAWSServiceAccess API
+//
+//    * The configuration aggregator cannot be updated because your AWS Organization
+//    management account or the delegated administrator role changed. Delete
+//    this aggregator and create a new one with the current AWS Organization.
+//
+//    * The configuration aggregator is associated with a previous AWS Organization
+//    and AWS Config cannot aggregate data with current AWS Organization. Delete
+//    this aggregator and create a new one with the current AWS Organization.
+//
+//    * You are not a registered delegated administrator for AWS Config with
+//    permissions to call ListDelegatedAdministrators API. Ensure that the management
+//    account registers delagated administrator for AWS Config service principle
+//    name before the delegated administrator creates an aggregator.
 //
 // For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS
 // Config throws an exception if APIs are called from member accounts. All APIs
@@ -18837,14 +20029,15 @@ type OrganizationConformancePack struct {
 	// A list of ConformancePackInputParameter objects.
 	ConformancePackInputParameters []*ConformancePackInputParameter `type:"list"`
 
-	// Location of an Amazon S3 bucket where AWS Config can deliver evaluation results
-	// and conformance pack template that is used to create a pack.
+	// Amazon S3 bucket where AWS Config stores conformance pack templates.
 	//
-	// DeliveryS3Bucket is a required field
-	DeliveryS3Bucket *string `min:"3" type:"string" required:"true"`
+	// This field is optional.
+	DeliveryS3Bucket *string `type:"string"`
 
 	// Any folder structure you want to add to an Amazon S3 bucket.
-	DeliveryS3KeyPrefix *string `min:"1" type:"string"`
+	//
+	// This field is optional.
+	DeliveryS3KeyPrefix *string `type:"string"`
 
 	// A comma-separated list of accounts excluded from organization conformance
 	// pack.
@@ -19994,13 +21187,15 @@ type PutConformancePackInput struct {
 	// ConformancePackName is a required field
 	ConformancePackName *string `min:"1" type:"string" required:"true"`
 
-	// AWS Config stores intermediate files while processing conformance pack template.
+	// Amazon S3 bucket where AWS Config stores conformance pack templates.
 	//
-	// DeliveryS3Bucket is a required field
-	DeliveryS3Bucket *string `min:"3" type:"string" required:"true"`
+	// This field is optional.
+	DeliveryS3Bucket *string `type:"string"`
 
 	// The prefix for the Amazon S3 bucket.
-	DeliveryS3KeyPrefix *string `min:"1" type:"string"`
+	//
+	// This field is optional.
+	DeliveryS3KeyPrefix *string `type:"string"`
 
 	// A string containing full conformance pack template body. Structure containing
 	// the template body with a minimum length of 1 byte and a maximum length of
@@ -20036,15 +21231,6 @@ func (s *PutConformancePackInput) Validate() error {
 	}
 	if s.ConformancePackName != nil && len(*s.ConformancePackName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ConformancePackName", 1))
-	}
-	if s.DeliveryS3Bucket == nil {
-		invalidParams.Add(request.NewErrParamRequired("DeliveryS3Bucket"))
-	}
-	if s.DeliveryS3Bucket != nil && len(*s.DeliveryS3Bucket) < 3 {
-		invalidParams.Add(request.NewErrParamMinLen("DeliveryS3Bucket", 3))
-	}
-	if s.DeliveryS3KeyPrefix != nil && len(*s.DeliveryS3KeyPrefix) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("DeliveryS3KeyPrefix", 1))
 	}
 	if s.TemplateBody != nil && len(*s.TemplateBody) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TemplateBody", 1))
@@ -20285,6 +21471,80 @@ func (s *PutEvaluationsOutput) SetFailedEvaluations(v []*Evaluation) *PutEvaluat
 	return s
 }
 
+type PutExternalEvaluationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the AWS Config rule.
+	//
+	// ConfigRuleName is a required field
+	ConfigRuleName *string `min:"1" type:"string" required:"true"`
+
+	// An ExternalEvaluation object that provides details about compliance.
+	//
+	// ExternalEvaluation is a required field
+	ExternalEvaluation *ExternalEvaluation `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s PutExternalEvaluationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutExternalEvaluationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutExternalEvaluationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutExternalEvaluationInput"}
+	if s.ConfigRuleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfigRuleName"))
+	}
+	if s.ConfigRuleName != nil && len(*s.ConfigRuleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigRuleName", 1))
+	}
+	if s.ExternalEvaluation == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExternalEvaluation"))
+	}
+	if s.ExternalEvaluation != nil {
+		if err := s.ExternalEvaluation.Validate(); err != nil {
+			invalidParams.AddNested("ExternalEvaluation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfigRuleName sets the ConfigRuleName field's value.
+func (s *PutExternalEvaluationInput) SetConfigRuleName(v string) *PutExternalEvaluationInput {
+	s.ConfigRuleName = &v
+	return s
+}
+
+// SetExternalEvaluation sets the ExternalEvaluation field's value.
+func (s *PutExternalEvaluationInput) SetExternalEvaluation(v *ExternalEvaluation) *PutExternalEvaluationInput {
+	s.ExternalEvaluation = v
+	return s
+}
+
+type PutExternalEvaluationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutExternalEvaluationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutExternalEvaluationOutput) GoString() string {
+	return s.String()
+}
+
 type PutOrganizationConfigRuleInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20393,18 +21653,15 @@ type PutOrganizationConformancePackInput struct {
 	// A list of ConformancePackInputParameter objects.
 	ConformancePackInputParameters []*ConformancePackInputParameter `type:"list"`
 
-	// Location of an Amazon S3 bucket where AWS Config can deliver evaluation results.
-	// AWS Config stores intermediate files while processing conformance pack template.
+	// Amazon S3 bucket where AWS Config stores conformance pack templates.
 	//
-	// The delivery bucket name should start with awsconfigconforms. For example:
-	// "Resource": "arn:aws:s3:::your_bucket_name/*". For more information, see
-	// Permissions for cross account bucket access (https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html).
-	//
-	// DeliveryS3Bucket is a required field
-	DeliveryS3Bucket *string `min:"3" type:"string" required:"true"`
+	// This field is optional.
+	DeliveryS3Bucket *string `type:"string"`
 
 	// The prefix for the Amazon S3 bucket.
-	DeliveryS3KeyPrefix *string `min:"1" type:"string"`
+	//
+	// This field is optional.
+	DeliveryS3KeyPrefix *string `type:"string"`
 
 	// A list of AWS accounts to be excluded from an organization conformance pack
 	// while deploying a conformance pack.
@@ -20440,15 +21697,6 @@ func (s PutOrganizationConformancePackInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PutOrganizationConformancePackInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PutOrganizationConformancePackInput"}
-	if s.DeliveryS3Bucket == nil {
-		invalidParams.Add(request.NewErrParamRequired("DeliveryS3Bucket"))
-	}
-	if s.DeliveryS3Bucket != nil && len(*s.DeliveryS3Bucket) < 3 {
-		invalidParams.Add(request.NewErrParamMinLen("DeliveryS3Bucket", 3))
-	}
-	if s.DeliveryS3KeyPrefix != nil && len(*s.DeliveryS3KeyPrefix) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("DeliveryS3KeyPrefix", 1))
-	}
 	if s.OrganizationConformancePackName == nil {
 		invalidParams.Add(request.NewErrParamRequired("OrganizationConformancePackName"))
 	}
@@ -20925,6 +22173,95 @@ func (s *PutRetentionConfigurationOutput) SetRetentionConfiguration(v *Retention
 	return s
 }
 
+type PutStoredQueryInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of StoredQuery objects. The mandatory fields are QueryName and Expression.
+	//
+	// When you are creating a query, you must provide a query name and an expression.
+	// When you are updating a query, you must provide a query name but updating
+	// the description is optional.
+	//
+	// StoredQuery is a required field
+	StoredQuery *StoredQuery `type:"structure" required:"true"`
+
+	// A list of Tags object.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s PutStoredQueryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutStoredQueryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutStoredQueryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutStoredQueryInput"}
+	if s.StoredQuery == nil {
+		invalidParams.Add(request.NewErrParamRequired("StoredQuery"))
+	}
+	if s.StoredQuery != nil {
+		if err := s.StoredQuery.Validate(); err != nil {
+			invalidParams.AddNested("StoredQuery", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStoredQuery sets the StoredQuery field's value.
+func (s *PutStoredQueryInput) SetStoredQuery(v *StoredQuery) *PutStoredQueryInput {
+	s.StoredQuery = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PutStoredQueryInput) SetTags(v []*Tag) *PutStoredQueryInput {
+	s.Tags = v
+	return s
+}
+
+type PutStoredQueryOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-name/resource-id.
+	QueryArn *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PutStoredQueryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutStoredQueryOutput) GoString() string {
+	return s.String()
+}
+
+// SetQueryArn sets the QueryArn field's value.
+func (s *PutStoredQueryOutput) SetQueryArn(v string) *PutStoredQueryOutput {
+	s.QueryArn = &v
+	return s
+}
+
 // Details about the query.
 type QueryInfo struct {
 	_ struct{} `type:"structure"`
@@ -21009,7 +22346,7 @@ type RecordingGroup struct {
 	// AWS Config records configuration changes (for example, AWS::EC2::Instance
 	// or AWS::CloudTrail::Trail).
 	//
-	// Before you can set this option to true, you must set the allSupported option
+	// To record all configuration changes, you must set the allSupported option
 	// to false.
 	//
 	// If you set this option to true, when AWS Config adds support for a new type
@@ -21126,7 +22463,7 @@ type RemediationConfiguration struct {
 	// The maximum number of failed attempts for auto-remediation. If you do not
 	// select a number, the default is 5.
 	//
-	// For example, if you specify MaximumAutomaticAttempts as 5 with RetryAttemptsSeconds
+	// For example, if you specify MaximumAutomaticAttempts as 5 with RetryAttemptSeconds
 	// as 50 seconds, AWS Config will put a RemediationException on your behalf
 	// for the failing resource after the 5th failed attempt within 50 seconds.
 	MaximumAutomaticAttempts *int64 `min:"1" type:"integer"`
@@ -21140,7 +22477,7 @@ type RemediationConfiguration struct {
 	// Maximum time in seconds that AWS Config runs auto-remediation. If you do
 	// not select a number, the default is 60 seconds.
 	//
-	// For example, if you specify RetryAttemptsSeconds as 50 seconds and MaximumAutomaticAttempts
+	// For example, if you specify RetryAttemptSeconds as 50 seconds and MaximumAutomaticAttempts
 	// as 5, AWS Config will run auto-remediations 5 times within 50 seconds before
 	// throwing an exception.
 	RetryAttemptSeconds *int64 `min:"1" type:"long"`
@@ -21645,6 +22982,63 @@ func (s *RemediationParameterValue) SetResourceValue(v *ResourceValue) *Remediat
 func (s *RemediationParameterValue) SetStaticValue(v *StaticValue) *RemediationParameterValue {
 	s.StaticValue = v
 	return s
+}
+
+// Two users are trying to modify the same query at the same time. Wait for
+// a moment and try again.
+type ResourceConcurrentModificationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceConcurrentModificationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceConcurrentModificationException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceConcurrentModificationException(v protocol.ResponseMetadata) error {
+	return &ResourceConcurrentModificationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceConcurrentModificationException) Code() string {
+	return "ResourceConcurrentModificationException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceConcurrentModificationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceConcurrentModificationException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceConcurrentModificationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceConcurrentModificationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceConcurrentModificationException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that contains the resource type and the number of resources.
@@ -23068,6 +24462,153 @@ func (s StopConfigurationRecorderOutput) GoString() string {
 	return s.String()
 }
 
+// Provides the details of a stored query.
+type StoredQuery struct {
+	_ struct{} `type:"structure"`
+
+	// A unique description for the query.
+	Description *string `type:"string"`
+
+	// The expression of the query. For example, SELECT resourceId, resourceType,
+	// supplementaryConfiguration.BucketVersioningConfiguration.status WHERE resourceType
+	// = 'AWS::S3::Bucket' AND supplementaryConfiguration.BucketVersioningConfiguration.status
+	// = 'Off'.
+	Expression *string `min:"1" type:"string"`
+
+	// Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-name/resource-id.
+	QueryArn *string `min:"1" type:"string"`
+
+	// The ID of the query.
+	QueryId *string `min:"1" type:"string"`
+
+	// The name of the query.
+	//
+	// QueryName is a required field
+	QueryName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StoredQuery) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StoredQuery) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StoredQuery) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StoredQuery"}
+	if s.Expression != nil && len(*s.Expression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Expression", 1))
+	}
+	if s.QueryArn != nil && len(*s.QueryArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryArn", 1))
+	}
+	if s.QueryId != nil && len(*s.QueryId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryId", 1))
+	}
+	if s.QueryName == nil {
+		invalidParams.Add(request.NewErrParamRequired("QueryName"))
+	}
+	if s.QueryName != nil && len(*s.QueryName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("QueryName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *StoredQuery) SetDescription(v string) *StoredQuery {
+	s.Description = &v
+	return s
+}
+
+// SetExpression sets the Expression field's value.
+func (s *StoredQuery) SetExpression(v string) *StoredQuery {
+	s.Expression = &v
+	return s
+}
+
+// SetQueryArn sets the QueryArn field's value.
+func (s *StoredQuery) SetQueryArn(v string) *StoredQuery {
+	s.QueryArn = &v
+	return s
+}
+
+// SetQueryId sets the QueryId field's value.
+func (s *StoredQuery) SetQueryId(v string) *StoredQuery {
+	s.QueryId = &v
+	return s
+}
+
+// SetQueryName sets the QueryName field's value.
+func (s *StoredQuery) SetQueryName(v string) *StoredQuery {
+	s.QueryName = &v
+	return s
+}
+
+// Returns details of a specific query.
+type StoredQueryMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// A unique description for the query.
+	Description *string `type:"string"`
+
+	// Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-name/resource-id.
+	//
+	// QueryArn is a required field
+	QueryArn *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the query.
+	//
+	// QueryId is a required field
+	QueryId *string `min:"1" type:"string" required:"true"`
+
+	// The name of the query.
+	//
+	// QueryName is a required field
+	QueryName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StoredQueryMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StoredQueryMetadata) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *StoredQueryMetadata) SetDescription(v string) *StoredQueryMetadata {
+	s.Description = &v
+	return s
+}
+
+// SetQueryArn sets the QueryArn field's value.
+func (s *StoredQueryMetadata) SetQueryArn(v string) *StoredQueryMetadata {
+	s.QueryArn = &v
+	return s
+}
+
+// SetQueryId sets the QueryId field's value.
+func (s *StoredQueryMetadata) SetQueryId(v string) *StoredQueryMetadata {
+	s.QueryId = &v
+	return s
+}
+
+// SetQueryName sets the QueryName field's value.
+func (s *StoredQueryMetadata) SetQueryName(v string) *StoredQueryMetadata {
+	s.QueryName = &v
+	return s
+}
+
 // The tags for the resource. The metadata that you apply to a resource to help
 // you categorize and organize them. Each tag consists of a key and an optional
 // value, both of which you define. Tag keys can have a maximum character length
@@ -23335,6 +24876,14 @@ func (s UntagResourceOutput) GoString() string {
 }
 
 // The requested action is not valid.
+//
+// For PutStoredQuery, you will see this exception if there are missing required
+// fields or if the input value fails the validation, or if you are trying to
+// create more than 300 queries.
+//
+// For GetStoredQuery, ListStoredQuery, and DeleteStoredQuery you will see this
+// exception if there are missing required fields or if the input value fails
+// the validation.
 type ValidationException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -23540,6 +25089,9 @@ const (
 
 	// ConformancePackComplianceTypeNonCompliant is a ConformancePackComplianceType enum value
 	ConformancePackComplianceTypeNonCompliant = "NON_COMPLIANT"
+
+	// ConformancePackComplianceTypeInsufficientData is a ConformancePackComplianceType enum value
+	ConformancePackComplianceTypeInsufficientData = "INSUFFICIENT_DATA"
 )
 
 // ConformancePackComplianceType_Values returns all elements of the ConformancePackComplianceType enum
@@ -23547,6 +25099,7 @@ func ConformancePackComplianceType_Values() []string {
 	return []string{
 		ConformancePackComplianceTypeCompliant,
 		ConformancePackComplianceTypeNonCompliant,
+		ConformancePackComplianceTypeInsufficientData,
 	}
 }
 
@@ -24166,6 +25719,15 @@ const (
 	// ResourceTypeAwsLambdaFunction is a ResourceType enum value
 	ResourceTypeAwsLambdaFunction = "AWS::Lambda::Function"
 
+	// ResourceTypeAwsNetworkFirewallFirewall is a ResourceType enum value
+	ResourceTypeAwsNetworkFirewallFirewall = "AWS::NetworkFirewall::Firewall"
+
+	// ResourceTypeAwsNetworkFirewallFirewallPolicy is a ResourceType enum value
+	ResourceTypeAwsNetworkFirewallFirewallPolicy = "AWS::NetworkFirewall::FirewallPolicy"
+
+	// ResourceTypeAwsNetworkFirewallRuleGroup is a ResourceType enum value
+	ResourceTypeAwsNetworkFirewallRuleGroup = "AWS::NetworkFirewall::RuleGroup"
+
 	// ResourceTypeAwsElasticBeanstalkApplication is a ResourceType enum value
 	ResourceTypeAwsElasticBeanstalkApplication = "AWS::ElasticBeanstalk::Application"
 
@@ -24319,6 +25881,9 @@ func ResourceType_Values() []string {
 		ResourceTypeAwsCloudFrontDistribution,
 		ResourceTypeAwsCloudFrontStreamingDistribution,
 		ResourceTypeAwsLambdaFunction,
+		ResourceTypeAwsNetworkFirewallFirewall,
+		ResourceTypeAwsNetworkFirewallFirewallPolicy,
+		ResourceTypeAwsNetworkFirewallRuleGroup,
 		ResourceTypeAwsElasticBeanstalkApplication,
 		ResourceTypeAwsElasticBeanstalkApplicationVersion,
 		ResourceTypeAwsElasticBeanstalkEnvironment,

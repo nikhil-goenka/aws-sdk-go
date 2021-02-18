@@ -166,10 +166,13 @@ func (c *QuickSight) CreateAccountCustomizationRequest(input *CreateAccountCusto
 // always override customizations that apply to an AWS account. To find out
 // which customizations apply, use the DescribeAccountCustomization API operation.
 //
-// Before you add a theme as the namespace default, make sure that you first
-// share the theme with the namespace. If you don't share it with the namespace,
-// the theme won't be visible to your users even if you use this API operation
-// to make it the default theme.
+// Before you use the CreateAccountCustomization API operation to add a theme
+// as the namespace default, make sure that you first share the theme with the
+// namespace. If you don't share it with the namespace, the theme isn't visible
+// to your users even if you make it the default theme. To check if the theme
+// is shared, view the current permissions by using the DescribeThemePermissions
+// API operation. To share the theme, grant permissions by using the UpdateThemePermissions
+// API operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -904,8 +907,10 @@ func (c *QuickSight) CreateIAMPolicyAssignmentRequest(input *CreateIAMPolicyAssi
 // CreateIAMPolicyAssignment API operation for Amazon QuickSight.
 //
 // Creates an assignment with one specified IAM policy, identified by its Amazon
-// Resource Name (ARN). This policy will be assigned to specified groups or
-// users of Amazon QuickSight. The users and groups need to be in the same namespace.
+// Resource Name (ARN). This policy assignment is attached to the specified
+// groups or users of Amazon QuickSight. Assignment names are unique per AWS
+// account. To avoid overwriting rules in other namespaces, use assignment names
+// that are unique.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1011,7 +1016,7 @@ func (c *QuickSight) CreateIngestionRequest(input *CreateIngestionInput) (req *r
 //
 // Any ingestions operating on tagged datasets inherit the same tags automatically
 // for use in access control. For an example, see How do I create an IAM policy
-// to control access to Amazon EC2 resources using tags? (https://aws.amazon.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/)
+// to control access to Amazon EC2 resources using tags? (http://aws.amazon.com/premiumsupport/knowledge-center/iam-ec2-resource-tags/)
 // in the AWS Knowledge Center. Tags are visible on the tagged dataset, but
 // not on the ingestion resource.
 //
@@ -1670,7 +1675,7 @@ func (c *QuickSight) DeleteAccountCustomizationRequest(input *DeleteAccountCusto
 // DeleteAccountCustomization API operation for Amazon QuickSight.
 //
 // Deletes all Amazon QuickSight customizations in this AWS Region for the specified
-// AWS Account and QuickSight namespace.
+// AWS account and QuickSight namespace.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3190,7 +3195,7 @@ func (c *QuickSight) DescribeAccountCustomizationRequest(input *DescribeAccountC
 //    * AWS Account - The AWS account exists at the top of the hierarchy. It
 //    has the potential to use all of the AWS Regions and AWS Services. When
 //    you subscribe to QuickSight, you choose one AWS Region to use as your
-//    home region. That's where your free SPICE capacity is located. You can
+//    home Region. That's where your free SPICE capacity is located. You can
 //    use QuickSight in any supported AWS Region.
 //
 //    * AWS Region - In each AWS Region where you sign in to QuickSight at least
@@ -3198,7 +3203,7 @@ func (c *QuickSight) DescribeAccountCustomizationRequest(input *DescribeAccountC
 //    have a user directory, it resides in us-east-1, which is the US East (N.
 //    Virginia). Generally speaking, these users have access to QuickSight in
 //    any AWS Region, unless they are constrained to a namespace. To run the
-//    command in a different AWS Region, you change your region settings. If
+//    command in a different AWS Region, you change your Region settings. If
 //    you're using the AWS CLI, you can use one of the following options: Use
 //    command line options (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-options.html).
 //    Use named profiles (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).
@@ -3215,7 +3220,7 @@ func (c *QuickSight) DescribeAccountCustomizationRequest(input *DescribeAccountC
 //
 //    * Applied customizations - Within an AWS Region, a set of QuickSight customizations
 //    can apply to an AWS account or to a namespace. Settings that you apply
-//    to a namespace override settings that you apply to an AWS Account. All
+//    to a namespace override settings that you apply to an AWS account. All
 //    settings are isolated to a single AWS Region. To apply them in other AWS
 //    Regions, run the CreateAccountCustomization command in each AWS Region
 //    where you want to apply the same customizations.
@@ -3317,7 +3322,7 @@ func (c *QuickSight) DescribeAccountSettingsRequest(input *DescribeAccountSettin
 // DescribeAccountSettings API operation for Amazon QuickSight.
 //
 // Describes the settings that were used when your QuickSight subscription was
-// first created in this AWS Account.
+// first created in this AWS account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5299,8 +5304,8 @@ func (c *QuickSight) GetDashboardEmbedUrlRequest(input *GetDashboardEmbedUrlInpu
 //
 //    * The resulting user session is valid for 10 hours.
 //
-// For more information, see Embedding Amazon QuickSight (https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html)
-// in the Amazon QuickSight User Guide .
+// For more information, see Embedded Analytics (https://docs.aws.amazon.com/quicksight/latest/user/embedded-analytics.html)
+// in the Amazon QuickSight User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5351,6 +5356,16 @@ func (c *QuickSight) GetDashboardEmbedUrlRequest(input *GetDashboardEmbedUrlInpu
 //   subscription where the edition doesn't include support for that operation.
 //   Amazon QuickSight currently has Standard Edition and Enterprise Edition.
 //   Not every operation and capability is available in every edition.
+//
+//   * UnsupportedPricingPlanException
+//   This error indicates that you are calling an embedding operation in Amazon
+//   QuickSight without the required pricing plan on your AWS account. Before
+//   you can use embedding for anonymous users, a QuickSight administrator needs
+//   to add capacity pricing to QuickSight. You can do this on the Manage QuickSight
+//   page.
+//
+//   After capacity pricing is added, you can use the GetDashboardEmbedUrl API
+//   operation with the --identity-type ANONYMOUS option.
 //
 //   * InternalFailureException
 //   An internal failure occurred.
@@ -7685,6 +7700,12 @@ func (c *QuickSight) ListThemeVersionsRequest(input *ListThemeVersionsInput) (re
 		Name:       opListThemeVersions,
 		HTTPMethod: "GET",
 		HTTPPath:   "/accounts/{AwsAccountId}/themes/{ThemeId}/versions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -7758,6 +7779,58 @@ func (c *QuickSight) ListThemeVersionsWithContext(ctx aws.Context, input *ListTh
 	return out, req.Send()
 }
 
+// ListThemeVersionsPages iterates over the pages of a ListThemeVersions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListThemeVersions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListThemeVersions operation.
+//    pageNum := 0
+//    err := client.ListThemeVersionsPages(params,
+//        func(page *quicksight.ListThemeVersionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *QuickSight) ListThemeVersionsPages(input *ListThemeVersionsInput, fn func(*ListThemeVersionsOutput, bool) bool) error {
+	return c.ListThemeVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListThemeVersionsPagesWithContext same as ListThemeVersionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *QuickSight) ListThemeVersionsPagesWithContext(ctx aws.Context, input *ListThemeVersionsInput, fn func(*ListThemeVersionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListThemeVersionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListThemeVersionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListThemeVersionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListThemes = "ListThemes"
 
 // ListThemesRequest generates a "aws/request.Request" representing the
@@ -7789,6 +7862,12 @@ func (c *QuickSight) ListThemesRequest(input *ListThemesInput) (req *request.Req
 		Name:       opListThemes,
 		HTTPMethod: "GET",
 		HTTPPath:   "/accounts/{AwsAccountId}/themes",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -7860,6 +7939,58 @@ func (c *QuickSight) ListThemesWithContext(ctx aws.Context, input *ListThemesInp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListThemesPages iterates over the pages of a ListThemes operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListThemes method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListThemes operation.
+//    pageNum := 0
+//    err := client.ListThemesPages(params,
+//        func(page *quicksight.ListThemesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *QuickSight) ListThemesPages(input *ListThemesInput, fn func(*ListThemesOutput, bool) bool) error {
+	return c.ListThemesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListThemesPagesWithContext same as ListThemesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *QuickSight) ListThemesPagesWithContext(ctx aws.Context, input *ListThemesInput, fn func(*ListThemesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListThemesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListThemesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListThemesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListUserGroups = "ListUserGroups"
@@ -8947,7 +9078,7 @@ func (c *QuickSight) UpdateAccountSettingsRequest(input *UpdateAccountSettingsIn
 
 // UpdateAccountSettings API operation for Amazon QuickSight.
 //
-// Updates the Amazon QuickSight settings in your AWS Account.
+// Updates the Amazon QuickSight settings in your AWS account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -10041,7 +10172,8 @@ func (c *QuickSight) UpdateIAMPolicyAssignmentRequest(input *UpdateIAMPolicyAssi
 // UpdateIAMPolicyAssignment API operation for Amazon QuickSight.
 //
 // Updates an existing IAM policy assignment. This operation updates only the
-// optional parameter or parameters that are specified in the request.
+// optional parameter or parameters that are specified in the request. This
+// overwrites all of the users included in Identities.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11086,6 +11218,10 @@ type Analysis struct {
 	// The descriptive name of the analysis.
 	Name *string `min:"1" type:"string"`
 
+	// A list of the associated sheets with the unique identifier and name of each
+	// sheet.
+	Sheets []*Sheet `type:"list"`
+
 	// Status associated with the analysis.
 	Status *string `type:"string" enum:"ResourceStatus"`
 
@@ -11142,6 +11278,12 @@ func (s *Analysis) SetLastUpdatedTime(v time.Time) *Analysis {
 // SetName sets the Name field's value.
 func (s *Analysis) SetName(v string) *Analysis {
 	s.Name = &v
+	return s
+}
+
+// SetSheets sets the Sheets field's value.
+func (s *Analysis) SetSheets(v []*Sheet) *Analysis {
+	s.Sheets = v
 	return s
 }
 
@@ -11933,6 +12075,30 @@ func (s *CastColumnTypeOperation) SetNewColumnType(v string) *CastColumnTypeOper
 	return s
 }
 
+// Metadata that contains a description for a column.
+type ColumnDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The text of a description for a column.
+	Text *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ColumnDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ColumnDescription) GoString() string {
+	return s.String()
+}
+
+// SetText sets the Text field's value.
+func (s *ColumnDescription) SetText(v string) *ColumnDescription {
+	s.Text = &v
+	return s
+}
+
 // Groupings of columns that work together in certain Amazon QuickSight features.
 // This is a variant type structure. For this structure to be valid, only one
 // of the attributes can be non-null.
@@ -12031,6 +12197,59 @@ func (s *ColumnGroupSchema) SetName(v string) *ColumnGroupSchema {
 	return s
 }
 
+// A rule defined to grant access on one or more restricted columns. Each dataset
+// can have multiple rules. To create a restricted column, you add it to one
+// or more rules. Each rule must contain at least one column and at least one
+// user or group. To be able to see a restricted column, a user or group needs
+// to be added to a rule for that column.
+type ColumnLevelPermissionRule struct {
+	_ struct{} `type:"structure"`
+
+	// An array of column names.
+	ColumnNames []*string `min:"1" type:"list"`
+
+	// An array of Amazon Resource Names (ARNs) for QuickSight users or groups.
+	Principals []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s ColumnLevelPermissionRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ColumnLevelPermissionRule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ColumnLevelPermissionRule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ColumnLevelPermissionRule"}
+	if s.ColumnNames != nil && len(s.ColumnNames) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ColumnNames", 1))
+	}
+	if s.Principals != nil && len(s.Principals) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Principals", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetColumnNames sets the ColumnNames field's value.
+func (s *ColumnLevelPermissionRule) SetColumnNames(v []*string) *ColumnLevelPermissionRule {
+	s.ColumnNames = v
+	return s
+}
+
+// SetPrincipals sets the Principals field's value.
+func (s *ColumnLevelPermissionRule) SetPrincipals(v []*string) *ColumnLevelPermissionRule {
+	s.Principals = v
+	return s
+}
+
 // The column schema.
 type ColumnSchema struct {
 	_ struct{} `type:"structure"`
@@ -12079,6 +12298,9 @@ func (s *ColumnSchema) SetName(v string) *ColumnSchema {
 type ColumnTag struct {
 	_ struct{} `type:"structure"`
 
+	// A description for a column.
+	ColumnDescription *ColumnDescription `type:"structure"`
+
 	// A geospatial role for a column.
 	ColumnGeographicRole *string `type:"string" enum:"GeoSpatialDataRole"`
 }
@@ -12091,6 +12313,12 @@ func (s ColumnTag) String() string {
 // GoString returns the string representation
 func (s ColumnTag) GoString() string {
 	return s.String()
+}
+
+// SetColumnDescription sets the ColumnDescription field's value.
+func (s *ColumnTag) SetColumnDescription(v *ColumnDescription) *ColumnTag {
+	s.ColumnDescription = v
+	return s
 }
 
 // SetColumnGeographicRole sets the ColumnGeographicRole field's value.
@@ -12223,10 +12451,10 @@ type CreateAccountCustomizationInput struct {
 	// The QuickSight customizations you're adding in the current AWS Region. You
 	// can add these to an AWS account and a QuickSight namespace.
 	//
-	// For example, you could add a default theme by setting AccountCustomization
+	// For example, you can add a default theme by setting AccountCustomization
 	// to the midnight theme: "AccountCustomization": { "DefaultTheme": "arn:aws:quicksight::aws:theme/MIDNIGHT"
-	// }. . Or, you could add a custom theme by specifying "AccountCustomization":
-	// { "DefaultTheme": "arn:aws:quicksight:us-west-2:111122223333:theme/bdb844d0-0fe9-4d9d-b520-0fe602d93639"
+	// }. Or, you can add a custom theme by specifying "AccountCustomization": {
+	// "DefaultTheme": "arn:aws:quicksight:us-west-2:111122223333:theme/bdb844d0-0fe9-4d9d-b520-0fe602d93639"
 	// }.
 	//
 	// AccountCustomization is a required field
@@ -12960,11 +13188,17 @@ type CreateDataSetInput struct {
 	// only geospatial hierarchy is supported.
 	ColumnGroups []*ColumnGroup `min:"1" type:"list"`
 
+	// A set of one or more definitions of a ColumnLevelPermissionRule .
+	ColumnLevelPermissionRules []*ColumnLevelPermissionRule `min:"1" type:"list"`
+
 	// An ID for the dataset that you want to create. This ID is unique per AWS
 	// Region for each AWS account.
 	//
 	// DataSetId is a required field
 	DataSetId *string `type:"string" required:"true"`
+
+	// The folder that contains fields and nested subfolders for your dataset.
+	FieldFolders map[string]*FieldFolder `type:"map"`
 
 	// Indicates whether you want to import the data into SPICE.
 	//
@@ -13018,6 +13252,9 @@ func (s *CreateDataSetInput) Validate() error {
 	if s.ColumnGroups != nil && len(s.ColumnGroups) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ColumnGroups", 1))
 	}
+	if s.ColumnLevelPermissionRules != nil && len(s.ColumnLevelPermissionRules) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ColumnLevelPermissionRules", 1))
+	}
 	if s.DataSetId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataSetId"))
 	}
@@ -13052,6 +13289,16 @@ func (s *CreateDataSetInput) Validate() error {
 			}
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ColumnGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ColumnLevelPermissionRules != nil {
+		for i, v := range s.ColumnLevelPermissionRules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ColumnLevelPermissionRules", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -13119,9 +13366,21 @@ func (s *CreateDataSetInput) SetColumnGroups(v []*ColumnGroup) *CreateDataSetInp
 	return s
 }
 
+// SetColumnLevelPermissionRules sets the ColumnLevelPermissionRules field's value.
+func (s *CreateDataSetInput) SetColumnLevelPermissionRules(v []*ColumnLevelPermissionRule) *CreateDataSetInput {
+	s.ColumnLevelPermissionRules = v
+	return s
+}
+
 // SetDataSetId sets the DataSetId field's value.
 func (s *CreateDataSetInput) SetDataSetId(v string) *CreateDataSetInput {
 	s.DataSetId = &v
+	return s
+}
+
+// SetFieldFolders sets the FieldFolders field's value.
+func (s *CreateDataSetInput) SetFieldFolders(v map[string]*FieldFolder) *CreateDataSetInput {
+	s.FieldFolders = v
 	return s
 }
 
@@ -13755,7 +14014,8 @@ func (s *CreateGroupOutput) SetStatus(v int64) *CreateGroupOutput {
 type CreateIAMPolicyAssignmentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the assignment. It must be unique within an AWS account.
+	// The name of the assignment, also called a rule. It must be unique within
+	// an AWS account.
 	//
 	// AssignmentName is a required field
 	AssignmentName *string `min:"1" type:"string" required:"true"`
@@ -15011,7 +15271,7 @@ type CredentialPair struct {
 	// credentials. The credentials are applied in tandem with the data source parameters
 	// when you copy a data source by using a create or update request. The API
 	// operation compares the DataSourceParameters structure that's in the request
-	// with the structures in the AlternateDataSourceParameters allowlist. If the
+	// with the structures in the AlternateDataSourceParameters allow list. If the
 	// structures are an exact match, the request is allowed to use the new data
 	// source with the existing credentials. If the AlternateDataSourceParameters
 	// list is null, the DataSourceParameters originally used with these Credentials
@@ -15603,6 +15863,10 @@ type DashboardVersion struct {
 	// Errors associated with this dashboard version.
 	Errors []*DashboardError `min:"1" type:"list"`
 
+	// A list of the associated sheets with the unique identifier and name of each
+	// sheet.
+	Sheets []*Sheet `type:"list"`
+
 	// Source entity ARN.
 	SourceEntityArn *string `type:"string"`
 
@@ -15653,6 +15917,12 @@ func (s *DashboardVersion) SetDescription(v string) *DashboardVersion {
 // SetErrors sets the Errors field's value.
 func (s *DashboardVersion) SetErrors(v []*DashboardError) *DashboardVersion {
 	s.Errors = v
+	return s
+}
+
+// SetSheets sets the Sheets field's value.
+func (s *DashboardVersion) SetSheets(v []*Sheet) *DashboardVersion {
+	s.Sheets = v
 	return s
 }
 
@@ -15750,7 +16020,7 @@ func (s *DashboardVersionSummary) SetVersionNumber(v int64) *DashboardVersionSum
 }
 
 // The theme colors that are used for data colors in charts. The colors description
-// is a hexidecimal color code that consists of six alphanumerical characters,
+// is a hexadecimal color code that consists of six alphanumerical characters,
 // prefixed with #, for example #37BFF5.
 type DataColorPalette struct {
 	_ struct{} `type:"structure"`
@@ -15805,6 +16075,9 @@ type DataSet struct {
 	// Currently, only geospatial hierarchy is supported.
 	ColumnGroups []*ColumnGroup `min:"1" type:"list"`
 
+	// A set of one or more definitions of a ColumnLevelPermissionRule .
+	ColumnLevelPermissionRules []*ColumnLevelPermissionRule `min:"1" type:"list"`
+
 	// The amount of SPICE capacity used by this dataset. This is 0 if the dataset
 	// isn't imported into SPICE.
 	ConsumedSpiceCapacityInBytes *int64 `type:"long"`
@@ -15815,7 +16088,10 @@ type DataSet struct {
 	// The ID of the dataset.
 	DataSetId *string `type:"string"`
 
-	// Indicates whether you want to import the data into SPICE.
+	// The folder that contains fields and nested subfolders for your dataset.
+	FieldFolders map[string]*FieldFolder `type:"map"`
+
+	// A value that indicates whether you want to import the data into SPICE.
 	ImportMode *string `type:"string" enum:"DataSetImportMode"`
 
 	// The last time that this dataset was updated.
@@ -15861,6 +16137,12 @@ func (s *DataSet) SetColumnGroups(v []*ColumnGroup) *DataSet {
 	return s
 }
 
+// SetColumnLevelPermissionRules sets the ColumnLevelPermissionRules field's value.
+func (s *DataSet) SetColumnLevelPermissionRules(v []*ColumnLevelPermissionRule) *DataSet {
+	s.ColumnLevelPermissionRules = v
+	return s
+}
+
 // SetConsumedSpiceCapacityInBytes sets the ConsumedSpiceCapacityInBytes field's value.
 func (s *DataSet) SetConsumedSpiceCapacityInBytes(v int64) *DataSet {
 	s.ConsumedSpiceCapacityInBytes = &v
@@ -15876,6 +16158,12 @@ func (s *DataSet) SetCreatedTime(v time.Time) *DataSet {
 // SetDataSetId sets the DataSetId field's value.
 func (s *DataSet) SetDataSetId(v string) *DataSet {
 	s.DataSetId = &v
+	return s
+}
+
+// SetFieldFolders sets the FieldFolders field's value.
+func (s *DataSet) SetFieldFolders(v map[string]*FieldFolder) *DataSet {
+	s.FieldFolders = v
 	return s
 }
 
@@ -16047,13 +16335,16 @@ type DataSetSummary struct {
 	// The Amazon Resource Name (ARN) of the dataset.
 	Arn *string `type:"string"`
 
+	// A value that indicates if the dataset has column level permission configured.
+	ColumnLevelPermissionRulesApplied *bool `type:"boolean"`
+
 	// The time that this dataset was created.
 	CreatedTime *time.Time `type:"timestamp"`
 
 	// The ID of the dataset.
 	DataSetId *string `type:"string"`
 
-	// Indicates whether you want to import the data into SPICE.
+	// A value that indicates whether you want to import the data into SPICE.
 	ImportMode *string `type:"string" enum:"DataSetImportMode"`
 
 	// The last time that this dataset was updated.
@@ -16079,6 +16370,12 @@ func (s DataSetSummary) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DataSetSummary) SetArn(v string) *DataSetSummary {
 	s.Arn = &v
+	return s
+}
+
+// SetColumnLevelPermissionRulesApplied sets the ColumnLevelPermissionRulesApplied field's value.
+func (s *DataSetSummary) SetColumnLevelPermissionRulesApplied(v bool) *DataSetSummary {
+	s.ColumnLevelPermissionRulesApplied = &v
 	return s
 }
 
@@ -16127,8 +16424,8 @@ type DataSource struct {
 	// tandem with the data source parameters when you copy a data source by using
 	// a create or update request. The API operation compares the DataSourceParameters
 	// structure that's in the request with the structures in the AlternateDataSourceParameters
-	// allowlist. If the structures are an exact match, the request is allowed to
-	// use the credentials from this existing data source. If the AlternateDataSourceParameters
+	// allow list. If the structures are an exact match, the request is allowed
+	// to use the credentials from this existing data source. If the AlternateDataSourceParameters
 	// list is null, the Credentials originally used with this DataSourceParameters
 	// are automatically allowed.
 	AlternateDataSourceParameters []*DataSourceParameters `min:"1" type:"list"`
@@ -16371,6 +16668,9 @@ type DataSourceParameters struct {
 	// MySQL parameters.
 	MySqlParameters *MySqlParameters `type:"structure"`
 
+	// Oracle parameters.
+	OracleParameters *OracleParameters `type:"structure"`
+
 	// PostgreSQL parameters.
 	PostgreSqlParameters *PostgreSqlParameters `type:"structure"`
 
@@ -16456,6 +16756,11 @@ func (s *DataSourceParameters) Validate() error {
 	if s.MySqlParameters != nil {
 		if err := s.MySqlParameters.Validate(); err != nil {
 			invalidParams.AddNested("MySqlParameters", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OracleParameters != nil {
+		if err := s.OracleParameters.Validate(); err != nil {
+			invalidParams.AddNested("OracleParameters", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.PostgreSqlParameters != nil {
@@ -16565,6 +16870,12 @@ func (s *DataSourceParameters) SetMariaDbParameters(v *MariaDbParameters) *DataS
 // SetMySqlParameters sets the MySqlParameters field's value.
 func (s *DataSourceParameters) SetMySqlParameters(v *MySqlParameters) *DataSourceParameters {
 	s.MySqlParameters = v
+	return s
+}
+
+// SetOracleParameters sets the OracleParameters field's value.
+func (s *DataSourceParameters) SetOracleParameters(v *OracleParameters) *DataSourceParameters {
+	s.OracleParameters = v
 	return s
 }
 
@@ -18657,7 +18968,7 @@ type DescribeAccountSettingsOutput struct {
 
 	// The QuickSight settings for this AWS account. This information includes the
 	// edition of Amazon QuickSight that you subscribed to (Standard or Enterprise)
-	// and the notification email for the QuickSight subscription. The QuickSight
+	// and the notification email for the QuickSight subscription. In the QuickSight
 	// console, the QuickSight subscription is sometimes referred to as a QuickSight
 	// "account" even though it's technically not an account by itself. Instead,
 	// it's a subscription to the QuickSight service for your AWS account. The edition
@@ -19722,7 +20033,7 @@ func (s *DescribeGroupOutput) SetStatus(v int64) *DescribeGroupOutput {
 type DescribeIAMPolicyAssignmentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the assignment.
+	// The name of the assignment, also called a rule.
 	//
 	// AssignmentName is a required field
 	AssignmentName *string `location:"uri" locationName:"AssignmentName" min:"1" type:"string" required:"true"`
@@ -21012,6 +21323,39 @@ func (s *ExportToCSVOption) SetAvailabilityStatus(v string) *ExportToCSVOption {
 	return s
 }
 
+// A FieldFolder element is a folder that contains fields and nested subfolders.
+type FieldFolder struct {
+	_ struct{} `type:"structure"`
+
+	// A folder has a list of columns. A column can only be in one folder.
+	Columns []*string `locationName:"columns" type:"list"`
+
+	// The description for a field folder.
+	Description *string `locationName:"description" type:"string"`
+}
+
+// String returns the string representation
+func (s FieldFolder) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FieldFolder) GoString() string {
+	return s.String()
+}
+
+// SetColumns sets the Columns field's value.
+func (s *FieldFolder) SetColumns(v []*string) *FieldFolder {
+	s.Columns = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *FieldFolder) SetDescription(v string) *FieldFolder {
+	s.Description = &v
+	return s
+}
+
 // A transform operation that filters rows based on a condition.
 type FilterOperation struct {
 	_ struct{} `type:"structure"`
@@ -21131,12 +21475,21 @@ func (s *GeoSpatialColumnGroup) SetName(v string) *GeoSpatialColumnGroup {
 type GetDashboardEmbedUrlInput struct {
 	_ struct{} `type:"structure"`
 
+	// A list of one or more dashboard IDs that you want to add to a session that
+	// includes anonymous users. The IdentityType parameter must be set to ANONYMOUS
+	// for this to work, because other identity types authenticate as QuickSight
+	// or IAM users. For example, if you set "--dashboard-id dash_id1 --dashboard-id
+	// dash_id2 dash_id3 identity-type ANONYMOUS", the session can access all three
+	// dashboards.
+	AdditionalDashboardIds []*string `location:"querystring" locationName:"additional-dashboard-ids" min:"1" type:"list"`
+
 	// The ID for the AWS account that contains the dashboard that you're embedding.
 	//
 	// AwsAccountId is a required field
 	AwsAccountId *string `location:"uri" locationName:"AwsAccountId" min:"12" type:"string" required:"true"`
 
-	// The ID for the dashboard, also added to the IAM policy.
+	// The ID for the dashboard, also added to the AWS Identity and Access Management
+	// (IAM) policy.
 	//
 	// DashboardId is a required field
 	DashboardId *string `location:"uri" locationName:"DashboardId" min:"1" type:"string" required:"true"`
@@ -21144,7 +21497,11 @@ type GetDashboardEmbedUrlInput struct {
 	// The authentication method that the user uses to sign in.
 	//
 	// IdentityType is a required field
-	IdentityType *string `location:"querystring" locationName:"creds-type" type:"string" required:"true" enum:"IdentityType"`
+	IdentityType *string `location:"querystring" locationName:"creds-type" type:"string" required:"true" enum:"EmbeddingIdentityType"`
+
+	// The QuickSight namespace that contains the dashboard IDs in this request.
+	// If you're not using a custom namespace, set this to "default".
+	Namespace *string `location:"querystring" locationName:"namespace" type:"string"`
 
 	// Remove the reset button on the embedded dashboard. The default is FALSE,
 	// which enables the reset button.
@@ -21153,6 +21510,15 @@ type GetDashboardEmbedUrlInput struct {
 	// How many minutes the session is valid. The session lifetime must be 15-600
 	// minutes.
 	SessionLifetimeInMinutes *int64 `location:"querystring" locationName:"session-lifetime" min:"15" type:"long"`
+
+	// Adds persistence of state for the user session in an embedded dashboard.
+	// Persistence applies to the sheet and the parameter settings. These are control
+	// settings that the dashboard subscriber (QuickSight reader) chooses while
+	// viewing the dashboard. If this is set to TRUE, the settings are the same
+	// when the subscriber reopens the same dashboard URL. The state is stored in
+	// QuickSight, not in a browser cookie. If this is set to FALSE, the state of
+	// the user session is not persisted. The default is FALSE.
+	StatePersistenceEnabled *bool `location:"querystring" locationName:"state-persistence-enabled" type:"boolean"`
 
 	// Remove the undo/redo button on the embedded dashboard. The default is FALSE,
 	// which enables the undo/redo button.
@@ -21187,6 +21553,9 @@ func (s GetDashboardEmbedUrlInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetDashboardEmbedUrlInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetDashboardEmbedUrlInput"}
+	if s.AdditionalDashboardIds != nil && len(s.AdditionalDashboardIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AdditionalDashboardIds", 1))
+	}
 	if s.AwsAccountId == nil {
 		invalidParams.Add(request.NewErrParamRequired("AwsAccountId"))
 	}
@@ -21212,6 +21581,12 @@ func (s *GetDashboardEmbedUrlInput) Validate() error {
 	return nil
 }
 
+// SetAdditionalDashboardIds sets the AdditionalDashboardIds field's value.
+func (s *GetDashboardEmbedUrlInput) SetAdditionalDashboardIds(v []*string) *GetDashboardEmbedUrlInput {
+	s.AdditionalDashboardIds = v
+	return s
+}
+
 // SetAwsAccountId sets the AwsAccountId field's value.
 func (s *GetDashboardEmbedUrlInput) SetAwsAccountId(v string) *GetDashboardEmbedUrlInput {
 	s.AwsAccountId = &v
@@ -21230,6 +21605,12 @@ func (s *GetDashboardEmbedUrlInput) SetIdentityType(v string) *GetDashboardEmbed
 	return s
 }
 
+// SetNamespace sets the Namespace field's value.
+func (s *GetDashboardEmbedUrlInput) SetNamespace(v string) *GetDashboardEmbedUrlInput {
+	s.Namespace = &v
+	return s
+}
+
 // SetResetDisabled sets the ResetDisabled field's value.
 func (s *GetDashboardEmbedUrlInput) SetResetDisabled(v bool) *GetDashboardEmbedUrlInput {
 	s.ResetDisabled = &v
@@ -21239,6 +21620,12 @@ func (s *GetDashboardEmbedUrlInput) SetResetDisabled(v bool) *GetDashboardEmbedU
 // SetSessionLifetimeInMinutes sets the SessionLifetimeInMinutes field's value.
 func (s *GetDashboardEmbedUrlInput) SetSessionLifetimeInMinutes(v int64) *GetDashboardEmbedUrlInput {
 	s.SessionLifetimeInMinutes = &v
+	return s
+}
+
+// SetStatePersistenceEnabled sets the StatePersistenceEnabled field's value.
+func (s *GetDashboardEmbedUrlInput) SetStatePersistenceEnabled(v bool) *GetDashboardEmbedUrlInput {
+	s.StatePersistenceEnabled = &v
 	return s
 }
 
@@ -21254,6 +21641,7 @@ func (s *GetDashboardEmbedUrlInput) SetUserArn(v string) *GetDashboardEmbedUrlIn
 	return s
 }
 
+// Output returned from the GetDashboardEmbedUrl operation.
 type GetDashboardEmbedUrlOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -21337,10 +21725,11 @@ type GetSessionEmbedUrlInput struct {
 	//
 	// Invited nonfederated users
 	//
-	// IAM users and IAM role-based sessions authenticated through Federated Single
-	// Sign-On using SAML, OpenID Connect, or IAM federation
+	// AWS Identity and Access Management (IAM) users and IAM role-based sessions
+	// authenticated through Federated Single Sign-On using SAML, OpenID Connect,
+	// or IAM federation
 	//
-	// Omit this parameter for users in the third group – IAM users and IAM role-based
+	// Omit this parameter for users in the third group, IAM users and IAM role-based
 	// sessions.
 	UserArn *string `location:"querystring" locationName:"user-arn" type:"string"`
 }
@@ -22166,26 +22555,32 @@ func (s *JiraParameters) SetSiteBaseUrl(v string) *JiraParameters {
 	return s
 }
 
-// Join instruction.
+// The instructions associated with a join.
 type JoinInstruction struct {
 	_ struct{} `type:"structure"`
 
-	// Left operand.
+	// Join key properties of the left operand.
+	LeftJoinKeyProperties *JoinKeyProperties `type:"structure"`
+
+	// The operand on the left side of a join.
 	//
 	// LeftOperand is a required field
 	LeftOperand *string `min:"1" type:"string" required:"true"`
 
-	// On Clause.
+	// The join instructions provided in the ON clause of a join.
 	//
 	// OnClause is a required field
 	OnClause *string `min:"1" type:"string" required:"true"`
 
-	// Right operand.
+	// Join key properties of the right operand.
+	RightJoinKeyProperties *JoinKeyProperties `type:"structure"`
+
+	// The operand on the right side of a join.
 	//
 	// RightOperand is a required field
 	RightOperand *string `min:"1" type:"string" required:"true"`
 
-	// Type.
+	// The type of join that it is.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"JoinType"`
@@ -22232,6 +22627,12 @@ func (s *JoinInstruction) Validate() error {
 	return nil
 }
 
+// SetLeftJoinKeyProperties sets the LeftJoinKeyProperties field's value.
+func (s *JoinInstruction) SetLeftJoinKeyProperties(v *JoinKeyProperties) *JoinInstruction {
+	s.LeftJoinKeyProperties = v
+	return s
+}
+
 // SetLeftOperand sets the LeftOperand field's value.
 func (s *JoinInstruction) SetLeftOperand(v string) *JoinInstruction {
 	s.LeftOperand = &v
@@ -22244,6 +22645,12 @@ func (s *JoinInstruction) SetOnClause(v string) *JoinInstruction {
 	return s
 }
 
+// SetRightJoinKeyProperties sets the RightJoinKeyProperties field's value.
+func (s *JoinInstruction) SetRightJoinKeyProperties(v *JoinKeyProperties) *JoinInstruction {
+	s.RightJoinKeyProperties = v
+	return s
+}
+
 // SetRightOperand sets the RightOperand field's value.
 func (s *JoinInstruction) SetRightOperand(v string) *JoinInstruction {
 	s.RightOperand = &v
@@ -22253,6 +22660,31 @@ func (s *JoinInstruction) SetRightOperand(v string) *JoinInstruction {
 // SetType sets the Type field's value.
 func (s *JoinInstruction) SetType(v string) *JoinInstruction {
 	s.Type = &v
+	return s
+}
+
+// Properties associated with the columns participating in a join.
+type JoinKeyProperties struct {
+	_ struct{} `type:"structure"`
+
+	// A value that indicates that a row in a table is uniquely identified by the
+	// columns in a join key. This is used by QuickSight to optimize query performance.
+	UniqueKey *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s JoinKeyProperties) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s JoinKeyProperties) GoString() string {
+	return s.String()
+}
+
+// SetUniqueKey sets the UniqueKey field's value.
+func (s *JoinKeyProperties) SetUniqueKey(v bool) *JoinKeyProperties {
+	s.UniqueKey = &v
 	return s
 }
 
@@ -25294,9 +25726,88 @@ func (s *NamespaceInfoV2) SetNamespaceError(v *NamespaceError) *NamespaceInfoV2 
 	return s
 }
 
+// Oracle parameters.
+type OracleParameters struct {
+	_ struct{} `type:"structure"`
+
+	// Database.
+	//
+	// Database is a required field
+	Database *string `min:"1" type:"string" required:"true"`
+
+	// An Oracle host.
+	//
+	// Host is a required field
+	Host *string `min:"1" type:"string" required:"true"`
+
+	// Port.
+	//
+	// Port is a required field
+	Port *int64 `min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation
+func (s OracleParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OracleParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OracleParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OracleParameters"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Database != nil && len(*s.Database) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Database", 1))
+	}
+	if s.Host == nil {
+		invalidParams.Add(request.NewErrParamRequired("Host"))
+	}
+	if s.Host != nil && len(*s.Host) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Host", 1))
+	}
+	if s.Port == nil {
+		invalidParams.Add(request.NewErrParamRequired("Port"))
+	}
+	if s.Port != nil && *s.Port < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Port", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *OracleParameters) SetDatabase(v string) *OracleParameters {
+	s.Database = &v
+	return s
+}
+
+// SetHost sets the Host field's value.
+func (s *OracleParameters) SetHost(v string) *OracleParameters {
+	s.Host = &v
+	return s
+}
+
+// SetPort sets the Port field's value.
+func (s *OracleParameters) SetPort(v int64) *OracleParameters {
+	s.Port = &v
+	return s
+}
+
 // Output column.
 type OutputColumn struct {
 	_ struct{} `type:"structure"`
+
+	// A description for a column.
+	Description *string `type:"string"`
 
 	// A display name for the dataset.
 	Name *string `min:"1" type:"string"`
@@ -25313,6 +25824,12 @@ func (s OutputColumn) String() string {
 // GoString returns the string representation
 func (s OutputColumn) GoString() string {
 	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *OutputColumn) SetDescription(v string) *OutputColumn {
+	s.Description = &v
+	return s
 }
 
 // SetName sets the Name field's value.
@@ -25987,7 +26504,7 @@ type RegisterUserInput struct {
 	// scenarios, for example when you are registering an IAM user or an Amazon
 	// QuickSight user. You can register multiple users using the same IAM role
 	// if each user has a different session name. For more information on assuming
-	// IAM roles, see assume-role (https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sts/assume-role.html)
+	// IAM roles, see assume-role (https://docs.aws.amazon.com/cli/latest/reference/sts/assume-role.html)
 	// in the AWS CLI Reference.
 	SessionName *string `min:"2" type:"string"`
 
@@ -26173,6 +26690,9 @@ func (s *RegisterUserOutput) SetUserInvitationUrl(v string) *RegisterUserOutput 
 type RelationalTable struct {
 	_ struct{} `type:"structure"`
 
+	// The catalog associated with a table.
+	Catalog *string `type:"string"`
+
 	// The Amazon Resource Name (ARN) for the data source.
 	//
 	// DataSourceArn is a required field
@@ -26235,6 +26755,12 @@ func (s *RelationalTable) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCatalog sets the Catalog field's value.
+func (s *RelationalTable) SetCatalog(v string) *RelationalTable {
+	s.Catalog = &v
+	return s
 }
 
 // SetDataSourceArn sets the DataSourceArn field's value.
@@ -26448,15 +26974,18 @@ func (s *ResourceNotFoundException) RequestID() string {
 type ResourcePermission struct {
 	_ struct{} `type:"structure"`
 
-	// The IAM action to grant or revoke permissions on, for example "quicksight:DescribeDashboard".
+	// The IAM action to grant or revoke permissions on.
 	//
 	// Actions is a required field
 	Actions []*string `min:"1" type:"list" required:"true"`
 
 	// The Amazon Resource Name (ARN) of the principal. This can be one of the following:
 	//
-	//    * The ARN of an Amazon QuickSight user, group, or namespace. (This is
-	//    most common.)
+	//    * The ARN of an Amazon QuickSight user or group associated with a data
+	//    source or dataset. (This is common.)
+	//
+	//    * The ARN of an Amazon QuickSight user, group, or namespace associated
+	//    with an analysis, dashboard, template, or theme. (This is common.)
 	//
 	//    * The ARN of an AWS account root: This is an IAM ARN rather than a QuickSight
 	//    ARN. Use this option only to share resources (templates) across AWS accounts.
@@ -26912,7 +27441,7 @@ type SearchAnalysesInput struct {
 	// The structure for the search filters that you want to apply to your search.
 	//
 	// Filters is a required field
-	Filters []*AnalysisSearchFilter `type:"list" required:"true"`
+	Filters []*AnalysisSearchFilter `min:"1" type:"list" required:"true"`
 
 	// The maximum number of results to return.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -26942,6 +27471,9 @@ func (s *SearchAnalysesInput) Validate() error {
 	}
 	if s.Filters == nil {
 		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
@@ -27042,7 +27574,7 @@ type SearchDashboardsInput struct {
 	// } ]
 	//
 	// Filters is a required field
-	Filters []*DashboardSearchFilter `type:"list" required:"true"`
+	Filters []*DashboardSearchFilter `min:"1" type:"list" required:"true"`
 
 	// The maximum number of results to be returned per request.
 	MaxResults *int64 `min:"1" type:"integer"`
@@ -27072,6 +27604,9 @@ func (s *SearchDashboardsInput) Validate() error {
 	}
 	if s.Filters == nil {
 		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
 	}
 	if s.MaxResults != nil && *s.MaxResults < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
@@ -27267,6 +27802,44 @@ func (s *SessionLifetimeInMinutesInvalidException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *SessionLifetimeInMinutesInvalidException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// A sheet, which is an object that contains a set of visuals that are viewed
+// together on one page in the Amazon QuickSight console. Every analysis and
+// dashboard contains at least one sheet. Each sheet contains at least one visualization
+// widget, for example a chart, pivot table, or narrative insight. Sheets can
+// be associated with other components, such as controls, filters, and so on.
+type Sheet struct {
+	_ struct{} `type:"structure"`
+
+	// The name of a sheet. This name is displayed on the sheet's tab in the QuickSight
+	// console.
+	Name *string `type:"string"`
+
+	// The unique identifier associated with a sheet.
+	SheetId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Sheet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Sheet) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *Sheet) SetName(v string) *Sheet {
+	s.Name = &v
+	return s
+}
+
+// SetSheetId sets the SheetId field's value.
+func (s *Sheet) SetSheetId(v string) *Sheet {
+	s.SheetId = &v
+	return s
 }
 
 // Sheet controls option.
@@ -28232,6 +28805,10 @@ type TemplateVersion struct {
 	// Errors associated with this template version.
 	Errors []*TemplateError `min:"1" type:"list"`
 
+	// A list of the associated sheets with the unique identifier and name of each
+	// sheet.
+	Sheets []*Sheet `type:"list"`
+
 	// The Amazon Resource Name (ARN) of an analysis or template that was used to
 	// create this template.
 	SourceEntityArn *string `type:"string"`
@@ -28277,6 +28854,12 @@ func (s *TemplateVersion) SetDescription(v string) *TemplateVersion {
 // SetErrors sets the Errors field's value.
 func (s *TemplateVersion) SetErrors(v []*TemplateError) *TemplateVersion {
 	s.Errors = v
+	return s
+}
+
+// SetSheets sets the Sheets field's value.
+func (s *TemplateVersion) SetSheets(v []*Sheet) *TemplateVersion {
+	s.Sheets = v
 	return s
 }
 
@@ -29143,7 +29726,7 @@ func (s *TwitterParameters) SetQuery(v string) *TwitterParameters {
 }
 
 // The theme colors that apply to UI and to charts, excluding data colors. The
-// colors description is a hexidecimal color code that consists of six alphanumerical
+// colors description is a hexadecimal color code that consists of six alphanumerical
 // characters, prefixed with #, for example #37BFF5. For more information, see
 // Using Themes in Amazon QuickSight (https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html)
 // in the Amazon QuickSight User Guide.
@@ -29313,6 +29896,72 @@ func (s *UIColorPalette) SetWarning(v string) *UIColorPalette {
 func (s *UIColorPalette) SetWarningForeground(v string) *UIColorPalette {
 	s.WarningForeground = &v
 	return s
+}
+
+// This error indicates that you are calling an embedding operation in Amazon
+// QuickSight without the required pricing plan on your AWS account. Before
+// you can use embedding for anonymous users, a QuickSight administrator needs
+// to add capacity pricing to QuickSight. You can do this on the Manage QuickSight
+// page.
+//
+// After capacity pricing is added, you can use the GetDashboardEmbedUrl API
+// operation with the --identity-type ANONYMOUS option.
+type UnsupportedPricingPlanException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// The AWS request ID for this request.
+	RequestId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s UnsupportedPricingPlanException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UnsupportedPricingPlanException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnsupportedPricingPlanException(v protocol.ResponseMetadata) error {
+	return &UnsupportedPricingPlanException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnsupportedPricingPlanException) Code() string {
+	return "UnsupportedPricingPlanException"
+}
+
+// Message returns the exception's message.
+func (s *UnsupportedPricingPlanException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnsupportedPricingPlanException) OrigErr() error {
+	return nil
+}
+
+func (s *UnsupportedPricingPlanException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnsupportedPricingPlanException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnsupportedPricingPlanException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // This error indicates that you are calling an operation on an Amazon QuickSight
@@ -29612,9 +30261,10 @@ type UpdateAccountSettingsInput struct {
 	// AwsAccountId is a required field
 	AwsAccountId *string `location:"uri" locationName:"AwsAccountId" min:"12" type:"string" required:"true"`
 
-	// The default namespace for this AWS Account. Currently, the default is default.
-	// IAM users who register for the first time with QuickSight provide an email
-	// that becomes associated with the default namespace.
+	// The default namespace for this AWS account. Currently, the default is default.
+	// AWS Identity and Access Management (IAM) users that register for the first
+	// time with QuickSight provide an email that becomes associated with the default
+	// namespace.
 	//
 	// DefaultNamespace is a required field
 	DefaultNamespace *string `type:"string" required:"true"`
@@ -30573,11 +31223,17 @@ type UpdateDataSetInput struct {
 	// only geospatial hierarchy is supported.
 	ColumnGroups []*ColumnGroup `min:"1" type:"list"`
 
+	// A set of one or more definitions of a ColumnLevelPermissionRule .
+	ColumnLevelPermissionRules []*ColumnLevelPermissionRule `min:"1" type:"list"`
+
 	// The ID for the dataset that you want to update. This ID is unique per AWS
 	// Region for each AWS account.
 	//
 	// DataSetId is a required field
 	DataSetId *string `location:"uri" locationName:"DataSetId" type:"string" required:"true"`
+
+	// The folder that contains fields and nested subfolders for your dataset.
+	FieldFolders map[string]*FieldFolder `type:"map"`
 
 	// Indicates whether you want to import the data into SPICE.
 	//
@@ -30624,6 +31280,9 @@ func (s *UpdateDataSetInput) Validate() error {
 	if s.ColumnGroups != nil && len(s.ColumnGroups) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ColumnGroups", 1))
 	}
+	if s.ColumnLevelPermissionRules != nil && len(s.ColumnLevelPermissionRules) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ColumnLevelPermissionRules", 1))
+	}
 	if s.DataSetId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataSetId"))
 	}
@@ -30655,6 +31314,16 @@ func (s *UpdateDataSetInput) Validate() error {
 			}
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ColumnGroups", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.ColumnLevelPermissionRules != nil {
+		for i, v := range s.ColumnLevelPermissionRules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ColumnLevelPermissionRules", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -30702,9 +31371,21 @@ func (s *UpdateDataSetInput) SetColumnGroups(v []*ColumnGroup) *UpdateDataSetInp
 	return s
 }
 
+// SetColumnLevelPermissionRules sets the ColumnLevelPermissionRules field's value.
+func (s *UpdateDataSetInput) SetColumnLevelPermissionRules(v []*ColumnLevelPermissionRule) *UpdateDataSetInput {
+	s.ColumnLevelPermissionRules = v
+	return s
+}
+
 // SetDataSetId sets the DataSetId field's value.
 func (s *UpdateDataSetInput) SetDataSetId(v string) *UpdateDataSetInput {
 	s.DataSetId = &v
+	return s
+}
+
+// SetFieldFolders sets the FieldFolders field's value.
+func (s *UpdateDataSetInput) SetFieldFolders(v map[string]*FieldFolder) *UpdateDataSetInput {
+	s.FieldFolders = v
 	return s
 }
 
@@ -31439,7 +32120,8 @@ func (s *UpdateGroupOutput) SetStatus(v int64) *UpdateGroupOutput {
 type UpdateIAMPolicyAssignmentInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the assignment. This name must be unique within an AWS account.
+	// The name of the assignment, also called a rule. This name must be unique
+	// within an AWS account.
 	//
 	// AssignmentName is a required field
 	AssignmentName *string `location:"uri" locationName:"AssignmentName" min:"1" type:"string" required:"true"`
@@ -31554,7 +32236,7 @@ type UpdateIAMPolicyAssignmentOutput struct {
 	// The ID of the assignment.
 	AssignmentId *string `type:"string"`
 
-	// The name of the assignment.
+	// The name of the assignment or rule.
 	AssignmentName *string `min:"1" type:"string"`
 
 	// The status of the assignment. Possible values are as follows:
@@ -33339,6 +34021,9 @@ const (
 	// DataSourceTypeMysql is a DataSourceType enum value
 	DataSourceTypeMysql = "MYSQL"
 
+	// DataSourceTypeOracle is a DataSourceType enum value
+	DataSourceTypeOracle = "ORACLE"
+
 	// DataSourceTypePostgresql is a DataSourceType enum value
 	DataSourceTypePostgresql = "POSTGRESQL"
 
@@ -33371,6 +34056,9 @@ const (
 
 	// DataSourceTypeTwitter is a DataSourceType enum value
 	DataSourceTypeTwitter = "TWITTER"
+
+	// DataSourceTypeTimestream is a DataSourceType enum value
+	DataSourceTypeTimestream = "TIMESTREAM"
 )
 
 // DataSourceType_Values returns all elements of the DataSourceType enum
@@ -33386,6 +34074,7 @@ func DataSourceType_Values() []string {
 		DataSourceTypeJira,
 		DataSourceTypeMariadb,
 		DataSourceTypeMysql,
+		DataSourceTypeOracle,
 		DataSourceTypePostgresql,
 		DataSourceTypePresto,
 		DataSourceTypeRedshift,
@@ -33397,6 +34086,7 @@ func DataSourceType_Values() []string {
 		DataSourceTypeSqlserver,
 		DataSourceTypeTeradata,
 		DataSourceTypeTwitter,
+		DataSourceTypeTimestream,
 	}
 }
 
@@ -33413,6 +34103,26 @@ func Edition_Values() []string {
 	return []string{
 		EditionStandard,
 		EditionEnterprise,
+	}
+}
+
+const (
+	// EmbeddingIdentityTypeIam is a EmbeddingIdentityType enum value
+	EmbeddingIdentityTypeIam = "IAM"
+
+	// EmbeddingIdentityTypeQuicksight is a EmbeddingIdentityType enum value
+	EmbeddingIdentityTypeQuicksight = "QUICKSIGHT"
+
+	// EmbeddingIdentityTypeAnonymous is a EmbeddingIdentityType enum value
+	EmbeddingIdentityTypeAnonymous = "ANONYMOUS"
+)
+
+// EmbeddingIdentityType_Values returns all elements of the EmbeddingIdentityType enum
+func EmbeddingIdentityType_Values() []string {
+	return []string{
+		EmbeddingIdentityTypeIam,
+		EmbeddingIdentityTypeQuicksight,
+		EmbeddingIdentityTypeAnonymous,
 	}
 }
 

@@ -192,6 +192,12 @@ func (c *MediaTailor) ListPlaybackConfigurationsRequest(input *ListPlaybackConfi
 		Name:       opListPlaybackConfigurations,
 		HTTPMethod: "GET",
 		HTTPPath:   "/playbackConfigurations",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -237,6 +243,58 @@ func (c *MediaTailor) ListPlaybackConfigurationsWithContext(ctx aws.Context, inp
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListPlaybackConfigurationsPages iterates over the pages of a ListPlaybackConfigurations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPlaybackConfigurations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPlaybackConfigurations operation.
+//    pageNum := 0
+//    err := client.ListPlaybackConfigurationsPages(params,
+//        func(page *mediatailor.ListPlaybackConfigurationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MediaTailor) ListPlaybackConfigurationsPages(input *ListPlaybackConfigurationsInput, fn func(*ListPlaybackConfigurationsOutput, bool) bool) error {
+	return c.ListPlaybackConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPlaybackConfigurationsPagesWithContext same as ListPlaybackConfigurationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaTailor) ListPlaybackConfigurationsPagesWithContext(ctx aws.Context, input *ListPlaybackConfigurationsInput, fn func(*ListPlaybackConfigurationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPlaybackConfigurationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPlaybackConfigurationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListPlaybackConfigurationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListTagsForResource = "ListTagsForResource"
@@ -553,6 +611,28 @@ func (c *MediaTailor) UntagResourceWithContext(ctx aws.Context, input *UntagReso
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+type AdMarkerPassthrough struct {
+	_ struct{} `type:"structure"`
+
+	Enabled *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s AdMarkerPassthrough) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AdMarkerPassthrough) GoString() string {
+	return s.String()
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *AdMarkerPassthrough) SetEnabled(v bool) *AdMarkerPassthrough {
+	s.Enabled = &v
+	return s
 }
 
 type AvailSuppression struct {
@@ -931,6 +1011,9 @@ type GetPlaybackConfigurationOutput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// Predefined aliases for dynamic variables.
+	ConfigurationAliases map[string]map[string]*string `type:"map"`
+
 	// The configuration for DASH content.
 	DashConfiguration *DashConfiguration `type:"structure"`
 
@@ -939,6 +1022,10 @@ type GetPlaybackConfigurationOutput struct {
 
 	// The configuration for pre-roll ad insertion.
 	LivePreRollConfiguration *LivePreRollConfiguration `type:"structure"`
+
+	// The configuration for manifest processing rules. Manifest processing rules
+	// enable customization of the personalized manifests created by MediaTailor.
+	ManifestProcessingRules *ManifestProcessingRules `type:"structure"`
 
 	// The identifier for the playback configuration.
 	Name *string `type:"string"`
@@ -1012,6 +1099,12 @@ func (s *GetPlaybackConfigurationOutput) SetCdnConfiguration(v *CdnConfiguration
 	return s
 }
 
+// SetConfigurationAliases sets the ConfigurationAliases field's value.
+func (s *GetPlaybackConfigurationOutput) SetConfigurationAliases(v map[string]map[string]*string) *GetPlaybackConfigurationOutput {
+	s.ConfigurationAliases = v
+	return s
+}
+
 // SetDashConfiguration sets the DashConfiguration field's value.
 func (s *GetPlaybackConfigurationOutput) SetDashConfiguration(v *DashConfiguration) *GetPlaybackConfigurationOutput {
 	s.DashConfiguration = v
@@ -1027,6 +1120,12 @@ func (s *GetPlaybackConfigurationOutput) SetHlsConfiguration(v *HlsConfiguration
 // SetLivePreRollConfiguration sets the LivePreRollConfiguration field's value.
 func (s *GetPlaybackConfigurationOutput) SetLivePreRollConfiguration(v *LivePreRollConfiguration) *GetPlaybackConfigurationOutput {
 	s.LivePreRollConfiguration = v
+	return s
+}
+
+// SetManifestProcessingRules sets the ManifestProcessingRules field's value.
+func (s *GetPlaybackConfigurationOutput) SetManifestProcessingRules(v *ManifestProcessingRules) *GetPlaybackConfigurationOutput {
+	s.ManifestProcessingRules = v
 	return s
 }
 
@@ -1287,6 +1386,37 @@ func (s *LivePreRollConfiguration) SetMaxDurationSeconds(v int64) *LivePreRollCo
 	return s
 }
 
+// The configuration for manifest processing rules. Manifest processing rules
+// enable customization of the personalized manifests created by MediaTailor.
+type ManifestProcessingRules struct {
+	_ struct{} `type:"structure"`
+
+	// For HLS, when set to true, MediaTailor passes through EXT-X-CUE-IN, EXT-X-CUE-OUT,
+	// and EXT-X-SPLICEPOINT-SCTE35 ad markers from the origin manifest to the MediaTailor
+	// personalized manifest.
+	//
+	// No logic is applied to these ad markers. For example, if EXT-X-CUE-OUT has
+	// a value of 60, but no ads are filled for that ad break, MediaTailor will
+	// not set the value to 0.
+	AdMarkerPassthrough *AdMarkerPassthrough `type:"structure"`
+}
+
+// String returns the string representation
+func (s ManifestProcessingRules) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ManifestProcessingRules) GoString() string {
+	return s.String()
+}
+
+// SetAdMarkerPassthrough sets the AdMarkerPassthrough field's value.
+func (s *ManifestProcessingRules) SetAdMarkerPassthrough(v *AdMarkerPassthrough) *ManifestProcessingRules {
+	s.AdMarkerPassthrough = v
+	return s
+}
+
 type PlaybackConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -1295,6 +1425,9 @@ type PlaybackConfiguration struct {
 	// The configuration for using a content delivery network (CDN), like Amazon
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
+
+	// Predefined aliases for dynamic variables.
+	ConfigurationAliases map[string]map[string]*string `type:"map"`
 
 	// The configuration for DASH content.
 	DashConfiguration *DashConfiguration `type:"structure"`
@@ -1340,6 +1473,12 @@ func (s *PlaybackConfiguration) SetAdDecisionServerUrl(v string) *PlaybackConfig
 // SetCdnConfiguration sets the CdnConfiguration field's value.
 func (s *PlaybackConfiguration) SetCdnConfiguration(v *CdnConfiguration) *PlaybackConfiguration {
 	s.CdnConfiguration = v
+	return s
+}
+
+// SetConfigurationAliases sets the ConfigurationAliases field's value.
+func (s *PlaybackConfiguration) SetConfigurationAliases(v map[string]map[string]*string) *PlaybackConfiguration {
+	s.ConfigurationAliases = v
 	return s
 }
 
@@ -1430,11 +1569,18 @@ type PutPlaybackConfigurationInput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// Predefined aliases for dynamic variables.
+	ConfigurationAliases map[string]map[string]*string `type:"map"`
+
 	// The configuration for DASH content.
 	DashConfiguration *DashConfigurationForPut `type:"structure"`
 
 	// The configuration for pre-roll ad insertion.
 	LivePreRollConfiguration *LivePreRollConfiguration `type:"structure"`
+
+	// The configuration for manifest processing rules. Manifest processing rules
+	// enable customization of the personalized manifests created by MediaTailor.
+	ManifestProcessingRules *ManifestProcessingRules `type:"structure"`
 
 	// The identifier for the playback configuration.
 	Name *string `type:"string"`
@@ -1510,6 +1656,12 @@ func (s *PutPlaybackConfigurationInput) SetCdnConfiguration(v *CdnConfiguration)
 	return s
 }
 
+// SetConfigurationAliases sets the ConfigurationAliases field's value.
+func (s *PutPlaybackConfigurationInput) SetConfigurationAliases(v map[string]map[string]*string) *PutPlaybackConfigurationInput {
+	s.ConfigurationAliases = v
+	return s
+}
+
 // SetDashConfiguration sets the DashConfiguration field's value.
 func (s *PutPlaybackConfigurationInput) SetDashConfiguration(v *DashConfigurationForPut) *PutPlaybackConfigurationInput {
 	s.DashConfiguration = v
@@ -1519,6 +1671,12 @@ func (s *PutPlaybackConfigurationInput) SetDashConfiguration(v *DashConfiguratio
 // SetLivePreRollConfiguration sets the LivePreRollConfiguration field's value.
 func (s *PutPlaybackConfigurationInput) SetLivePreRollConfiguration(v *LivePreRollConfiguration) *PutPlaybackConfigurationInput {
 	s.LivePreRollConfiguration = v
+	return s
+}
+
+// SetManifestProcessingRules sets the ManifestProcessingRules field's value.
+func (s *PutPlaybackConfigurationInput) SetManifestProcessingRules(v *ManifestProcessingRules) *PutPlaybackConfigurationInput {
+	s.ManifestProcessingRules = v
 	return s
 }
 
@@ -1573,6 +1731,9 @@ type PutPlaybackConfigurationOutput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// Predefined aliases for dynamic variables.
+	ConfigurationAliases map[string]map[string]*string `type:"map"`
+
 	// The configuration for DASH content.
 	DashConfiguration *DashConfiguration `type:"structure"`
 
@@ -1581,6 +1742,10 @@ type PutPlaybackConfigurationOutput struct {
 
 	// The configuration for pre-roll ad insertion.
 	LivePreRollConfiguration *LivePreRollConfiguration `type:"structure"`
+
+	// The configuration for manifest processing rules. Manifest processing rules
+	// enable customization of the personalized manifests created by MediaTailor.
+	ManifestProcessingRules *ManifestProcessingRules `type:"structure"`
 
 	Name *string `type:"string"`
 
@@ -1633,6 +1798,12 @@ func (s *PutPlaybackConfigurationOutput) SetCdnConfiguration(v *CdnConfiguration
 	return s
 }
 
+// SetConfigurationAliases sets the ConfigurationAliases field's value.
+func (s *PutPlaybackConfigurationOutput) SetConfigurationAliases(v map[string]map[string]*string) *PutPlaybackConfigurationOutput {
+	s.ConfigurationAliases = v
+	return s
+}
+
 // SetDashConfiguration sets the DashConfiguration field's value.
 func (s *PutPlaybackConfigurationOutput) SetDashConfiguration(v *DashConfiguration) *PutPlaybackConfigurationOutput {
 	s.DashConfiguration = v
@@ -1648,6 +1819,12 @@ func (s *PutPlaybackConfigurationOutput) SetHlsConfiguration(v *HlsConfiguration
 // SetLivePreRollConfiguration sets the LivePreRollConfiguration field's value.
 func (s *PutPlaybackConfigurationOutput) SetLivePreRollConfiguration(v *LivePreRollConfiguration) *PutPlaybackConfigurationOutput {
 	s.LivePreRollConfiguration = v
+	return s
+}
+
+// SetManifestProcessingRules sets the ManifestProcessingRules field's value.
+func (s *PutPlaybackConfigurationOutput) SetManifestProcessingRules(v *ManifestProcessingRules) *PutPlaybackConfigurationOutput {
+	s.ManifestProcessingRules = v
 	return s
 }
 

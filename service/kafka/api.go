@@ -2717,6 +2717,103 @@ func (c *Kafka) UpdateBrokerStorageWithContext(ctx aws.Context, input *UpdateBro
 	return out, req.Send()
 }
 
+const opUpdateBrokerType = "UpdateBrokerType"
+
+// UpdateBrokerTypeRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateBrokerType operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateBrokerType for more information on using the UpdateBrokerType
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateBrokerTypeRequest method.
+//    req, resp := client.UpdateBrokerTypeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kafka-2018-11-14/UpdateBrokerType
+func (c *Kafka) UpdateBrokerTypeRequest(input *UpdateBrokerTypeInput) (req *request.Request, output *UpdateBrokerTypeOutput) {
+	op := &request.Operation{
+		Name:       opUpdateBrokerType,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v1/clusters/{clusterArn}/nodes/type",
+	}
+
+	if input == nil {
+		input = &UpdateBrokerTypeInput{}
+	}
+
+	output = &UpdateBrokerTypeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateBrokerType API operation for Managed Streaming for Kafka.
+//
+// Updates all the brokers in the cluster to the specified type.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Managed Streaming for Kafka's
+// API operation UpdateBrokerType for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Returns information about an error.
+//
+//   * ForbiddenException
+//   Returns information about an error.
+//
+//   * InternalServerErrorException
+//   Returns information about an error.
+//
+//   * NotFoundException
+//   Returns information about an error.
+//
+//   * ServiceUnavailableException
+//   Returns information about an error.
+//
+//   * UnauthorizedException
+//   Returns information about an error.
+//
+//   * TooManyRequestsException
+//   Returns information about an error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kafka-2018-11-14/UpdateBrokerType
+func (c *Kafka) UpdateBrokerType(input *UpdateBrokerTypeInput) (*UpdateBrokerTypeOutput, error) {
+	req, out := c.UpdateBrokerTypeRequest(input)
+	return out, req.Send()
+}
+
+// UpdateBrokerTypeWithContext is the same as UpdateBrokerType with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateBrokerType for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kafka) UpdateBrokerTypeWithContext(ctx aws.Context, input *UpdateBrokerTypeInput, opts ...request.Option) (*UpdateBrokerTypeOutput, error) {
+	req, out := c.UpdateBrokerTypeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateClusterConfiguration = "UpdateClusterConfiguration"
 
 // UpdateClusterConfigurationRequest generates a "aws/request.Request" representing the
@@ -3464,9 +3561,7 @@ type BrokerNodeGroupInfo struct {
 	// ClientSubnets is a required field
 	ClientSubnets []*string `locationName:"clientSubnets" type:"list" required:"true"`
 
-	// The type of Amazon EC2 instances to use for Kafka brokers. The following
-	// instance types are allowed: kafka.m5.large, kafka.m5.xlarge, kafka.m5.2xlarge,
-	// kafka.m5.4xlarge, kafka.m5.12xlarge, and kafka.m5.24xlarge.
+	// The type of broker used in the Amazon MSK cluster.
 	//
 	// InstanceType is a required field
 	InstanceType *string `locationName:"instanceType" min:"5" type:"string" required:"true"`
@@ -3748,7 +3843,7 @@ type ClusterInfo struct {
 	// Arn of active cluster operation.
 	ActiveOperationArn *string `locationName:"activeOperationArn" type:"string"`
 
-	// Information about the broker nodes.
+	// Information about the brokers.
 	BrokerNodeGroupInfo *BrokerNodeGroupInfo `locationName:"brokerNodeGroupInfo" type:"structure"`
 
 	// Includes all client authentication information.
@@ -3776,9 +3871,9 @@ type ClusterInfo struct {
 	EncryptionInfo *EncryptionInfo `locationName:"encryptionInfo" type:"structure"`
 
 	// Specifies which metrics are gathered for the MSK cluster. This property has
-	// three possible values: DEFAULT, PER_BROKER, and PER_TOPIC_PER_BROKER. For
-	// a list of the metrics associated with each of these three levels of monitoring,
-	// see Monitoring (https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html).
+	// the following possible values: DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER,
+	// and PER_TOPIC_PER_PARTITION. For a list of the metrics associated with each
+	// of these levels of monitoring, see Monitoring (https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html).
 	EnhancedMonitoring *string `locationName:"enhancedMonitoring" type:"string" enum:"EnhancedMonitoring"`
 
 	// You can configure your MSK cluster to send broker logs to different destination
@@ -3792,7 +3887,8 @@ type ClusterInfo struct {
 	// Settings for open monitoring using Prometheus.
 	OpenMonitoring *OpenMonitoring `locationName:"openMonitoring" type:"structure"`
 
-	// The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.
+	// The state of the cluster. The possible states are ACTIVE, CREATING, DELETING,
+	// FAILED, HEALING, MAINTENANCE, REBOOTING_BROKER, and UPDATING.
 	State *string `locationName:"state" type:"string" enum:"ClusterState"`
 
 	// Tags attached to the cluster.
@@ -3800,6 +3896,9 @@ type ClusterInfo struct {
 
 	// The connection string to use to connect to the Apache ZooKeeper cluster.
 	ZookeeperConnectString *string `locationName:"zookeeperConnectString" type:"string"`
+
+	// The connection string to use to connect to zookeeper cluster on Tls port.
+	ZookeeperConnectStringTls *string `locationName:"zookeeperConnectStringTls" type:"string"`
 }
 
 // String returns the string representation
@@ -3905,6 +4004,12 @@ func (s *ClusterInfo) SetTags(v map[string]*string) *ClusterInfo {
 // SetZookeeperConnectString sets the ZookeeperConnectString field's value.
 func (s *ClusterInfo) SetZookeeperConnectString(v string) *ClusterInfo {
 	s.ZookeeperConnectString = &v
+	return s
+}
+
+// SetZookeeperConnectStringTls sets the ZookeeperConnectStringTls field's value.
+func (s *ClusterInfo) SetZookeeperConnectStringTls(v string) *ClusterInfo {
+	s.ZookeeperConnectStringTls = &v
 	return s
 }
 
@@ -4364,7 +4469,7 @@ func (s *ConflictException) RequestID() string {
 type CreateClusterInput struct {
 	_ struct{} `type:"structure"`
 
-	// Information about the broker nodes in the cluster.
+	// Information about the brokers.
 	//
 	// BrokerNodeGroupInfo is a required field
 	BrokerNodeGroupInfo *BrokerNodeGroupInfo `locationName:"brokerNodeGroupInfo" type:"structure" required:"true"`
@@ -4384,7 +4489,7 @@ type CreateClusterInput struct {
 	EncryptionInfo *EncryptionInfo `locationName:"encryptionInfo" type:"structure"`
 
 	// Specifies the level of monitoring for the MSK cluster. The possible values
-	// are DEFAULT, PER_BROKER, and PER_TOPIC_PER_BROKER.
+	// are DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER, and PER_TOPIC_PER_PARTITION.
 	EnhancedMonitoring *string `locationName:"enhancedMonitoring" type:"string" enum:"EnhancedMonitoring"`
 
 	// The version of Apache Kafka.
@@ -4549,7 +4654,8 @@ type CreateClusterOutput struct {
 	// The name of the MSK cluster.
 	ClusterName *string `locationName:"clusterName" type:"string"`
 
-	// The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.
+	// The state of the cluster. The possible states are ACTIVE, CREATING, DELETING,
+	// FAILED, HEALING, MAINTENANCE, REBOOTING_BROKER, and UPDATING.
 	State *string `locationName:"state" type:"string" enum:"ClusterState"`
 }
 
@@ -4769,7 +4875,8 @@ type DeleteClusterOutput struct {
 	// The Amazon Resource Name (ARN) of the cluster.
 	ClusterArn *string `locationName:"clusterArn" type:"string"`
 
-	// The state of the cluster. The possible states are CREATING, ACTIVE, and FAILED.
+	// The state of the cluster. The possible states are ACTIVE, CREATING, DELETING,
+	// FAILED, HEALING, MAINTENANCE, REBOOTING_BROKER, and UPDATING.
 	State *string `locationName:"state" type:"string" enum:"ClusterState"`
 }
 
@@ -6566,6 +6673,10 @@ type MutableClusterInfo struct {
 	// CloudWatch for this cluster.
 	EnhancedMonitoring *string `locationName:"enhancedMonitoring" type:"string" enum:"EnhancedMonitoring"`
 
+	// The Amazon MSK broker type that you want all of the brokers in this cluster
+	// to be.
+	InstanceType *string `locationName:"instanceType" min:"5" type:"string"`
+
 	KafkaVersion *string `locationName:"kafkaVersion" type:"string"`
 
 	// LoggingInfo details.
@@ -6603,6 +6714,12 @@ func (s *MutableClusterInfo) SetConfigurationInfo(v *ConfigurationInfo) *Mutable
 // SetEnhancedMonitoring sets the EnhancedMonitoring field's value.
 func (s *MutableClusterInfo) SetEnhancedMonitoring(v string) *MutableClusterInfo {
 	s.EnhancedMonitoring = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *MutableClusterInfo) SetInstanceType(v string) *MutableClusterInfo {
+	s.InstanceType = &v
 	return s
 }
 
@@ -7797,6 +7914,108 @@ func (s *UpdateBrokerStorageOutput) SetClusterOperationArn(v string) *UpdateBrok
 	return s
 }
 
+// Request body for UpdateBrokerType.
+type UpdateBrokerTypeInput struct {
+	_ struct{} `type:"structure"`
+
+	// ClusterArn is a required field
+	ClusterArn *string `location:"uri" locationName:"clusterArn" type:"string" required:"true"`
+
+	// The current version of the cluster.
+	//
+	// CurrentVersion is a required field
+	CurrentVersion *string `locationName:"currentVersion" type:"string" required:"true"`
+
+	// The Amazon MSK broker type that you want all of the brokers in this cluster
+	// to be.
+	//
+	// TargetInstanceType is a required field
+	TargetInstanceType *string `locationName:"targetInstanceType" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateBrokerTypeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateBrokerTypeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateBrokerTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateBrokerTypeInput"}
+	if s.ClusterArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterArn"))
+	}
+	if s.ClusterArn != nil && len(*s.ClusterArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterArn", 1))
+	}
+	if s.CurrentVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("CurrentVersion"))
+	}
+	if s.TargetInstanceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetInstanceType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterArn sets the ClusterArn field's value.
+func (s *UpdateBrokerTypeInput) SetClusterArn(v string) *UpdateBrokerTypeInput {
+	s.ClusterArn = &v
+	return s
+}
+
+// SetCurrentVersion sets the CurrentVersion field's value.
+func (s *UpdateBrokerTypeInput) SetCurrentVersion(v string) *UpdateBrokerTypeInput {
+	s.CurrentVersion = &v
+	return s
+}
+
+// SetTargetInstanceType sets the TargetInstanceType field's value.
+func (s *UpdateBrokerTypeInput) SetTargetInstanceType(v string) *UpdateBrokerTypeInput {
+	s.TargetInstanceType = &v
+	return s
+}
+
+// Response body for UpdateBrokerType.
+type UpdateBrokerTypeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the cluster.
+	ClusterArn *string `locationName:"clusterArn" type:"string"`
+
+	// The Amazon Resource Name (ARN) of the cluster operation.
+	ClusterOperationArn *string `locationName:"clusterOperationArn" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateBrokerTypeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateBrokerTypeOutput) GoString() string {
+	return s.String()
+}
+
+// SetClusterArn sets the ClusterArn field's value.
+func (s *UpdateBrokerTypeOutput) SetClusterArn(v string) *UpdateBrokerTypeOutput {
+	s.ClusterArn = &v
+	return s
+}
+
+// SetClusterOperationArn sets the ClusterOperationArn field's value.
+func (s *UpdateBrokerTypeOutput) SetClusterOperationArn(v string) *UpdateBrokerTypeOutput {
+	s.ClusterOperationArn = &v
+	return s
+}
+
 // Request body for UpdateClusterConfiguration.
 type UpdateClusterConfigurationInput struct {
 	_ struct{} `type:"structure"`
@@ -8347,14 +8566,23 @@ const (
 	// ClusterStateCreating is a ClusterState enum value
 	ClusterStateCreating = "CREATING"
 
-	// ClusterStateUpdating is a ClusterState enum value
-	ClusterStateUpdating = "UPDATING"
-
 	// ClusterStateDeleting is a ClusterState enum value
 	ClusterStateDeleting = "DELETING"
 
 	// ClusterStateFailed is a ClusterState enum value
 	ClusterStateFailed = "FAILED"
+
+	// ClusterStateHealing is a ClusterState enum value
+	ClusterStateHealing = "HEALING"
+
+	// ClusterStateMaintenance is a ClusterState enum value
+	ClusterStateMaintenance = "MAINTENANCE"
+
+	// ClusterStateRebootingBroker is a ClusterState enum value
+	ClusterStateRebootingBroker = "REBOOTING_BROKER"
+
+	// ClusterStateUpdating is a ClusterState enum value
+	ClusterStateUpdating = "UPDATING"
 )
 
 // ClusterState_Values returns all elements of the ClusterState enum
@@ -8362,9 +8590,12 @@ func ClusterState_Values() []string {
 	return []string{
 		ClusterStateActive,
 		ClusterStateCreating,
-		ClusterStateUpdating,
 		ClusterStateDeleting,
 		ClusterStateFailed,
+		ClusterStateHealing,
+		ClusterStateMaintenance,
+		ClusterStateRebootingBroker,
+		ClusterStateUpdating,
 	}
 }
 
@@ -8390,9 +8621,9 @@ func ConfigurationState_Values() []string {
 }
 
 // Specifies which metrics are gathered for the MSK cluster. This property has
-// three possible values: DEFAULT, PER_BROKER, and PER_TOPIC_PER_BROKER. For
-// a list of the metrics associated with each of these three levels of monitoring,
-// see Monitoring (https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html).
+// the following possible values: DEFAULT, PER_BROKER, PER_TOPIC_PER_BROKER,
+// and PER_TOPIC_PER_PARTITION. For a list of the metrics associated with each
+// of these levels of monitoring, see Monitoring (https://docs.aws.amazon.com/msk/latest/developerguide/monitoring.html).
 const (
 	// EnhancedMonitoringDefault is a EnhancedMonitoring enum value
 	EnhancedMonitoringDefault = "DEFAULT"
@@ -8402,6 +8633,9 @@ const (
 
 	// EnhancedMonitoringPerTopicPerBroker is a EnhancedMonitoring enum value
 	EnhancedMonitoringPerTopicPerBroker = "PER_TOPIC_PER_BROKER"
+
+	// EnhancedMonitoringPerTopicPerPartition is a EnhancedMonitoring enum value
+	EnhancedMonitoringPerTopicPerPartition = "PER_TOPIC_PER_PARTITION"
 )
 
 // EnhancedMonitoring_Values returns all elements of the EnhancedMonitoring enum
@@ -8410,6 +8644,7 @@ func EnhancedMonitoring_Values() []string {
 		EnhancedMonitoringDefault,
 		EnhancedMonitoringPerBroker,
 		EnhancedMonitoringPerTopicPerBroker,
+		EnhancedMonitoringPerTopicPerPartition,
 	}
 }
 

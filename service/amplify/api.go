@@ -3356,6 +3356,9 @@ type App struct {
 	// CreateTime is a required field
 	CreateTime *time.Time `locationName:"createTime" type:"timestamp" required:"true"`
 
+	// Describes the custom HTTP headers for the Amplify app.
+	CustomHeaders *string `locationName:"customHeaders" min:"1" type:"string"`
+
 	// Describes the custom redirect and rewrite rules for the Amplify app.
 	CustomRules []*CustomRule `locationName:"customRules" type:"list"`
 
@@ -3471,6 +3474,12 @@ func (s *App) SetBuildSpec(v string) *App {
 // SetCreateTime sets the CreateTime field's value.
 func (s *App) SetCreateTime(v time.Time) *App {
 	s.CreateTime = &v
+	return s
+}
+
+// SetCustomHeaders sets the CustomHeaders field's value.
+func (s *App) SetCustomHeaders(v string) *App {
+	s.CustomHeaders = &v
 	return s
 }
 
@@ -3617,7 +3626,14 @@ type AutoBranchCreationConfig struct {
 	// Enables basic authorization for the autocreated branch.
 	EnableBasicAuth *bool `locationName:"enableBasicAuth" type:"boolean"`
 
-	// Enables pull request preview for the autocreated branch.
+	// Enables performance mode for the branch.
+	//
+	// Performance mode optimizes for faster hosting performance by keeping content
+	// cached at the edge for a longer interval. When performance mode is enabled,
+	// hosting configuration or code changes can take up to 10 minutes to roll out.
+	EnablePerformanceMode *bool `locationName:"enablePerformanceMode" type:"boolean"`
+
+	// Enables pull request previews for the autocreated branch.
 	EnablePullRequestPreview *bool `locationName:"enablePullRequestPreview" type:"boolean"`
 
 	// The environment variables for the autocreated branch.
@@ -3677,6 +3693,12 @@ func (s *AutoBranchCreationConfig) SetEnableAutoBuild(v bool) *AutoBranchCreatio
 // SetEnableBasicAuth sets the EnableBasicAuth field's value.
 func (s *AutoBranchCreationConfig) SetEnableBasicAuth(v bool) *AutoBranchCreationConfig {
 	s.EnableBasicAuth = &v
+	return s
+}
+
+// SetEnablePerformanceMode sets the EnablePerformanceMode field's value.
+func (s *AutoBranchCreationConfig) SetEnablePerformanceMode(v bool) *AutoBranchCreationConfig {
+	s.EnablePerformanceMode = &v
 	return s
 }
 
@@ -3917,7 +3939,14 @@ type Branch struct {
 	// EnableNotification is a required field
 	EnableNotification *bool `locationName:"enableNotification" type:"boolean" required:"true"`
 
-	// Enables pull request preview for the branch.
+	// Enables performance mode for the branch.
+	//
+	// Performance mode optimizes for faster hosting performance by keeping content
+	// cached at the edge for a longer interval. When performance mode is enabled,
+	// hosting configuration or code changes can take up to 10 minutes to roll out.
+	EnablePerformanceMode *bool `locationName:"enablePerformanceMode" type:"boolean"`
+
+	// Enables pull request previews for the branch.
 	//
 	// EnablePullRequestPreview is a required field
 	EnablePullRequestPreview *bool `locationName:"enablePullRequestPreview" type:"boolean" required:"true"`
@@ -4065,6 +4094,12 @@ func (s *Branch) SetEnableNotification(v bool) *Branch {
 	return s
 }
 
+// SetEnablePerformanceMode sets the EnablePerformanceMode field's value.
+func (s *Branch) SetEnablePerformanceMode(v bool) *Branch {
+	s.EnablePerformanceMode = &v
+	return s
+}
+
 // SetEnablePullRequestPreview sets the EnablePullRequestPreview field's value.
 func (s *Branch) SetEnablePullRequestPreview(v bool) *Branch {
 	s.EnablePullRequestPreview = &v
@@ -4140,10 +4175,10 @@ type CreateAppInput struct {
 	// read-only deploy key. The token is not stored.
 	AccessToken *string `locationName:"accessToken" min:"1" type:"string" sensitive:"true"`
 
-	// The automated branch creation configuration for the Amplify app.
+	// The automated branch creation configuration for an Amplify app.
 	AutoBranchCreationConfig *AutoBranchCreationConfig `locationName:"autoBranchCreationConfig" type:"structure"`
 
-	// The automated branch creation glob patterns for the Amplify app.
+	// The automated branch creation glob patterns for an Amplify app.
 	AutoBranchCreationPatterns []*string `locationName:"autoBranchCreationPatterns" type:"list"`
 
 	// The credentials for basic authorization for an Amplify app.
@@ -4152,13 +4187,16 @@ type CreateAppInput struct {
 	// The build specification (build spec) for an Amplify app.
 	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
 
+	// The custom HTTP headers for an Amplify app.
+	CustomHeaders *string `locationName:"customHeaders" min:"1" type:"string"`
+
 	// The custom rewrite and redirect rules for an Amplify app.
 	CustomRules []*CustomRule `locationName:"customRules" type:"list"`
 
 	// The description for an Amplify app.
 	Description *string `locationName:"description" type:"string"`
 
-	// Enables automated branch creation for the Amplify app.
+	// Enables automated branch creation for an Amplify app.
 	EnableAutoBranchCreation *bool `locationName:"enableAutoBranchCreation" type:"boolean"`
 
 	// Enables basic authorization for an Amplify app. This will apply to all branches
@@ -4179,7 +4217,7 @@ type CreateAppInput struct {
 	// app.
 	IamServiceRoleArn *string `locationName:"iamServiceRoleArn" min:"1" type:"string"`
 
-	// The name for the Amplify app.
+	// The name for an Amplify app.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
@@ -4217,6 +4255,9 @@ func (s *CreateAppInput) Validate() error {
 	}
 	if s.BuildSpec != nil && len(*s.BuildSpec) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BuildSpec", 1))
+	}
+	if s.CustomHeaders != nil && len(*s.CustomHeaders) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CustomHeaders", 1))
 	}
 	if s.IamServiceRoleArn != nil && len(*s.IamServiceRoleArn) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("IamServiceRoleArn", 1))
@@ -4279,6 +4320,12 @@ func (s *CreateAppInput) SetBasicAuthCredentials(v string) *CreateAppInput {
 // SetBuildSpec sets the BuildSpec field's value.
 func (s *CreateAppInput) SetBuildSpec(v string) *CreateAppInput {
 	s.BuildSpec = &v
+	return s
+}
+
+// SetCustomHeaders sets the CustomHeaders field's value.
+func (s *CreateAppInput) SetCustomHeaders(v string) *CreateAppInput {
+	s.CustomHeaders = &v
 	return s
 }
 
@@ -4534,7 +4581,14 @@ type CreateBranchInput struct {
 	// Enables notifications for the branch.
 	EnableNotification *bool `locationName:"enableNotification" type:"boolean"`
 
-	// Enables pull request preview for this branch.
+	// Enables performance mode for the branch.
+	//
+	// Performance mode optimizes for faster hosting performance by keeping content
+	// cached at the edge for a longer interval. When performance mode is enabled,
+	// hosting configuration or code changes can take up to 10 minutes to roll out.
+	EnablePerformanceMode *bool `locationName:"enablePerformanceMode" type:"boolean"`
+
+	// Enables pull request previews for this branch.
 	EnablePullRequestPreview *bool `locationName:"enablePullRequestPreview" type:"boolean"`
 
 	// The environment variables for the branch.
@@ -4654,6 +4708,12 @@ func (s *CreateBranchInput) SetEnableBasicAuth(v bool) *CreateBranchInput {
 // SetEnableNotification sets the EnableNotification field's value.
 func (s *CreateBranchInput) SetEnableNotification(v bool) *CreateBranchInput {
 	s.EnableNotification = &v
+	return s
+}
+
+// SetEnablePerformanceMode sets the EnablePerformanceMode field's value.
+func (s *CreateBranchInput) SetEnablePerformanceMode(v bool) *CreateBranchInput {
+	s.EnablePerformanceMode = &v
 	return s
 }
 
@@ -5087,6 +5147,27 @@ type CustomRule struct {
 	Source *string `locationName:"source" min:"1" type:"string" required:"true"`
 
 	// The status code for a URL rewrite or redirect rule.
+	//
+	// 200
+	//
+	// Represents a 200 rewrite rule.
+	//
+	// 301
+	//
+	// Represents a 301 (moved pemanently) redirect rule. This and all future requests
+	// should be directed to the target URL.
+	//
+	// 302
+	//
+	// Represents a 302 temporary redirect rule.
+	//
+	// 404
+	//
+	// Represents a 404 redirect rule.
+	//
+	// 404-200
+	//
+	// Represents a 404 rewrite rule.
 	Status *string `locationName:"status" min:"3" type:"string"`
 
 	// The target pattern for a URL rewrite or redirect rule.
@@ -6757,7 +6838,7 @@ type ListAppsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. If non-null, the pagination token is returned in a result.
 	// Pass its value in another request to retrieve more entries.
@@ -6772,19 +6853,6 @@ func (s ListAppsInput) String() string {
 // GoString returns the string representation
 func (s ListAppsInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *ListAppsInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "ListAppsInput"}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -6856,7 +6924,7 @@ type ListArtifactsInput struct {
 	JobId *string `location:"uri" locationName:"jobId" type:"string" required:"true"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. Set to null to start listing artifacts from start. If
 	// a non-null pagination token is returned in a result, pass its value in here
@@ -6894,9 +6962,6 @@ func (s *ListArtifactsInput) Validate() error {
 	}
 	if s.JobId != nil && len(*s.JobId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -6984,7 +7049,7 @@ type ListBackendEnvironmentsInput struct {
 	EnvironmentName *string `location:"querystring" locationName:"environmentName" min:"1" type:"string"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. Set to null to start listing backend environments from
 	// the start. If a non-null pagination token is returned in a result, pass its
@@ -7013,9 +7078,6 @@ func (s *ListBackendEnvironmentsInput) Validate() error {
 	}
 	if s.EnvironmentName != nil && len(*s.EnvironmentName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("EnvironmentName", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7094,7 +7156,7 @@ type ListBranchesInput struct {
 	AppId *string `location:"uri" locationName:"appId" min:"1" type:"string" required:"true"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. Set to null to start listing branches from the start.
 	// If a non-null pagination token is returned in a result, pass its value in
@@ -7120,9 +7182,6 @@ func (s *ListBranchesInput) Validate() error {
 	}
 	if s.AppId != nil && len(*s.AppId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AppId", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7195,7 +7254,7 @@ type ListDomainAssociationsInput struct {
 	AppId *string `location:"uri" locationName:"appId" min:"1" type:"string" required:"true"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. Set to null to start listing apps from the start. If
 	// non-null, a pagination token is returned in a result. Pass its value in here
@@ -7221,9 +7280,6 @@ func (s *ListDomainAssociationsInput) Validate() error {
 	}
 	if s.AppId != nil && len(*s.AppId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AppId", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7301,7 +7357,7 @@ type ListJobsInput struct {
 	BranchName *string `location:"uri" locationName:"branchName" min:"1" type:"string" required:"true"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. Set to null to start listing steps from the start. If
 	// a non-null pagination token is returned in a result, pass its value in here
@@ -7333,9 +7389,6 @@ func (s *ListJobsInput) Validate() error {
 	}
 	if s.BranchName != nil && len(*s.BranchName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BranchName", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7480,7 +7533,7 @@ type ListWebhooksInput struct {
 	AppId *string `location:"uri" locationName:"appId" min:"1" type:"string" required:"true"`
 
 	// The maximum number of records to list in a single response.
-	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
 
 	// A pagination token. Set to null to start listing webhooks from the start.
 	// If non-null,the pagination token is returned in a result. Pass its value
@@ -7506,9 +7559,6 @@ func (s *ListWebhooksInput) Validate() error {
 	}
 	if s.AppId != nil && len(*s.AppId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("AppId", 1))
-	}
-	if s.MaxResults != nil && *s.MaxResults < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8535,10 +8585,10 @@ type UpdateAppInput struct {
 	// AppId is a required field
 	AppId *string `location:"uri" locationName:"appId" min:"1" type:"string" required:"true"`
 
-	// The automated branch creation configuration for the Amplify app.
+	// The automated branch creation configuration for an Amplify app.
 	AutoBranchCreationConfig *AutoBranchCreationConfig `locationName:"autoBranchCreationConfig" type:"structure"`
 
-	// Describes the automated branch creation glob patterns for the Amplify app.
+	// Describes the automated branch creation glob patterns for an Amplify app.
 	AutoBranchCreationPatterns []*string `locationName:"autoBranchCreationPatterns" type:"list"`
 
 	// The basic authorization credentials for an Amplify app.
@@ -8547,13 +8597,16 @@ type UpdateAppInput struct {
 	// The build specification (build spec) for an Amplify app.
 	BuildSpec *string `locationName:"buildSpec" min:"1" type:"string"`
 
+	// The custom HTTP headers for an Amplify app.
+	CustomHeaders *string `locationName:"customHeaders" min:"1" type:"string"`
+
 	// The custom redirect and rewrite rules for an Amplify app.
 	CustomRules []*CustomRule `locationName:"customRules" type:"list"`
 
 	// The description for an Amplify app.
 	Description *string `locationName:"description" type:"string"`
 
-	// Enables automated branch creation for the Amplify app.
+	// Enables automated branch creation for an Amplify app.
 	EnableAutoBranchCreation *bool `locationName:"enableAutoBranchCreation" type:"boolean"`
 
 	// Enables basic authorization for an Amplify app.
@@ -8612,6 +8665,9 @@ func (s *UpdateAppInput) Validate() error {
 	}
 	if s.BuildSpec != nil && len(*s.BuildSpec) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("BuildSpec", 1))
+	}
+	if s.CustomHeaders != nil && len(*s.CustomHeaders) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CustomHeaders", 1))
 	}
 	if s.IamServiceRoleArn != nil && len(*s.IamServiceRoleArn) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("IamServiceRoleArn", 1))
@@ -8674,6 +8730,12 @@ func (s *UpdateAppInput) SetBasicAuthCredentials(v string) *UpdateAppInput {
 // SetBuildSpec sets the BuildSpec field's value.
 func (s *UpdateAppInput) SetBuildSpec(v string) *UpdateAppInput {
 	s.BuildSpec = &v
+	return s
+}
+
+// SetCustomHeaders sets the CustomHeaders field's value.
+func (s *UpdateAppInput) SetCustomHeaders(v string) *UpdateAppInput {
+	s.CustomHeaders = &v
 	return s
 }
 
@@ -8814,7 +8876,14 @@ type UpdateBranchInput struct {
 	// Enables notifications for the branch.
 	EnableNotification *bool `locationName:"enableNotification" type:"boolean"`
 
-	// Enables pull request preview for this branch.
+	// Enables performance mode for the branch.
+	//
+	// Performance mode optimizes for faster hosting performance by keeping content
+	// cached at the edge for a longer interval. When performance mode is enabled,
+	// hosting configuration or code changes can take up to 10 minutes to roll out.
+	EnablePerformanceMode *bool `locationName:"enablePerformanceMode" type:"boolean"`
+
+	// Enables pull request previews for this branch.
 	EnablePullRequestPreview *bool `locationName:"enablePullRequestPreview" type:"boolean"`
 
 	// The environment variables for the branch.
@@ -8928,6 +8997,12 @@ func (s *UpdateBranchInput) SetEnableBasicAuth(v bool) *UpdateBranchInput {
 // SetEnableNotification sets the EnableNotification field's value.
 func (s *UpdateBranchInput) SetEnableNotification(v bool) *UpdateBranchInput {
 	s.EnableNotification = &v
+	return s
+}
+
+// SetEnablePerformanceMode sets the EnablePerformanceMode field's value.
+func (s *UpdateBranchInput) SetEnablePerformanceMode(v bool) *UpdateBranchInput {
+	s.EnablePerformanceMode = &v
 	return s
 }
 

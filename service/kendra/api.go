@@ -491,6 +491,97 @@ func (c *Kendra) CreateIndexWithContext(ctx aws.Context, input *CreateIndexInput
 	return out, req.Send()
 }
 
+const opCreateThesaurus = "CreateThesaurus"
+
+// CreateThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the CreateThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateThesaurus for more information on using the CreateThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateThesaurusRequest method.
+//    req, resp := client.CreateThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateThesaurus
+func (c *Kendra) CreateThesaurusRequest(input *CreateThesaurusInput) (req *request.Request, output *CreateThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opCreateThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateThesaurusInput{}
+	}
+
+	output = &CreateThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateThesaurus API operation for AWSKendraFrontendService.
+//
+// Creates a thesaurus for an index. The thesaurus contains a list of synonyms
+// in Solr format.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation CreateThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * ServiceQuotaExceededException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/CreateThesaurus
+func (c *Kendra) CreateThesaurus(input *CreateThesaurusInput) (*CreateThesaurusOutput, error) {
+	req, out := c.CreateThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// CreateThesaurusWithContext is the same as CreateThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) CreateThesaurusWithContext(ctx aws.Context, input *CreateThesaurusInput, opts ...request.Option) (*CreateThesaurusOutput, error) {
+	req, out := c.CreateThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteDataSource = "DeleteDataSource"
 
 // DeleteDataSourceRequest generates a "aws/request.Request" representing the
@@ -763,6 +854,95 @@ func (c *Kendra) DeleteIndexWithContext(ctx aws.Context, input *DeleteIndexInput
 	return out, req.Send()
 }
 
+const opDeleteThesaurus = "DeleteThesaurus"
+
+// DeleteThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteThesaurus for more information on using the DeleteThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteThesaurusRequest method.
+//    req, resp := client.DeleteThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteThesaurus
+func (c *Kendra) DeleteThesaurusRequest(input *DeleteThesaurusInput) (req *request.Request, output *DeleteThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opDeleteThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteThesaurusInput{}
+	}
+
+	output = &DeleteThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteThesaurus API operation for AWSKendraFrontendService.
+//
+// Deletes an existing Amazon Kendra thesaurus.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DeleteThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ConflictException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DeleteThesaurus
+func (c *Kendra) DeleteThesaurus(input *DeleteThesaurusInput) (*DeleteThesaurusOutput, error) {
+	req, out := c.DeleteThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// DeleteThesaurusWithContext is the same as DeleteThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DeleteThesaurusWithContext(ctx aws.Context, input *DeleteThesaurusInput, opts ...request.Option) (*DeleteThesaurusOutput, error) {
+	req, out := c.DeleteThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeDataSource = "DescribeDataSource"
 
 // DescribeDataSourceRequest generates a "aws/request.Request" representing the
@@ -1016,6 +1196,92 @@ func (c *Kendra) DescribeIndex(input *DescribeIndexInput) (*DescribeIndexOutput,
 // for more information on using Contexts.
 func (c *Kendra) DescribeIndexWithContext(ctx aws.Context, input *DescribeIndexInput, opts ...request.Option) (*DescribeIndexOutput, error) {
 	req, out := c.DescribeIndexRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeThesaurus = "DescribeThesaurus"
+
+// DescribeThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeThesaurus for more information on using the DescribeThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeThesaurusRequest method.
+//    req, resp := client.DescribeThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeThesaurus
+func (c *Kendra) DescribeThesaurusRequest(input *DescribeThesaurusInput) (req *request.Request, output *DescribeThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeThesaurusInput{}
+	}
+
+	output = &DescribeThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeThesaurus API operation for AWSKendraFrontendService.
+//
+// Describes an existing Amazon Kendra thesaurus.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation DescribeThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/DescribeThesaurus
+func (c *Kendra) DescribeThesaurus(input *DescribeThesaurusInput) (*DescribeThesaurusOutput, error) {
+	req, out := c.DescribeThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// DescribeThesaurusWithContext is the same as DescribeThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) DescribeThesaurusWithContext(ctx aws.Context, input *DescribeThesaurusInput, opts ...request.Option) (*DescribeThesaurusOutput, error) {
+	req, out := c.DescribeThesaurusRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1621,6 +1887,92 @@ func (c *Kendra) ListTagsForResource(input *ListTagsForResourceInput) (*ListTags
 // for more information on using Contexts.
 func (c *Kendra) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListThesauri = "ListThesauri"
+
+// ListThesauriRequest generates a "aws/request.Request" representing the
+// client's request for the ListThesauri operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListThesauri for more information on using the ListThesauri
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListThesauriRequest method.
+//    req, resp := client.ListThesauriRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListThesauri
+func (c *Kendra) ListThesauriRequest(input *ListThesauriInput) (req *request.Request, output *ListThesauriOutput) {
+	op := &request.Operation{
+		Name:       opListThesauri,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListThesauriInput{}
+	}
+
+	output = &ListThesauriOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListThesauri API operation for AWSKendraFrontendService.
+//
+// Lists the Amazon Kendra thesauri associated with an index.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation ListThesauri for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/ListThesauri
+func (c *Kendra) ListThesauri(input *ListThesauriInput) (*ListThesauriOutput, error) {
+	req, out := c.ListThesauriRequest(input)
+	return out, req.Send()
+}
+
+// ListThesauriWithContext is the same as ListThesauri with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListThesauri for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) ListThesauriWithContext(ctx aws.Context, input *ListThesauriInput, opts ...request.Option) (*ListThesauriOutput, error) {
+	req, out := c.ListThesauriRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2359,7 +2711,97 @@ func (c *Kendra) UpdateIndexWithContext(ctx aws.Context, input *UpdateIndexInput
 	return out, req.Send()
 }
 
-// Access Control List files for the documents in a data source.
+const opUpdateThesaurus = "UpdateThesaurus"
+
+// UpdateThesaurusRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateThesaurus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateThesaurus for more information on using the UpdateThesaurus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateThesaurusRequest method.
+//    req, resp := client.UpdateThesaurusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateThesaurus
+func (c *Kendra) UpdateThesaurusRequest(input *UpdateThesaurusInput) (req *request.Request, output *UpdateThesaurusOutput) {
+	op := &request.Operation{
+		Name:       opUpdateThesaurus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateThesaurusInput{}
+	}
+
+	output = &UpdateThesaurusOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateThesaurus API operation for AWSKendraFrontendService.
+//
+// Updates a thesaurus file associated with an index.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSKendraFrontendService's
+// API operation UpdateThesaurus for usage and error information.
+//
+// Returned Error Types:
+//   * ValidationException
+//
+//   * ResourceNotFoundException
+//
+//   * ThrottlingException
+//
+//   * AccessDeniedException
+//
+//   * ConflictException
+//
+//   * InternalServerException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/kendra-2019-02-03/UpdateThesaurus
+func (c *Kendra) UpdateThesaurus(input *UpdateThesaurusInput) (*UpdateThesaurusOutput, error) {
+	req, out := c.UpdateThesaurusRequest(input)
+	return out, req.Send()
+}
+
+// UpdateThesaurusWithContext is the same as UpdateThesaurus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateThesaurus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Kendra) UpdateThesaurusWithContext(ctx aws.Context, input *UpdateThesaurusInput, opts ...request.Option) (*UpdateThesaurusOutput, error) {
+	req, out := c.UpdateThesaurusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// Access Control List files for the documents in a data source. For the format
+// of the file, see Access control for S3 data sources (https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html).
 type AccessControlListConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -3337,6 +3779,721 @@ func (s *ConflictException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Specifies the attachment settings for the Confluence data source. Attachment
+// settings are optional, if you don't specify settings attachments, Amazon
+// Kendra won't index them.
+type ConfluenceAttachmentConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Defines how attachment metadata fields should be mapped to index fields.
+	// Before you can map a field, you must first create an index field with a matching
+	// type using the console or the UpdateIndex operation.
+	//
+	// If you specify the AttachentFieldMappings parameter, you must specify at
+	// least one field mapping.
+	AttachmentFieldMappings []*ConfluenceAttachmentToIndexFieldMapping `min:"1" type:"list"`
+
+	// Indicates whether Amazon Kendra indexes attachments to the pages and blogs
+	// in the Confluence data source.
+	CrawlAttachments *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s ConfluenceAttachmentConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceAttachmentConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceAttachmentConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceAttachmentConfiguration"}
+	if s.AttachmentFieldMappings != nil && len(s.AttachmentFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AttachmentFieldMappings", 1))
+	}
+	if s.AttachmentFieldMappings != nil {
+		for i, v := range s.AttachmentFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AttachmentFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttachmentFieldMappings sets the AttachmentFieldMappings field's value.
+func (s *ConfluenceAttachmentConfiguration) SetAttachmentFieldMappings(v []*ConfluenceAttachmentToIndexFieldMapping) *ConfluenceAttachmentConfiguration {
+	s.AttachmentFieldMappings = v
+	return s
+}
+
+// SetCrawlAttachments sets the CrawlAttachments field's value.
+func (s *ConfluenceAttachmentConfiguration) SetCrawlAttachments(v bool) *ConfluenceAttachmentConfiguration {
+	s.CrawlAttachments = &v
+	return s
+}
+
+// Defines the mapping between a field in the Confluence data source to a Amazon
+// Kendra index field.
+//
+// You must first create the index field using the operation.
+type ConfluenceAttachmentToIndexFieldMapping struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the field in the data source.
+	//
+	// You must first create the index field using the operation.
+	DataSourceFieldName *string `type:"string" enum:"ConfluenceAttachmentFieldName"`
+
+	// The format for date fields in the data source. If the field specified in
+	// DataSourceFieldName is a date field you must specify the date format. If
+	// the field is not a date field, an exception is thrown.
+	DateFieldFormat *string `min:"4" type:"string"`
+
+	// The name of the index field to map to the Confluence data source field. The
+	// index field type must match the Confluence field type.
+	IndexFieldName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ConfluenceAttachmentToIndexFieldMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceAttachmentToIndexFieldMapping) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceAttachmentToIndexFieldMapping) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceAttachmentToIndexFieldMapping"}
+	if s.DateFieldFormat != nil && len(*s.DateFieldFormat) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("DateFieldFormat", 4))
+	}
+	if s.IndexFieldName != nil && len(*s.IndexFieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexFieldName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceFieldName sets the DataSourceFieldName field's value.
+func (s *ConfluenceAttachmentToIndexFieldMapping) SetDataSourceFieldName(v string) *ConfluenceAttachmentToIndexFieldMapping {
+	s.DataSourceFieldName = &v
+	return s
+}
+
+// SetDateFieldFormat sets the DateFieldFormat field's value.
+func (s *ConfluenceAttachmentToIndexFieldMapping) SetDateFieldFormat(v string) *ConfluenceAttachmentToIndexFieldMapping {
+	s.DateFieldFormat = &v
+	return s
+}
+
+// SetIndexFieldName sets the IndexFieldName field's value.
+func (s *ConfluenceAttachmentToIndexFieldMapping) SetIndexFieldName(v string) *ConfluenceAttachmentToIndexFieldMapping {
+	s.IndexFieldName = &v
+	return s
+}
+
+// Specifies the blog settings for the Confluence data source. Blogs are always
+// indexed unless filtered from the index by the ExclusionPatterns or InclusionPatterns
+// fields in the data type.
+type ConfluenceBlogConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Defines how blog metadata fields should be mapped to index fields. Before
+	// you can map a field, you must first create an index field with a matching
+	// type using the console or the UpdateIndex operation.
+	//
+	// If you specify the BlogFieldMappings parameter, you must specify at least
+	// one field mapping.
+	BlogFieldMappings []*ConfluenceBlogToIndexFieldMapping `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s ConfluenceBlogConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceBlogConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceBlogConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceBlogConfiguration"}
+	if s.BlogFieldMappings != nil && len(s.BlogFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("BlogFieldMappings", 1))
+	}
+	if s.BlogFieldMappings != nil {
+		for i, v := range s.BlogFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BlogFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBlogFieldMappings sets the BlogFieldMappings field's value.
+func (s *ConfluenceBlogConfiguration) SetBlogFieldMappings(v []*ConfluenceBlogToIndexFieldMapping) *ConfluenceBlogConfiguration {
+	s.BlogFieldMappings = v
+	return s
+}
+
+// Defines the mapping between a blog field in the Confluence data source to
+// a Amazon Kendra index field.
+//
+// You must first create the index field using the operation.
+type ConfluenceBlogToIndexFieldMapping struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the field in the data source.
+	DataSourceFieldName *string `type:"string" enum:"ConfluenceBlogFieldName"`
+
+	// The format for date fields in the data source. If the field specified in
+	// DataSourceFieldName is a date field you must specify the date format. If
+	// the field is not a date field, an exception is thrown.
+	DateFieldFormat *string `min:"4" type:"string"`
+
+	// The name of the index field to map to the Confluence data source field. The
+	// index field type must match the Confluence field type.
+	IndexFieldName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ConfluenceBlogToIndexFieldMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceBlogToIndexFieldMapping) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceBlogToIndexFieldMapping) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceBlogToIndexFieldMapping"}
+	if s.DateFieldFormat != nil && len(*s.DateFieldFormat) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("DateFieldFormat", 4))
+	}
+	if s.IndexFieldName != nil && len(*s.IndexFieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexFieldName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceFieldName sets the DataSourceFieldName field's value.
+func (s *ConfluenceBlogToIndexFieldMapping) SetDataSourceFieldName(v string) *ConfluenceBlogToIndexFieldMapping {
+	s.DataSourceFieldName = &v
+	return s
+}
+
+// SetDateFieldFormat sets the DateFieldFormat field's value.
+func (s *ConfluenceBlogToIndexFieldMapping) SetDateFieldFormat(v string) *ConfluenceBlogToIndexFieldMapping {
+	s.DateFieldFormat = &v
+	return s
+}
+
+// SetIndexFieldName sets the IndexFieldName field's value.
+func (s *ConfluenceBlogToIndexFieldMapping) SetIndexFieldName(v string) *ConfluenceBlogToIndexFieldMapping {
+	s.IndexFieldName = &v
+	return s
+}
+
+// Provides configuration information for data sources that connect to Confluence.
+type ConfluenceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies configuration information for indexing attachments to Confluence
+	// blogs and pages.
+	AttachmentConfiguration *ConfluenceAttachmentConfiguration `type:"structure"`
+
+	// Specifies configuration information for indexing Confluence blogs.
+	BlogConfiguration *ConfluenceBlogConfiguration `type:"structure"`
+
+	// A list of regular expression patterns that apply to a URL on the Confluence
+	// server. An exclusion pattern can apply to a blog post, a page, a space, or
+	// an attachment. Items that match the pattern are excluded from the index.
+	// Items that don't match the pattern are included in the index. If a item matches
+	// both an exclusion pattern and an inclusion pattern, the item isn't included
+	// in the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// A list of regular expression patterns that apply to a URL on the Confluence
+	// server. An inclusion pattern can apply to a blog post, a page, a space, or
+	// an attachment. Items that match the patterns are included in the index. Items
+	// that don't match the pattern are excluded from the index. If an item matches
+	// both an inclusion pattern and an exclusion pattern, the item isn't included
+	// in the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// Specifies configuration information for indexing Confluence pages.
+	PageConfiguration *ConfluencePageConfiguration `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of an AWS Secrets Manager secret that contains
+	// the key/value pairs required to connect to your Confluence server. The secret
+	// must contain a JSON structure with the following keys:
+	//
+	//    * username - The user name or email address of a user with administrative
+	//    privileges for the Confluence server.
+	//
+	//    * password - The password associated with the user logging in to the Confluence
+	//    server.
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+
+	// The URL of your Confluence instance. Use the full URL of the server. For
+	// example, https://server.example.com:port/. You can also use an IP address,
+	// for example, https://192.168.1.113/.
+	//
+	// ServerUrl is a required field
+	ServerUrl *string `min:"1" type:"string" required:"true"`
+
+	// Specifies configuration information for indexing Confluence spaces.
+	SpaceConfiguration *ConfluenceSpaceConfiguration `type:"structure"`
+
+	// Specifies the version of the Confluence installation that you are connecting
+	// to.
+	//
+	// Version is a required field
+	Version *string `type:"string" required:"true" enum:"ConfluenceVersion"`
+
+	// Specifies the information for connecting to an Amazon VPC.
+	VpcConfiguration *DataSourceVpcConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s ConfluenceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceConfiguration"}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.ServerUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerUrl"))
+	}
+	if s.ServerUrl != nil && len(*s.ServerUrl) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerUrl", 1))
+	}
+	if s.Version == nil {
+		invalidParams.Add(request.NewErrParamRequired("Version"))
+	}
+	if s.AttachmentConfiguration != nil {
+		if err := s.AttachmentConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("AttachmentConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.BlogConfiguration != nil {
+		if err := s.BlogConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("BlogConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PageConfiguration != nil {
+		if err := s.PageConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("PageConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SpaceConfiguration != nil {
+		if err := s.SpaceConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("SpaceConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VpcConfiguration != nil {
+		if err := s.VpcConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttachmentConfiguration sets the AttachmentConfiguration field's value.
+func (s *ConfluenceConfiguration) SetAttachmentConfiguration(v *ConfluenceAttachmentConfiguration) *ConfluenceConfiguration {
+	s.AttachmentConfiguration = v
+	return s
+}
+
+// SetBlogConfiguration sets the BlogConfiguration field's value.
+func (s *ConfluenceConfiguration) SetBlogConfiguration(v *ConfluenceBlogConfiguration) *ConfluenceConfiguration {
+	s.BlogConfiguration = v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *ConfluenceConfiguration) SetExclusionPatterns(v []*string) *ConfluenceConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *ConfluenceConfiguration) SetInclusionPatterns(v []*string) *ConfluenceConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetPageConfiguration sets the PageConfiguration field's value.
+func (s *ConfluenceConfiguration) SetPageConfiguration(v *ConfluencePageConfiguration) *ConfluenceConfiguration {
+	s.PageConfiguration = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *ConfluenceConfiguration) SetSecretArn(v string) *ConfluenceConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
+// SetServerUrl sets the ServerUrl field's value.
+func (s *ConfluenceConfiguration) SetServerUrl(v string) *ConfluenceConfiguration {
+	s.ServerUrl = &v
+	return s
+}
+
+// SetSpaceConfiguration sets the SpaceConfiguration field's value.
+func (s *ConfluenceConfiguration) SetSpaceConfiguration(v *ConfluenceSpaceConfiguration) *ConfluenceConfiguration {
+	s.SpaceConfiguration = v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *ConfluenceConfiguration) SetVersion(v string) *ConfluenceConfiguration {
+	s.Version = &v
+	return s
+}
+
+// SetVpcConfiguration sets the VpcConfiguration field's value.
+func (s *ConfluenceConfiguration) SetVpcConfiguration(v *DataSourceVpcConfiguration) *ConfluenceConfiguration {
+	s.VpcConfiguration = v
+	return s
+}
+
+// Specifies the page settings for the Confluence data source.
+type ConfluencePageConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Defines how page metadata fields should be mapped to index fields. Before
+	// you can map a field, you must first create an index field with a matching
+	// type using the console or the UpdateIndex operation.
+	//
+	// If you specify the PageFieldMappings parameter, you must specify at least
+	// one field mapping.
+	PageFieldMappings []*ConfluencePageToIndexFieldMapping `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s ConfluencePageConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluencePageConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluencePageConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluencePageConfiguration"}
+	if s.PageFieldMappings != nil && len(s.PageFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PageFieldMappings", 1))
+	}
+	if s.PageFieldMappings != nil {
+		for i, v := range s.PageFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PageFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPageFieldMappings sets the PageFieldMappings field's value.
+func (s *ConfluencePageConfiguration) SetPageFieldMappings(v []*ConfluencePageToIndexFieldMapping) *ConfluencePageConfiguration {
+	s.PageFieldMappings = v
+	return s
+}
+
+// Defines the mapping between a field in the Confluence data source to a Amazon
+// Kendra index field.
+//
+// You must first create the index field using the operation.
+type ConfluencePageToIndexFieldMapping struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the field in the data source.
+	DataSourceFieldName *string `type:"string" enum:"ConfluencePageFieldName"`
+
+	// The format for date fields in the data source. If the field specified in
+	// DataSourceFieldName is a date field you must specify the date format. If
+	// the field is not a date field, an exception is thrown.
+	DateFieldFormat *string `min:"4" type:"string"`
+
+	// The name of the index field to map to the Confluence data source field. The
+	// index field type must match the Confluence field type.
+	IndexFieldName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ConfluencePageToIndexFieldMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluencePageToIndexFieldMapping) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluencePageToIndexFieldMapping) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluencePageToIndexFieldMapping"}
+	if s.DateFieldFormat != nil && len(*s.DateFieldFormat) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("DateFieldFormat", 4))
+	}
+	if s.IndexFieldName != nil && len(*s.IndexFieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexFieldName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceFieldName sets the DataSourceFieldName field's value.
+func (s *ConfluencePageToIndexFieldMapping) SetDataSourceFieldName(v string) *ConfluencePageToIndexFieldMapping {
+	s.DataSourceFieldName = &v
+	return s
+}
+
+// SetDateFieldFormat sets the DateFieldFormat field's value.
+func (s *ConfluencePageToIndexFieldMapping) SetDateFieldFormat(v string) *ConfluencePageToIndexFieldMapping {
+	s.DateFieldFormat = &v
+	return s
+}
+
+// SetIndexFieldName sets the IndexFieldName field's value.
+func (s *ConfluencePageToIndexFieldMapping) SetIndexFieldName(v string) *ConfluencePageToIndexFieldMapping {
+	s.IndexFieldName = &v
+	return s
+}
+
+// Specifies the configuration for indexing Confluence spaces.
+type ConfluenceSpaceConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether Amazon Kendra should index archived spaces.
+	CrawlArchivedSpaces *bool `type:"boolean"`
+
+	// Specifies whether Amazon Kendra should index personal spaces. Users can add
+	// restrictions to items in personal spaces. If personal spaces are indexed,
+	// queries without user context information may return restricted items from
+	// a personal space in their results. For more information, see Filtering on
+	// user context (https://docs.aws.amazon.com/kendra/latest/dg/user-context-filter.html).
+	CrawlPersonalSpaces *bool `type:"boolean"`
+
+	// A list of space keys of Confluence spaces. If you include a key, the blogs,
+	// documents, and attachments in the space are not indexed. If a space is in
+	// both the ExcludeSpaces and the IncludeSpaces list, the space is excluded.
+	ExcludeSpaces []*string `min:"1" type:"list"`
+
+	// A list of space keys for Confluence spaces. If you include a key, the blogs,
+	// documents, and attachments in the space are indexed. Spaces that aren't in
+	// the list aren't indexed. A space in the list must exist. Otherwise, Amazon
+	// Kendra logs an error when the data source is synchronized. If a space is
+	// in both the IncludeSpaces and the ExcludeSpaces list, the space is excluded.
+	IncludeSpaces []*string `min:"1" type:"list"`
+
+	// Defines how space metadata fields should be mapped to index fields. Before
+	// you can map a field, you must first create an index field with a matching
+	// type using the console or the UpdateIndex operation.
+	//
+	// If you specify the SpaceFieldMappings parameter, you must specify at least
+	// one field mapping.
+	SpaceFieldMappings []*ConfluenceSpaceToIndexFieldMapping `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s ConfluenceSpaceConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceSpaceConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceSpaceConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceSpaceConfiguration"}
+	if s.ExcludeSpaces != nil && len(s.ExcludeSpaces) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ExcludeSpaces", 1))
+	}
+	if s.IncludeSpaces != nil && len(s.IncludeSpaces) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IncludeSpaces", 1))
+	}
+	if s.SpaceFieldMappings != nil && len(s.SpaceFieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SpaceFieldMappings", 1))
+	}
+	if s.SpaceFieldMappings != nil {
+		for i, v := range s.SpaceFieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SpaceFieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCrawlArchivedSpaces sets the CrawlArchivedSpaces field's value.
+func (s *ConfluenceSpaceConfiguration) SetCrawlArchivedSpaces(v bool) *ConfluenceSpaceConfiguration {
+	s.CrawlArchivedSpaces = &v
+	return s
+}
+
+// SetCrawlPersonalSpaces sets the CrawlPersonalSpaces field's value.
+func (s *ConfluenceSpaceConfiguration) SetCrawlPersonalSpaces(v bool) *ConfluenceSpaceConfiguration {
+	s.CrawlPersonalSpaces = &v
+	return s
+}
+
+// SetExcludeSpaces sets the ExcludeSpaces field's value.
+func (s *ConfluenceSpaceConfiguration) SetExcludeSpaces(v []*string) *ConfluenceSpaceConfiguration {
+	s.ExcludeSpaces = v
+	return s
+}
+
+// SetIncludeSpaces sets the IncludeSpaces field's value.
+func (s *ConfluenceSpaceConfiguration) SetIncludeSpaces(v []*string) *ConfluenceSpaceConfiguration {
+	s.IncludeSpaces = v
+	return s
+}
+
+// SetSpaceFieldMappings sets the SpaceFieldMappings field's value.
+func (s *ConfluenceSpaceConfiguration) SetSpaceFieldMappings(v []*ConfluenceSpaceToIndexFieldMapping) *ConfluenceSpaceConfiguration {
+	s.SpaceFieldMappings = v
+	return s
+}
+
+// Defines the mapping between a field in the Confluence data source to a Amazon
+// Kendra index field.
+//
+// You must first create the index field using the operation.
+type ConfluenceSpaceToIndexFieldMapping struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the field in the data source.
+	DataSourceFieldName *string `type:"string" enum:"ConfluenceSpaceFieldName"`
+
+	// The format for date fields in the data source. If the field specified in
+	// DataSourceFieldName is a date field you must specify the date format. If
+	// the field is not a date field, an exception is thrown.
+	DateFieldFormat *string `min:"4" type:"string"`
+
+	// The name of the index field to map to the Confluence data source field. The
+	// index field type must match the Confluence field type.
+	IndexFieldName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ConfluenceSpaceToIndexFieldMapping) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfluenceSpaceToIndexFieldMapping) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfluenceSpaceToIndexFieldMapping) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfluenceSpaceToIndexFieldMapping"}
+	if s.DateFieldFormat != nil && len(*s.DateFieldFormat) < 4 {
+		invalidParams.Add(request.NewErrParamMinLen("DateFieldFormat", 4))
+	}
+	if s.IndexFieldName != nil && len(*s.IndexFieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexFieldName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataSourceFieldName sets the DataSourceFieldName field's value.
+func (s *ConfluenceSpaceToIndexFieldMapping) SetDataSourceFieldName(v string) *ConfluenceSpaceToIndexFieldMapping {
+	s.DataSourceFieldName = &v
+	return s
+}
+
+// SetDateFieldFormat sets the DateFieldFormat field's value.
+func (s *ConfluenceSpaceToIndexFieldMapping) SetDateFieldFormat(v string) *ConfluenceSpaceToIndexFieldMapping {
+	s.DateFieldFormat = &v
+	return s
+}
+
+// SetIndexFieldName sets the IndexFieldName field's value.
+func (s *ConfluenceSpaceToIndexFieldMapping) SetIndexFieldName(v string) *ConfluenceSpaceToIndexFieldMapping {
+	s.IndexFieldName = &v
+	return s
+}
+
 // Provides the information necessary to connect to a database.
 type ConnectionConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -3456,14 +4613,21 @@ func (s *ConnectionConfiguration) SetTableName(v string) *ConnectionConfiguratio
 type CreateDataSourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The data source connector configuration information that is required to access
-	// the repository.
+	// A token that you provide to identify the request to create a data source.
+	// Multiple calls to the CreateDataSource operation with the same client token
+	// will create only one data source.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The connector configuration information that is required to access the repository.
 	//
-	// Configuration is a required field
-	Configuration *DataSourceConfiguration `type:"structure" required:"true"`
+	// You can't specify the Configuration parameter when the Type parameter is
+	// set to CUSTOM. If you do, you receive a ValidationException exception.
+	//
+	// The Configuration parameter is required for all other data sources.
+	Configuration *DataSourceConfiguration `type:"structure"`
 
 	// A description for the data source.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// The identifier of the index that should be associated with this data source.
 	//
@@ -3479,13 +4643,19 @@ type CreateDataSourceInput struct {
 	// The Amazon Resource Name (ARN) of a role with permission to access the data
 	// source. For more information, see IAM Roles for Amazon Kendra (https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html).
 	//
-	// RoleArn is a required field
-	RoleArn *string `min:"1" type:"string" required:"true"`
+	// You can't specify the RoleArn parameter when the Type parameter is set to
+	// CUSTOM. If you do, you receive a ValidationException exception.
+	//
+	// The RoleArn parameter is required for all other data sources.
+	RoleArn *string `min:"1" type:"string"`
 
 	// Sets the frequency that Amazon Kendra will check the documents in your repository
 	// and update the index. If you don't set a schedule Amazon Kendra will not
 	// periodically update the index. You can call the StartDataSourceSyncJob operation
 	// to update the index.
+	//
+	// You can't specify the Schedule parameter when the Type parameter is set to
+	// CUSTOM. If you do, you receive a ValidationException exception.
 	Schedule *string `type:"string"`
 
 	// A list of key-value pairs that identify the data source. You can use the
@@ -3511,11 +4681,8 @@ func (s CreateDataSourceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateDataSourceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateDataSourceInput"}
-	if s.Configuration == nil {
-		invalidParams.Add(request.NewErrParamRequired("Configuration"))
-	}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
 	}
 	if s.IndexId == nil {
 		invalidParams.Add(request.NewErrParamRequired("IndexId"))
@@ -3528,9 +4695,6 @@ func (s *CreateDataSourceInput) Validate() error {
 	}
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
-	}
-	if s.RoleArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
 	}
 	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
@@ -3558,6 +4722,12 @@ func (s *CreateDataSourceInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateDataSourceInput) SetClientToken(v string) *CreateDataSourceInput {
+	s.ClientToken = &v
+	return s
 }
 
 // SetConfiguration sets the Configuration field's value.
@@ -3636,8 +4806,13 @@ func (s *CreateDataSourceOutput) SetId(v string) *CreateDataSourceOutput {
 type CreateFaqInput struct {
 	_ struct{} `type:"structure"`
 
+	// A token that you provide to identify the request to create a FAQ. Multiple
+	// calls to the CreateFaqRequest operation with the same client token will create
+	// only one FAQ.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
 	// A description of the FAQ.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// The format of the input file. You can choose between a basic CSV format,
 	// a CSV format that includes customs attributes in a header, and a JSON format
@@ -3689,8 +4864,8 @@ func (s CreateFaqInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateFaqInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateFaqInput"}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
 	}
 	if s.IndexId == nil {
 		invalidParams.Add(request.NewErrParamRequired("IndexId"))
@@ -3733,6 +4908,12 @@ func (s *CreateFaqInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateFaqInput) SetClientToken(v string) *CreateFaqInput {
+	s.ClientToken = &v
+	return s
 }
 
 // SetDescription sets the Description field's value.
@@ -3805,11 +4986,11 @@ type CreateIndexInput struct {
 
 	// A token that you provide to identify the request to create an index. Multiple
 	// calls to the CreateIndex operation with the same client token will create
-	// only one index.”
+	// only one index.
 	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
 
 	// A description for the index.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// The Amazon Kendra edition to use for the index. Choose DEVELOPER_EDITION
 	// for indexes intended for development, testing, or proof of concept. Use ENTERPRISE_EDITION
@@ -3825,9 +5006,10 @@ type CreateIndexInput struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// An IAM role that gives Amazon Kendra permissions to access your Amazon CloudWatch
-	// logs and metrics. This is also the role used when you use the BatchPutDocument
-	// operation to index documents from an Amazon S3 bucket.
+	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
+	// permissions to access your Amazon CloudWatch logs and metrics. This is also
+	// the role used when you use the BatchPutDocument operation to index documents
+	// from an Amazon S3 bucket.
 	//
 	// RoleArn is a required field
 	RoleArn *string `min:"1" type:"string" required:"true"`
@@ -3839,6 +5021,23 @@ type CreateIndexInput struct {
 	// A list of key-value pairs that identify the index. You can use the tags to
 	// identify and organize your resources and to control access to resources.
 	Tags []*Tag `type:"list"`
+
+	// The user context policy.
+	//
+	// ATTRIBUTE_FILTER
+	//
+	// All indexed content is searchable and displayable for all users. If there
+	// is an access control list, it is ignored. You can filter on user and group
+	// attributes.
+	//
+	// USER_TOKEN
+	//
+	// Enables SSO and token-based user access control. All documents with no access
+	// control and all documents accessible to the user will be searchable and displayable.
+	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
+
+	// The user token configuration.
+	UserTokenConfigurations []*UserTokenConfiguration `type:"list"`
 }
 
 // String returns the string representation
@@ -3856,9 +5055,6 @@ func (s *CreateIndexInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateIndexInput"}
 	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
-	}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -3884,6 +5080,16 @@ func (s *CreateIndexInput) Validate() error {
 			}
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.UserTokenConfigurations != nil {
+		for i, v := range s.UserTokenConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "UserTokenConfigurations", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -3936,6 +5142,18 @@ func (s *CreateIndexInput) SetTags(v []*Tag) *CreateIndexInput {
 	return s
 }
 
+// SetUserContextPolicy sets the UserContextPolicy field's value.
+func (s *CreateIndexInput) SetUserContextPolicy(v string) *CreateIndexInput {
+	s.UserContextPolicy = &v
+	return s
+}
+
+// SetUserTokenConfigurations sets the UserTokenConfigurations field's value.
+func (s *CreateIndexInput) SetUserTokenConfigurations(v []*UserTokenConfiguration) *CreateIndexInput {
+	s.UserTokenConfigurations = v
+	return s
+}
+
 type CreateIndexOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -3960,14 +5178,181 @@ func (s *CreateIndexOutput) SetId(v string) *CreateIndexOutput {
 	return s
 }
 
+type CreateThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that you provide to identify the request to create a thesaurus. Multiple
+	// calls to the CreateThesaurus operation with the same client token will create
+	// only one index.
+	ClientToken *string `min:"1" type:"string" idempotencyToken:"true"`
+
+	// The description for the new thesaurus.
+	Description *string `type:"string"`
+
+	// The unique identifier of the index for the new thesaurus.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The name for the new thesaurus.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
+	// permissions to access thesaurus file specified in SourceS3Path.
+	//
+	// RoleArn is a required field
+	RoleArn *string `min:"1" type:"string" required:"true"`
+
+	// The thesaurus file Amazon S3 source path.
+	//
+	// SourceS3Path is a required field
+	SourceS3Path *S3Path `type:"structure" required:"true"`
+
+	// A list of key-value pairs that identify the thesaurus. You can use the tags
+	// to identify and organize your resources and to control access to resources.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateThesaurusInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.SourceS3Path == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceS3Path"))
+	}
+	if s.SourceS3Path != nil {
+		if err := s.SourceS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SourceS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateThesaurusInput) SetClientToken(v string) *CreateThesaurusInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateThesaurusInput) SetDescription(v string) *CreateThesaurusInput {
+	s.Description = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *CreateThesaurusInput) SetIndexId(v string) *CreateThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateThesaurusInput) SetName(v string) *CreateThesaurusInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateThesaurusInput) SetRoleArn(v string) *CreateThesaurusInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *CreateThesaurusInput) SetSourceS3Path(v *S3Path) *CreateThesaurusInput {
+	s.SourceS3Path = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateThesaurusInput) SetTags(v []*Tag) *CreateThesaurusInput {
+	s.Tags = v
+	return s
+}
+
+type CreateThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the thesaurus.
+	Id *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateThesaurusOutput) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *CreateThesaurusOutput) SetId(v string) *CreateThesaurusOutput {
+	s.Id = &v
+	return s
+}
+
 // Configuration information for a Amazon Kendra data source.
 type DataSourceConfiguration struct {
 	_ struct{} `type:"structure"`
 
+	// Provides configuration information for connecting to a Confluence data source.
+	ConfluenceConfiguration *ConfluenceConfiguration `type:"structure"`
+
 	// Provides information necessary to create a data source connector for a database.
 	DatabaseConfiguration *DatabaseConfiguration `type:"structure"`
 
-	// Provided configuration for data sources that connect to Microsoft OneDrive.
+	// Provides configuration for data sources that connect to Google Drive.
+	GoogleDriveConfiguration *GoogleDriveConfiguration `type:"structure"`
+
+	// Provides configuration for data sources that connect to Microsoft OneDrive.
 	OneDriveConfiguration *OneDriveConfiguration `type:"structure"`
 
 	// Provides information to create a data source connector for a document repository
@@ -3999,9 +5384,19 @@ func (s DataSourceConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DataSourceConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DataSourceConfiguration"}
+	if s.ConfluenceConfiguration != nil {
+		if err := s.ConfluenceConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ConfluenceConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.DatabaseConfiguration != nil {
 		if err := s.DatabaseConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("DatabaseConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.GoogleDriveConfiguration != nil {
+		if err := s.GoogleDriveConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("GoogleDriveConfiguration", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.OneDriveConfiguration != nil {
@@ -4036,9 +5431,21 @@ func (s *DataSourceConfiguration) Validate() error {
 	return nil
 }
 
+// SetConfluenceConfiguration sets the ConfluenceConfiguration field's value.
+func (s *DataSourceConfiguration) SetConfluenceConfiguration(v *ConfluenceConfiguration) *DataSourceConfiguration {
+	s.ConfluenceConfiguration = v
+	return s
+}
+
 // SetDatabaseConfiguration sets the DatabaseConfiguration field's value.
 func (s *DataSourceConfiguration) SetDatabaseConfiguration(v *DatabaseConfiguration) *DataSourceConfiguration {
 	s.DatabaseConfiguration = v
+	return s
+}
+
+// SetGoogleDriveConfiguration sets the GoogleDriveConfiguration field's value.
+func (s *DataSourceConfiguration) SetGoogleDriveConfiguration(v *GoogleDriveConfiguration) *DataSourceConfiguration {
+	s.GoogleDriveConfiguration = v
 	return s
 }
 
@@ -4813,6 +6220,78 @@ func (s DeleteIndexOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the thesaurus to delete.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index associated with the thesaurus to delete.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteThesaurusInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DeleteThesaurusInput) SetId(v string) *DeleteThesaurusInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DeleteThesaurusInput) SetIndexId(v string) *DeleteThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+type DeleteThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteThesaurusOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeDataSourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4883,7 +6362,7 @@ type DescribeDataSourceOutput struct {
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The description of the data source.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// When the Status field value is FAILED, the ErrorMessage field contains a
 	// description of the error that caused the data source to fail.
@@ -5064,7 +6543,7 @@ type DescribeFaqOutput struct {
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The description of the FAQ that you provided when it was created.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// If the Status field is FAILED, the ErrorMessage field contains the reason
 	// why the FAQ failed.
@@ -5226,7 +6705,7 @@ type DescribeIndexOutput struct {
 	CreatedAt *time.Time `type:"timestamp"`
 
 	// The description of the index.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// Configuration settings for any metadata applied to the documents in the index.
 	DocumentMetadataConfigurations []*DocumentMetadataConfiguration `type:"list"`
@@ -5239,7 +6718,7 @@ type DescribeIndexOutput struct {
 	// message that explains why.
 	ErrorMessage *string `min:"1" type:"string"`
 
-	// the name of the index.
+	// The name of the index.
 	Id *string `min:"36" type:"string"`
 
 	// Provides information about the number of FAQ questions and answers and the
@@ -5264,6 +6743,12 @@ type DescribeIndexOutput struct {
 
 	// The Unix datetime that the index was last updated.
 	UpdatedAt *time.Time `type:"timestamp"`
+
+	// The user context policy for the Amazon Kendra index.
+	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
+
+	// The user token configuration for the Amazon Kendra index.
+	UserTokenConfigurations []*UserTokenConfiguration `type:"list"`
 }
 
 // String returns the string representation
@@ -5350,6 +6835,215 @@ func (s *DescribeIndexOutput) SetStatus(v string) *DescribeIndexOutput {
 
 // SetUpdatedAt sets the UpdatedAt field's value.
 func (s *DescribeIndexOutput) SetUpdatedAt(v time.Time) *DescribeIndexOutput {
+	s.UpdatedAt = &v
+	return s
+}
+
+// SetUserContextPolicy sets the UserContextPolicy field's value.
+func (s *DescribeIndexOutput) SetUserContextPolicy(v string) *DescribeIndexOutput {
+	s.UserContextPolicy = &v
+	return s
+}
+
+// SetUserTokenConfigurations sets the UserTokenConfigurations field's value.
+func (s *DescribeIndexOutput) SetUserTokenConfigurations(v []*UserTokenConfiguration) *DescribeIndexOutput {
+	s.UserTokenConfigurations = v
+	return s
+}
+
+type DescribeThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the thesaurus to describe.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index associated with the thesaurus to describe.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeThesaurusInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeThesaurusInput) SetId(v string) *DescribeThesaurusInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeThesaurusInput) SetIndexId(v string) *DescribeThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+type DescribeThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix datetime that the thesaurus was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The thesaurus description.
+	Description *string `type:"string"`
+
+	// When the Status field value is FAILED, the ErrorMessage field provides more
+	// information.
+	ErrorMessage *string `min:"1" type:"string"`
+
+	// The size of the thesaurus file in bytes.
+	FileSizeBytes *int64 `type:"long"`
+
+	// The identifier of the thesaurus.
+	Id *string `min:"1" type:"string"`
+
+	// The identifier of the index associated with the thesaurus to describe.
+	IndexId *string `min:"36" type:"string"`
+
+	// The thesaurus name.
+	Name *string `min:"1" type:"string"`
+
+	// An AWS Identity and Access Management (IAM) role that gives Amazon Kendra
+	// permissions to access thesaurus file specified in SourceS3Path.
+	RoleArn *string `min:"1" type:"string"`
+
+	// Information required to find a specific file in an Amazon S3 bucket.
+	SourceS3Path *S3Path `type:"structure"`
+
+	// The current status of the thesaurus. When the value is ACTIVE, queries are
+	// able to use the thesaurus. If the Status field value is FAILED, the ErrorMessage
+	// field provides more information.
+	//
+	// If the status is ACTIVE_BUT_UPDATE_FAILED, it means that Amazon Kendra could
+	// not ingest the new thesaurus file. The old thesaurus file is still active.
+	Status *string `type:"string" enum:"ThesaurusStatus"`
+
+	// The number of synonym rules in the thesaurus file.
+	SynonymRuleCount *int64 `type:"long"`
+
+	// The number of unique terms in the thesaurus file. For example, the synonyms
+	// a,b,c and a=>d, the term count would be 4.
+	TermCount *int64 `type:"long"`
+
+	// The Unix datetime that the thesaurus was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation
+func (s DescribeThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeThesaurusOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeThesaurusOutput) SetCreatedAt(v time.Time) *DescribeThesaurusOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeThesaurusOutput) SetDescription(v string) *DescribeThesaurusOutput {
+	s.Description = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *DescribeThesaurusOutput) SetErrorMessage(v string) *DescribeThesaurusOutput {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetFileSizeBytes sets the FileSizeBytes field's value.
+func (s *DescribeThesaurusOutput) SetFileSizeBytes(v int64) *DescribeThesaurusOutput {
+	s.FileSizeBytes = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *DescribeThesaurusOutput) SetId(v string) *DescribeThesaurusOutput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *DescribeThesaurusOutput) SetIndexId(v string) *DescribeThesaurusOutput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeThesaurusOutput) SetName(v string) *DescribeThesaurusOutput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *DescribeThesaurusOutput) SetRoleArn(v string) *DescribeThesaurusOutput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *DescribeThesaurusOutput) SetSourceS3Path(v *S3Path) *DescribeThesaurusOutput {
+	s.SourceS3Path = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeThesaurusOutput) SetStatus(v string) *DescribeThesaurusOutput {
+	s.Status = &v
+	return s
+}
+
+// SetSynonymRuleCount sets the SynonymRuleCount field's value.
+func (s *DescribeThesaurusOutput) SetSynonymRuleCount(v int64) *DescribeThesaurusOutput {
+	s.SynonymRuleCount = &v
+	return s
+}
+
+// SetTermCount sets the TermCount field's value.
+func (s *DescribeThesaurusOutput) SetTermCount(v int64) *DescribeThesaurusOutput {
+	s.TermCount = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *DescribeThesaurusOutput) SetUpdatedAt(v time.Time) *DescribeThesaurusOutput {
 	s.UpdatedAt = &v
 	return s
 }
@@ -5946,6 +7640,138 @@ func (s *FaqSummary) SetUpdatedAt(v time.Time) *FaqSummary {
 	return s
 }
 
+// Provides configuration information for data sources that connect to Google
+// Drive.
+type GoogleDriveConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A list of MIME types to exclude from the index. All documents matching the
+	// specified MIME type are excluded.
+	//
+	// For a list of MIME types, see Using a Google Workspace Drive data source
+	// (https://docs.aws.amazon.com/kendra/latest/dg/data-source-google-drive.html).
+	ExcludeMimeTypes []*string `type:"list"`
+
+	// A list of identifiers or shared drives to exclude from the index. All files
+	// and folders stored on the shared drive are excluded.
+	ExcludeSharedDrives []*string `type:"list"`
+
+	// A list of email addresses of the users. Documents owned by these users are
+	// excluded from the index. Documents shared with excluded users are indexed
+	// unless they are excluded in another way.
+	ExcludeUserAccounts []*string `type:"list"`
+
+	// A list of regular expression patterns that apply to the path on Google Drive.
+	// Items that match the pattern are excluded from the index from both shared
+	// drives and users' My Drives. Items that don't match the pattern are included
+	// in the index. If an item matches both an exclusion pattern and an inclusion
+	// pattern, it is excluded from the index.
+	ExclusionPatterns []*string `type:"list"`
+
+	// Defines mapping between a field in the Google Drive and a Amazon Kendra index
+	// field.
+	//
+	// If you are using the console, you can define index fields when creating the
+	// mapping. If you are using the API, you must first create the field using
+	// the UpdateIndex operation.
+	FieldMappings []*DataSourceToIndexFieldMapping `min:"1" type:"list"`
+
+	// A list of regular expression patterns that apply to path on Google Drive.
+	// Items that match the pattern are included in the index from both shared drives
+	// and users' My Drives. Items that don't match the pattern are excluded from
+	// the index. If an item matches both an inclusion pattern and an exclusion
+	// pattern, it is excluded from the index.
+	InclusionPatterns []*string `type:"list"`
+
+	// The Amazon Resource Name (ARN) of a AWS Secrets Manager secret that contains
+	// the credentials required to connect to Google Drive. For more information,
+	// see Using a Google Workspace Drive data source (https://docs.aws.amazon.com/kendra/latest/dg/data-source-google-drive.html).
+	//
+	// SecretArn is a required field
+	SecretArn *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GoogleDriveConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GoogleDriveConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GoogleDriveConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GoogleDriveConfiguration"}
+	if s.FieldMappings != nil && len(s.FieldMappings) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldMappings", 1))
+	}
+	if s.SecretArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
+	}
+	if s.SecretArn != nil && len(*s.SecretArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretArn", 1))
+	}
+	if s.FieldMappings != nil {
+		for i, v := range s.FieldMappings {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FieldMappings", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExcludeMimeTypes sets the ExcludeMimeTypes field's value.
+func (s *GoogleDriveConfiguration) SetExcludeMimeTypes(v []*string) *GoogleDriveConfiguration {
+	s.ExcludeMimeTypes = v
+	return s
+}
+
+// SetExcludeSharedDrives sets the ExcludeSharedDrives field's value.
+func (s *GoogleDriveConfiguration) SetExcludeSharedDrives(v []*string) *GoogleDriveConfiguration {
+	s.ExcludeSharedDrives = v
+	return s
+}
+
+// SetExcludeUserAccounts sets the ExcludeUserAccounts field's value.
+func (s *GoogleDriveConfiguration) SetExcludeUserAccounts(v []*string) *GoogleDriveConfiguration {
+	s.ExcludeUserAccounts = v
+	return s
+}
+
+// SetExclusionPatterns sets the ExclusionPatterns field's value.
+func (s *GoogleDriveConfiguration) SetExclusionPatterns(v []*string) *GoogleDriveConfiguration {
+	s.ExclusionPatterns = v
+	return s
+}
+
+// SetFieldMappings sets the FieldMappings field's value.
+func (s *GoogleDriveConfiguration) SetFieldMappings(v []*DataSourceToIndexFieldMapping) *GoogleDriveConfiguration {
+	s.FieldMappings = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *GoogleDriveConfiguration) SetInclusionPatterns(v []*string) *GoogleDriveConfiguration {
+	s.InclusionPatterns = v
+	return s
+}
+
+// SetSecretArn sets the SecretArn field's value.
+func (s *GoogleDriveConfiguration) SetSecretArn(v string) *GoogleDriveConfiguration {
+	s.SecretArn = &v
+	return s
+}
+
 // Provides information that you can use to highlight a search result so that
 // your users can quickly identify terms in the response.
 type Highlight struct {
@@ -5964,6 +7790,9 @@ type Highlight struct {
 	// Indicates whether the response is the best response. True if this is the
 	// best response; otherwise, false.
 	TopAnswer *bool `type:"boolean"`
+
+	// The highlight type.
+	Type *string `type:"string" enum:"HighlightType"`
 }
 
 // String returns the string representation
@@ -5991,6 +7820,12 @@ func (s *Highlight) SetEndOffset(v int64) *Highlight {
 // SetTopAnswer sets the TopAnswer field's value.
 func (s *Highlight) SetTopAnswer(v bool) *Highlight {
 	s.TopAnswer = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *Highlight) SetType(v string) *Highlight {
+	s.Type = &v
 	return s
 }
 
@@ -6163,6 +7998,176 @@ func (s *InternalServerException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *InternalServerException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Configuration information for the JSON token type.
+type JsonTokenTypeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The group attribute field.
+	//
+	// GroupAttributeField is a required field
+	GroupAttributeField *string `min:"1" type:"string" required:"true"`
+
+	// The user name attribute field.
+	//
+	// UserNameAttributeField is a required field
+	UserNameAttributeField *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s JsonTokenTypeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s JsonTokenTypeConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JsonTokenTypeConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JsonTokenTypeConfiguration"}
+	if s.GroupAttributeField == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupAttributeField"))
+	}
+	if s.GroupAttributeField != nil && len(*s.GroupAttributeField) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupAttributeField", 1))
+	}
+	if s.UserNameAttributeField == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserNameAttributeField"))
+	}
+	if s.UserNameAttributeField != nil && len(*s.UserNameAttributeField) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserNameAttributeField", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupAttributeField sets the GroupAttributeField field's value.
+func (s *JsonTokenTypeConfiguration) SetGroupAttributeField(v string) *JsonTokenTypeConfiguration {
+	s.GroupAttributeField = &v
+	return s
+}
+
+// SetUserNameAttributeField sets the UserNameAttributeField field's value.
+func (s *JsonTokenTypeConfiguration) SetUserNameAttributeField(v string) *JsonTokenTypeConfiguration {
+	s.UserNameAttributeField = &v
+	return s
+}
+
+// Configuration information for the JWT token type.
+type JwtTokenTypeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The regular expression that identifies the claim.
+	ClaimRegex *string `min:"1" type:"string"`
+
+	// The group attribute field.
+	GroupAttributeField *string `min:"1" type:"string"`
+
+	// The issuer of the token.
+	Issuer *string `min:"1" type:"string"`
+
+	// The location of the key.
+	//
+	// KeyLocation is a required field
+	KeyLocation *string `type:"string" required:"true" enum:"KeyLocation"`
+
+	// The Amazon Resource Name (arn) of the secret.
+	SecretManagerArn *string `min:"1" type:"string"`
+
+	// The signing key URL.
+	URL *string `min:"1" type:"string"`
+
+	// The user name attribute field.
+	UserNameAttributeField *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s JwtTokenTypeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s JwtTokenTypeConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *JwtTokenTypeConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "JwtTokenTypeConfiguration"}
+	if s.ClaimRegex != nil && len(*s.ClaimRegex) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClaimRegex", 1))
+	}
+	if s.GroupAttributeField != nil && len(*s.GroupAttributeField) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupAttributeField", 1))
+	}
+	if s.Issuer != nil && len(*s.Issuer) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Issuer", 1))
+	}
+	if s.KeyLocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeyLocation"))
+	}
+	if s.SecretManagerArn != nil && len(*s.SecretManagerArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretManagerArn", 1))
+	}
+	if s.URL != nil && len(*s.URL) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("URL", 1))
+	}
+	if s.UserNameAttributeField != nil && len(*s.UserNameAttributeField) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserNameAttributeField", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClaimRegex sets the ClaimRegex field's value.
+func (s *JwtTokenTypeConfiguration) SetClaimRegex(v string) *JwtTokenTypeConfiguration {
+	s.ClaimRegex = &v
+	return s
+}
+
+// SetGroupAttributeField sets the GroupAttributeField field's value.
+func (s *JwtTokenTypeConfiguration) SetGroupAttributeField(v string) *JwtTokenTypeConfiguration {
+	s.GroupAttributeField = &v
+	return s
+}
+
+// SetIssuer sets the Issuer field's value.
+func (s *JwtTokenTypeConfiguration) SetIssuer(v string) *JwtTokenTypeConfiguration {
+	s.Issuer = &v
+	return s
+}
+
+// SetKeyLocation sets the KeyLocation field's value.
+func (s *JwtTokenTypeConfiguration) SetKeyLocation(v string) *JwtTokenTypeConfiguration {
+	s.KeyLocation = &v
+	return s
+}
+
+// SetSecretManagerArn sets the SecretManagerArn field's value.
+func (s *JwtTokenTypeConfiguration) SetSecretManagerArn(v string) *JwtTokenTypeConfiguration {
+	s.SecretManagerArn = &v
+	return s
+}
+
+// SetURL sets the URL field's value.
+func (s *JwtTokenTypeConfiguration) SetURL(v string) *JwtTokenTypeConfiguration {
+	s.URL = &v
+	return s
+}
+
+// SetUserNameAttributeField sets the UserNameAttributeField field's value.
+func (s *JwtTokenTypeConfiguration) SetUserNameAttributeField(v string) *JwtTokenTypeConfiguration {
+	s.UserNameAttributeField = &v
+	return s
 }
 
 type ListDataSourceSyncJobsInput struct {
@@ -6657,9 +8662,113 @@ func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput
 	return s
 }
 
+type ListThesauriInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the index associated with the thesaurus to list.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The maximum number of thesauri to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If the previous response was incomplete (because there is more data to retrieve),
+	// Amazon Kendra returns a pagination token in the response. You can use this
+	// pagination token to retrieve the next set of thesauri (ThesaurusSummaryItems).
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListThesauriInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListThesauriInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListThesauriInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListThesauriInput"}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *ListThesauriInput) SetIndexId(v string) *ListThesauriInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListThesauriInput) SetMaxResults(v int64) *ListThesauriInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListThesauriInput) SetNextToken(v string) *ListThesauriInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListThesauriOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the response is truncated, Amazon Kendra returns this token that you can
+	// use in the subsequent request to retrieve the next set of thesauri.
+	NextToken *string `min:"1" type:"string"`
+
+	// An array of summary information for one or more thesauruses.
+	ThesaurusSummaryItems []*ThesaurusSummary `type:"list"`
+}
+
+// String returns the string representation
+func (s ListThesauriOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListThesauriOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListThesauriOutput) SetNextToken(v string) *ListThesauriOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetThesaurusSummaryItems sets the ThesaurusSummaryItems field's value.
+func (s *ListThesauriOutput) SetThesaurusSummaryItems(v []*ThesaurusSummary) *ListThesauriOutput {
+	s.ThesaurusSummaryItems = v
+	return s
+}
+
 // Provides configuration information for data sources that connect to OneDrive.
 type OneDriveConfiguration struct {
 	_ struct{} `type:"structure"`
+
+	// A Boolean value that specifies whether local groups are disabled (True) or
+	// enabled (False).
+	DisableLocalGroups *bool `type:"boolean"`
 
 	// List of regular expressions applied to documents. Items that match the exclusion
 	// pattern are not indexed. If you provide both an inclusion pattern and an
@@ -6694,7 +8803,7 @@ type OneDriveConfiguration struct {
 	// SecretArn is a required field
 	SecretArn *string `min:"1" type:"string" required:"true"`
 
-	// Tha Azure Active Directory domain of the organization.
+	// The Azure Active Directory domain of the organization.
 	//
 	// TenantDomain is a required field
 	TenantDomain *string `min:"1" type:"string" required:"true"`
@@ -6751,6 +8860,12 @@ func (s *OneDriveConfiguration) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetDisableLocalGroups sets the DisableLocalGroups field's value.
+func (s *OneDriveConfiguration) SetDisableLocalGroups(v bool) *OneDriveConfiguration {
+	s.DisableLocalGroups = &v
+	return s
 }
 
 // SetExclusionPatterns sets the ExclusionPatterns field's value.
@@ -6967,6 +9082,14 @@ type QueryInput struct {
 	// If you don't provide sorting configuration, the results are sorted by the
 	// relevance that Amazon Kendra determines for the result.
 	SortingConfiguration *SortingConfiguration `type:"structure"`
+
+	// The user context token.
+	UserContext *UserContext `type:"structure"`
+
+	// Provides an identifier for a specific user. The VisitorId should be a unique
+	// identifier, such as a GUID. Don't use personally identifiable information,
+	// such as the user's email address, as the VisitorId.
+	VisitorId *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -6997,6 +9120,9 @@ func (s *QueryInput) Validate() error {
 	if s.RequestedDocumentAttributes != nil && len(s.RequestedDocumentAttributes) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("RequestedDocumentAttributes", 1))
 	}
+	if s.VisitorId != nil && len(*s.VisitorId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VisitorId", 1))
+	}
 	if s.AttributeFilter != nil {
 		if err := s.AttributeFilter.Validate(); err != nil {
 			invalidParams.AddNested("AttributeFilter", err.(request.ErrInvalidParams))
@@ -7015,6 +9141,11 @@ func (s *QueryInput) Validate() error {
 	if s.SortingConfiguration != nil {
 		if err := s.SortingConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("SortingConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.UserContext != nil {
+		if err := s.UserContext.Validate(); err != nil {
+			invalidParams.AddNested("UserContext", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -7075,6 +9206,18 @@ func (s *QueryInput) SetRequestedDocumentAttributes(v []*string) *QueryInput {
 // SetSortingConfiguration sets the SortingConfiguration field's value.
 func (s *QueryInput) SetSortingConfiguration(v *SortingConfiguration) *QueryInput {
 	s.SortingConfiguration = v
+	return s
+}
+
+// SetUserContext sets the UserContext field's value.
+func (s *QueryInput) SetUserContext(v *UserContext) *QueryInput {
+	s.UserContext = v
+	return s
+}
+
+// SetVisitorId sets the VisitorId field's value.
+func (s *QueryInput) SetVisitorId(v string) *QueryInput {
+	s.VisitorId = &v
 	return s
 }
 
@@ -7163,6 +9306,11 @@ type QueryResultItem struct {
 	// The URI of the original location of the document.
 	DocumentURI *string `min:"1" type:"string"`
 
+	// A token that identifies a particular result from a particular query. Use
+	// this token to provide click-through feedback for the result. For more information,
+	// see Submitting feedback (https://docs.aws.amazon.com/kendra/latest/dg/submitting-feedback.html).
+	FeedbackToken *string `min:"1" type:"string"`
+
 	// The unique identifier for the query result.
 	Id *string `min:"1" type:"string"`
 
@@ -7222,6 +9370,12 @@ func (s *QueryResultItem) SetDocumentTitle(v *TextWithHighlights) *QueryResultIt
 // SetDocumentURI sets the DocumentURI field's value.
 func (s *QueryResultItem) SetDocumentURI(v string) *QueryResultItem {
 	s.DocumentURI = &v
+	return s
+}
+
+// SetFeedbackToken sets the FeedbackToken field's value.
+func (s *QueryResultItem) SetFeedbackToken(v string) *QueryResultItem {
+	s.FeedbackToken = &v
 	return s
 }
 
@@ -7637,7 +9791,8 @@ type S3DataSourceConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Provides the path to the S3 bucket that contains the user context filtering
-	// files for the data source.
+	// files for the data source. For the format of the file, see Access control
+	// for S3 data sources (https://docs.aws.amazon.com/kendra/latest/dg/s3-acl.html).
 	AccessControlListConfiguration *AccessControlListConfiguration `type:"structure"`
 
 	// The name of the bucket that contains the documents.
@@ -7651,12 +9806,20 @@ type S3DataSourceConfiguration struct {
 	DocumentsMetadataConfiguration *DocumentsMetadataConfiguration `type:"structure"`
 
 	// A list of glob patterns for documents that should not be indexed. If a document
-	// that matches an inclusion prefix also matches an exclusion pattern, the document
-	// is not indexed.
+	// that matches an inclusion prefix or inclusion pattern also matches an exclusion
+	// pattern, the document is not indexed.
 	//
 	// For more information about glob patterns, see glob (programming) (https://en.wikipedia.org/wiki/Glob_(programming))
 	// in Wikipedia.
 	ExclusionPatterns []*string `type:"list"`
+
+	// A list of glob patterns for documents that should be indexed. If a document
+	// that matches an inclusion pattern also matches an exclusion pattern, the
+	// document is not indexed.
+	//
+	// For more information about glob patterns, see glob (programming) (https://en.wikipedia.org/wiki/Glob_(programming))
+	// in Wikipedia.
+	InclusionPatterns []*string `type:"list"`
 
 	// A list of S3 prefixes for the documents that should be included in the index.
 	InclusionPrefixes []*string `type:"list"`
@@ -7719,6 +9882,12 @@ func (s *S3DataSourceConfiguration) SetDocumentsMetadataConfiguration(v *Documen
 // SetExclusionPatterns sets the ExclusionPatterns field's value.
 func (s *S3DataSourceConfiguration) SetExclusionPatterns(v []*string) *S3DataSourceConfiguration {
 	s.ExclusionPatterns = v
+	return s
+}
+
+// SetInclusionPatterns sets the InclusionPatterns field's value.
+func (s *S3DataSourceConfiguration) SetInclusionPatterns(v []*string) *S3DataSourceConfiguration {
+	s.InclusionPatterns = v
 	return s
 }
 
@@ -8988,6 +11157,10 @@ type SharePointConfiguration struct {
 	// site in the index; otherwise, FALSE.
 	CrawlAttachments *bool `type:"boolean"`
 
+	// A Boolean value that specifies whether local groups are disabled (True) or
+	// enabled (False).
+	DisableLocalGroups *bool `type:"boolean"`
+
 	// The Microsoft SharePoint attribute field that contains the title of the document.
 	DocumentTitleFieldName *string `min:"1" type:"string"`
 
@@ -9104,6 +11277,12 @@ func (s *SharePointConfiguration) Validate() error {
 // SetCrawlAttachments sets the CrawlAttachments field's value.
 func (s *SharePointConfiguration) SetCrawlAttachments(v bool) *SharePointConfiguration {
 	s.CrawlAttachments = &v
+	return s
+}
+
+// SetDisableLocalGroups sets the DisableLocalGroups field's value.
+func (s *SharePointConfiguration) SetDisableLocalGroups(v bool) *SharePointConfiguration {
+	s.DisableLocalGroups = &v
 	return s
 }
 
@@ -9758,6 +11937,66 @@ func (s *TextWithHighlights) SetText(v string) *TextWithHighlights {
 	return s
 }
 
+// An array of summary information for one or more thesauruses.
+type ThesaurusSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix datetime that the thesaurus was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The identifier of the thesaurus.
+	Id *string `min:"1" type:"string"`
+
+	// The name of the thesaurus.
+	Name *string `min:"1" type:"string"`
+
+	// The status of the thesaurus.
+	Status *string `type:"string" enum:"ThesaurusStatus"`
+
+	// The Unix datetime that the thesaurus was last updated.
+	UpdatedAt *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation
+func (s ThesaurusSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThesaurusSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *ThesaurusSummary) SetCreatedAt(v time.Time) *ThesaurusSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ThesaurusSummary) SetId(v string) *ThesaurusSummary {
+	s.Id = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ThesaurusSummary) SetName(v string) *ThesaurusSummary {
+	s.Name = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ThesaurusSummary) SetStatus(v string) *ThesaurusSummary {
+	s.Status = &v
+	return s
+}
+
+// SetUpdatedAt sets the UpdatedAt field's value.
+func (s *ThesaurusSummary) SetUpdatedAt(v time.Time) *ThesaurusSummary {
+	s.UpdatedAt = &v
+	return s
+}
+
 type ThrottlingException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -9924,7 +12163,7 @@ type UpdateDataSourceInput struct {
 	Configuration *DataSourceConfiguration `type:"structure"`
 
 	// The new description for the data source.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// The unique identifier of the data source to update.
 	//
@@ -9962,9 +12201,6 @@ func (s UpdateDataSourceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateDataSourceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateDataSourceInput"}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
-	}
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
 	}
@@ -10063,7 +12299,7 @@ type UpdateIndexInput struct {
 	CapacityUnits *CapacityUnitsConfiguration `type:"structure"`
 
 	// A new description for the index.
-	Description *string `min:"1" type:"string"`
+	Description *string `type:"string"`
 
 	// The document metadata to update.
 	DocumentMetadataConfigurationUpdates []*DocumentMetadataConfiguration `type:"list"`
@@ -10079,6 +12315,12 @@ type UpdateIndexInput struct {
 	// A new IAM role that gives Amazon Kendra permission to access your Amazon
 	// CloudWatch logs.
 	RoleArn *string `min:"1" type:"string"`
+
+	// The user user token context policy.
+	UserContextPolicy *string `type:"string" enum:"UserContextPolicy"`
+
+	// The user token configuration.
+	UserTokenConfigurations []*UserTokenConfiguration `type:"list"`
 }
 
 // String returns the string representation
@@ -10094,9 +12336,6 @@ func (s UpdateIndexInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UpdateIndexInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateIndexInput"}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
-	}
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
 	}
@@ -10121,6 +12360,16 @@ func (s *UpdateIndexInput) Validate() error {
 			}
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DocumentMetadataConfigurationUpdates", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.UserTokenConfigurations != nil {
+		for i, v := range s.UserTokenConfigurations {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "UserTokenConfigurations", i), err.(request.ErrInvalidParams))
 			}
 		}
 	}
@@ -10167,6 +12416,18 @@ func (s *UpdateIndexInput) SetRoleArn(v string) *UpdateIndexInput {
 	return s
 }
 
+// SetUserContextPolicy sets the UserContextPolicy field's value.
+func (s *UpdateIndexInput) SetUserContextPolicy(v string) *UpdateIndexInput {
+	s.UserContextPolicy = &v
+	return s
+}
+
+// SetUserTokenConfigurations sets the UserTokenConfigurations field's value.
+func (s *UpdateIndexInput) SetUserTokenConfigurations(v []*UserTokenConfiguration) *UpdateIndexInput {
+	s.UserTokenConfigurations = v
+	return s
+}
+
 type UpdateIndexOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -10179,6 +12440,215 @@ func (s UpdateIndexOutput) String() string {
 // GoString returns the string representation
 func (s UpdateIndexOutput) GoString() string {
 	return s.String()
+}
+
+type UpdateThesaurusInput struct {
+	_ struct{} `type:"structure"`
+
+	// The updated description of the thesaurus.
+	Description *string `type:"string"`
+
+	// The identifier of the thesaurus to update.
+	//
+	// Id is a required field
+	Id *string `min:"1" type:"string" required:"true"`
+
+	// The identifier of the index associated with the thesaurus to update.
+	//
+	// IndexId is a required field
+	IndexId *string `min:"36" type:"string" required:"true"`
+
+	// The updated name of the thesaurus.
+	Name *string `min:"1" type:"string"`
+
+	// The updated role ARN of the thesaurus.
+	RoleArn *string `min:"1" type:"string"`
+
+	// Information required to find a specific file in an Amazon S3 bucket.
+	SourceS3Path *S3Path `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateThesaurusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateThesaurusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateThesaurusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateThesaurusInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+	if s.IndexId == nil {
+		invalidParams.Add(request.NewErrParamRequired("IndexId"))
+	}
+	if s.IndexId != nil && len(*s.IndexId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("IndexId", 36))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 1))
+	}
+	if s.SourceS3Path != nil {
+		if err := s.SourceS3Path.Validate(); err != nil {
+			invalidParams.AddNested("SourceS3Path", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateThesaurusInput) SetDescription(v string) *UpdateThesaurusInput {
+	s.Description = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *UpdateThesaurusInput) SetId(v string) *UpdateThesaurusInput {
+	s.Id = &v
+	return s
+}
+
+// SetIndexId sets the IndexId field's value.
+func (s *UpdateThesaurusInput) SetIndexId(v string) *UpdateThesaurusInput {
+	s.IndexId = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateThesaurusInput) SetName(v string) *UpdateThesaurusInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *UpdateThesaurusInput) SetRoleArn(v string) *UpdateThesaurusInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSourceS3Path sets the SourceS3Path field's value.
+func (s *UpdateThesaurusInput) SetSourceS3Path(v *S3Path) *UpdateThesaurusInput {
+	s.SourceS3Path = v
+	return s
+}
+
+type UpdateThesaurusOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateThesaurusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateThesaurusOutput) GoString() string {
+	return s.String()
+}
+
+// Provides information about the user context for a Amazon Kendra index.
+type UserContext struct {
+	_ struct{} `type:"structure"`
+
+	// The user context token. It must be a JWT or a JSON token.
+	Token *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UserContext) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UserContext) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserContext) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserContext"}
+	if s.Token != nil && len(*s.Token) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Token", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetToken sets the Token field's value.
+func (s *UserContext) SetToken(v string) *UserContext {
+	s.Token = &v
+	return s
+}
+
+// Provides configuration information for a token configuration.
+type UserTokenConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the JSON token type configuration.
+	JsonTokenTypeConfiguration *JsonTokenTypeConfiguration `type:"structure"`
+
+	// Information about the JWT token type configuration.
+	JwtTokenTypeConfiguration *JwtTokenTypeConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s UserTokenConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UserTokenConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UserTokenConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UserTokenConfiguration"}
+	if s.JsonTokenTypeConfiguration != nil {
+		if err := s.JsonTokenTypeConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("JsonTokenTypeConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.JwtTokenTypeConfiguration != nil {
+		if err := s.JwtTokenTypeConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("JwtTokenTypeConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJsonTokenTypeConfiguration sets the JsonTokenTypeConfiguration field's value.
+func (s *UserTokenConfiguration) SetJsonTokenTypeConfiguration(v *JsonTokenTypeConfiguration) *UserTokenConfiguration {
+	s.JsonTokenTypeConfiguration = v
+	return s
+}
+
+// SetJwtTokenTypeConfiguration sets the JwtTokenTypeConfiguration field's value.
+func (s *UserTokenConfiguration) SetJwtTokenTypeConfiguration(v *JwtTokenTypeConfiguration) *UserTokenConfiguration {
+	s.JwtTokenTypeConfiguration = v
+	return s
 }
 
 type ValidationException struct {
@@ -10245,6 +12715,198 @@ const (
 func AdditionalResultAttributeValueType_Values() []string {
 	return []string{
 		AdditionalResultAttributeValueTypeTextWithHighlightsValue,
+	}
+}
+
+const (
+	// ConfluenceAttachmentFieldNameAuthor is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameAuthor = "AUTHOR"
+
+	// ConfluenceAttachmentFieldNameContentType is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameContentType = "CONTENT_TYPE"
+
+	// ConfluenceAttachmentFieldNameCreatedDate is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameCreatedDate = "CREATED_DATE"
+
+	// ConfluenceAttachmentFieldNameDisplayUrl is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameDisplayUrl = "DISPLAY_URL"
+
+	// ConfluenceAttachmentFieldNameFileSize is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameFileSize = "FILE_SIZE"
+
+	// ConfluenceAttachmentFieldNameItemType is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameItemType = "ITEM_TYPE"
+
+	// ConfluenceAttachmentFieldNameParentId is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameParentId = "PARENT_ID"
+
+	// ConfluenceAttachmentFieldNameSpaceKey is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameSpaceKey = "SPACE_KEY"
+
+	// ConfluenceAttachmentFieldNameSpaceName is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameSpaceName = "SPACE_NAME"
+
+	// ConfluenceAttachmentFieldNameUrl is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameUrl = "URL"
+
+	// ConfluenceAttachmentFieldNameVersion is a ConfluenceAttachmentFieldName enum value
+	ConfluenceAttachmentFieldNameVersion = "VERSION"
+)
+
+// ConfluenceAttachmentFieldName_Values returns all elements of the ConfluenceAttachmentFieldName enum
+func ConfluenceAttachmentFieldName_Values() []string {
+	return []string{
+		ConfluenceAttachmentFieldNameAuthor,
+		ConfluenceAttachmentFieldNameContentType,
+		ConfluenceAttachmentFieldNameCreatedDate,
+		ConfluenceAttachmentFieldNameDisplayUrl,
+		ConfluenceAttachmentFieldNameFileSize,
+		ConfluenceAttachmentFieldNameItemType,
+		ConfluenceAttachmentFieldNameParentId,
+		ConfluenceAttachmentFieldNameSpaceKey,
+		ConfluenceAttachmentFieldNameSpaceName,
+		ConfluenceAttachmentFieldNameUrl,
+		ConfluenceAttachmentFieldNameVersion,
+	}
+}
+
+const (
+	// ConfluenceBlogFieldNameAuthor is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameAuthor = "AUTHOR"
+
+	// ConfluenceBlogFieldNameDisplayUrl is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameDisplayUrl = "DISPLAY_URL"
+
+	// ConfluenceBlogFieldNameItemType is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameItemType = "ITEM_TYPE"
+
+	// ConfluenceBlogFieldNameLabels is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameLabels = "LABELS"
+
+	// ConfluenceBlogFieldNamePublishDate is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNamePublishDate = "PUBLISH_DATE"
+
+	// ConfluenceBlogFieldNameSpaceKey is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameSpaceKey = "SPACE_KEY"
+
+	// ConfluenceBlogFieldNameSpaceName is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameSpaceName = "SPACE_NAME"
+
+	// ConfluenceBlogFieldNameUrl is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameUrl = "URL"
+
+	// ConfluenceBlogFieldNameVersion is a ConfluenceBlogFieldName enum value
+	ConfluenceBlogFieldNameVersion = "VERSION"
+)
+
+// ConfluenceBlogFieldName_Values returns all elements of the ConfluenceBlogFieldName enum
+func ConfluenceBlogFieldName_Values() []string {
+	return []string{
+		ConfluenceBlogFieldNameAuthor,
+		ConfluenceBlogFieldNameDisplayUrl,
+		ConfluenceBlogFieldNameItemType,
+		ConfluenceBlogFieldNameLabels,
+		ConfluenceBlogFieldNamePublishDate,
+		ConfluenceBlogFieldNameSpaceKey,
+		ConfluenceBlogFieldNameSpaceName,
+		ConfluenceBlogFieldNameUrl,
+		ConfluenceBlogFieldNameVersion,
+	}
+}
+
+const (
+	// ConfluencePageFieldNameAuthor is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameAuthor = "AUTHOR"
+
+	// ConfluencePageFieldNameContentStatus is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameContentStatus = "CONTENT_STATUS"
+
+	// ConfluencePageFieldNameCreatedDate is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameCreatedDate = "CREATED_DATE"
+
+	// ConfluencePageFieldNameDisplayUrl is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameDisplayUrl = "DISPLAY_URL"
+
+	// ConfluencePageFieldNameItemType is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameItemType = "ITEM_TYPE"
+
+	// ConfluencePageFieldNameLabels is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameLabels = "LABELS"
+
+	// ConfluencePageFieldNameModifiedDate is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameModifiedDate = "MODIFIED_DATE"
+
+	// ConfluencePageFieldNameParentId is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameParentId = "PARENT_ID"
+
+	// ConfluencePageFieldNameSpaceKey is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameSpaceKey = "SPACE_KEY"
+
+	// ConfluencePageFieldNameSpaceName is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameSpaceName = "SPACE_NAME"
+
+	// ConfluencePageFieldNameUrl is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameUrl = "URL"
+
+	// ConfluencePageFieldNameVersion is a ConfluencePageFieldName enum value
+	ConfluencePageFieldNameVersion = "VERSION"
+)
+
+// ConfluencePageFieldName_Values returns all elements of the ConfluencePageFieldName enum
+func ConfluencePageFieldName_Values() []string {
+	return []string{
+		ConfluencePageFieldNameAuthor,
+		ConfluencePageFieldNameContentStatus,
+		ConfluencePageFieldNameCreatedDate,
+		ConfluencePageFieldNameDisplayUrl,
+		ConfluencePageFieldNameItemType,
+		ConfluencePageFieldNameLabels,
+		ConfluencePageFieldNameModifiedDate,
+		ConfluencePageFieldNameParentId,
+		ConfluencePageFieldNameSpaceKey,
+		ConfluencePageFieldNameSpaceName,
+		ConfluencePageFieldNameUrl,
+		ConfluencePageFieldNameVersion,
+	}
+}
+
+const (
+	// ConfluenceSpaceFieldNameDisplayUrl is a ConfluenceSpaceFieldName enum value
+	ConfluenceSpaceFieldNameDisplayUrl = "DISPLAY_URL"
+
+	// ConfluenceSpaceFieldNameItemType is a ConfluenceSpaceFieldName enum value
+	ConfluenceSpaceFieldNameItemType = "ITEM_TYPE"
+
+	// ConfluenceSpaceFieldNameSpaceKey is a ConfluenceSpaceFieldName enum value
+	ConfluenceSpaceFieldNameSpaceKey = "SPACE_KEY"
+
+	// ConfluenceSpaceFieldNameUrl is a ConfluenceSpaceFieldName enum value
+	ConfluenceSpaceFieldNameUrl = "URL"
+)
+
+// ConfluenceSpaceFieldName_Values returns all elements of the ConfluenceSpaceFieldName enum
+func ConfluenceSpaceFieldName_Values() []string {
+	return []string{
+		ConfluenceSpaceFieldNameDisplayUrl,
+		ConfluenceSpaceFieldNameItemType,
+		ConfluenceSpaceFieldNameSpaceKey,
+		ConfluenceSpaceFieldNameUrl,
+	}
+}
+
+const (
+	// ConfluenceVersionCloud is a ConfluenceVersion enum value
+	ConfluenceVersionCloud = "CLOUD"
+
+	// ConfluenceVersionServer is a ConfluenceVersion enum value
+	ConfluenceVersionServer = "SERVER"
+)
+
+// ConfluenceVersion_Values returns all elements of the ConfluenceVersion enum
+func ConfluenceVersion_Values() []string {
+	return []string{
+		ConfluenceVersionCloud,
+		ConfluenceVersionServer,
 	}
 }
 
@@ -10358,6 +13020,15 @@ const (
 
 	// DataSourceTypeServicenow is a DataSourceType enum value
 	DataSourceTypeServicenow = "SERVICENOW"
+
+	// DataSourceTypeCustom is a DataSourceType enum value
+	DataSourceTypeCustom = "CUSTOM"
+
+	// DataSourceTypeConfluence is a DataSourceType enum value
+	DataSourceTypeConfluence = "CONFLUENCE"
+
+	// DataSourceTypeGoogledrive is a DataSourceType enum value
+	DataSourceTypeGoogledrive = "GOOGLEDRIVE"
 )
 
 // DataSourceType_Values returns all elements of the DataSourceType enum
@@ -10369,6 +13040,9 @@ func DataSourceType_Values() []string {
 		DataSourceTypeSalesforce,
 		DataSourceTypeOnedrive,
 		DataSourceTypeServicenow,
+		DataSourceTypeCustom,
+		DataSourceTypeConfluence,
+		DataSourceTypeGoogledrive,
 	}
 }
 
@@ -10485,6 +13159,22 @@ func FaqStatus_Values() []string {
 }
 
 const (
+	// HighlightTypeStandard is a HighlightType enum value
+	HighlightTypeStandard = "STANDARD"
+
+	// HighlightTypeThesaurusSynonym is a HighlightType enum value
+	HighlightTypeThesaurusSynonym = "THESAURUS_SYNONYM"
+)
+
+// HighlightType_Values returns all elements of the HighlightType enum
+func HighlightType_Values() []string {
+	return []string{
+		HighlightTypeStandard,
+		HighlightTypeThesaurusSynonym,
+	}
+}
+
+const (
 	// IndexEditionDeveloperEdition is a IndexEdition enum value
 	IndexEditionDeveloperEdition = "DEVELOPER_EDITION"
 
@@ -10529,6 +13219,22 @@ func IndexStatus_Values() []string {
 		IndexStatusFailed,
 		IndexStatusUpdating,
 		IndexStatusSystemUpdating,
+	}
+}
+
+const (
+	// KeyLocationUrl is a KeyLocation enum value
+	KeyLocationUrl = "URL"
+
+	// KeyLocationSecretManager is a KeyLocation enum value
+	KeyLocationSecretManager = "SECRET_MANAGER"
+)
+
+// KeyLocation_Values returns all elements of the KeyLocation enum
+func KeyLocation_Values() []string {
+	return []string{
+		KeyLocationUrl,
+		KeyLocationSecretManager,
 	}
 }
 
@@ -10810,5 +13516,53 @@ func SortOrder_Values() []string {
 	return []string{
 		SortOrderDesc,
 		SortOrderAsc,
+	}
+}
+
+const (
+	// ThesaurusStatusCreating is a ThesaurusStatus enum value
+	ThesaurusStatusCreating = "CREATING"
+
+	// ThesaurusStatusActive is a ThesaurusStatus enum value
+	ThesaurusStatusActive = "ACTIVE"
+
+	// ThesaurusStatusDeleting is a ThesaurusStatus enum value
+	ThesaurusStatusDeleting = "DELETING"
+
+	// ThesaurusStatusUpdating is a ThesaurusStatus enum value
+	ThesaurusStatusUpdating = "UPDATING"
+
+	// ThesaurusStatusActiveButUpdateFailed is a ThesaurusStatus enum value
+	ThesaurusStatusActiveButUpdateFailed = "ACTIVE_BUT_UPDATE_FAILED"
+
+	// ThesaurusStatusFailed is a ThesaurusStatus enum value
+	ThesaurusStatusFailed = "FAILED"
+)
+
+// ThesaurusStatus_Values returns all elements of the ThesaurusStatus enum
+func ThesaurusStatus_Values() []string {
+	return []string{
+		ThesaurusStatusCreating,
+		ThesaurusStatusActive,
+		ThesaurusStatusDeleting,
+		ThesaurusStatusUpdating,
+		ThesaurusStatusActiveButUpdateFailed,
+		ThesaurusStatusFailed,
+	}
+}
+
+const (
+	// UserContextPolicyAttributeFilter is a UserContextPolicy enum value
+	UserContextPolicyAttributeFilter = "ATTRIBUTE_FILTER"
+
+	// UserContextPolicyUserToken is a UserContextPolicy enum value
+	UserContextPolicyUserToken = "USER_TOKEN"
+)
+
+// UserContextPolicy_Values returns all elements of the UserContextPolicy enum
+func UserContextPolicy_Values() []string {
+	return []string{
+		UserContextPolicyAttributeFilter,
+		UserContextPolicyUserToken,
 	}
 }

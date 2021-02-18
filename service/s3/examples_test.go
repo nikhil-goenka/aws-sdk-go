@@ -952,6 +952,8 @@ func ExampleS3_GetObject_shared00() {
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchKey:
 				fmt.Println(s3.ErrCodeNoSuchKey, aerr.Error())
+			case s3.ErrCodeInvalidObjectState:
+				fmt.Println(s3.ErrCodeInvalidObjectState, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -982,6 +984,8 @@ func ExampleS3_GetObject_shared01() {
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchKey:
 				fmt.Println(s3.ErrCodeNoSuchKey, aerr.Error())
+			case s3.ErrCodeInvalidObjectState:
+				fmt.Println(s3.ErrCodeInvalidObjectState, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

@@ -355,7 +355,7 @@ func (c *RDS) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *requ
 //
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetGroupNotFoundFault "DBProxyTargetGroupNotFoundFault"
 //   The specified target group isn't available for a proxy owned by your AWS
@@ -894,16 +894,17 @@ func (c *RDS) CopyDBClusterSnapshotRequest(input *CopyDBClusterSnapshotInput) (r
 //    be a valid request for the CopyDBClusterSnapshot API action that can be
 //    executed in the source AWS Region that contains the encrypted DB cluster
 //    snapshot to be copied. The pre-signed URL request must contain the following
-//    parameter values: KmsKeyId - The KMS key identifier for the key to use
-//    to encrypt the copy of the DB cluster snapshot in the destination AWS
-//    Region. This is the same identifier for both the CopyDBClusterSnapshot
-//    action that is called in the destination AWS Region, and the action contained
-//    in the pre-signed URL. DestinationRegion - The name of the AWS Region
-//    that the DB cluster snapshot is to be created in. SourceDBClusterSnapshotIdentifier
-//    - The DB cluster snapshot identifier for the encrypted DB cluster snapshot
-//    to be copied. This identifier must be in the Amazon Resource Name (ARN)
-//    format for the source AWS Region. For example, if you are copying an encrypted
-//    DB cluster snapshot from the us-west-2 AWS Region, then your SourceDBClusterSnapshotIdentifier
+//    parameter values: KmsKeyId - The AWS KMS key identifier for the customer
+//    master key (CMK) to use to encrypt the copy of the DB cluster snapshot
+//    in the destination AWS Region. This is the same identifier for both the
+//    CopyDBClusterSnapshot action that is called in the destination AWS Region,
+//    and the action contained in the pre-signed URL. DestinationRegion - The
+//    name of the AWS Region that the DB cluster snapshot is to be created in.
+//    SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier
+//    for the encrypted DB cluster snapshot to be copied. This identifier must
+//    be in the Amazon Resource Name (ARN) format for the source AWS Region.
+//    For example, if you are copying an encrypted DB cluster snapshot from
+//    the us-west-2 AWS Region, then your SourceDBClusterSnapshotIdentifier
 //    looks like the following example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115.
 //    To learn how to generate a Signature Version 4 signed request, see Authenticating
 //    Requests: Using Query Parameters (AWS Signature Version 4) (https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
@@ -1113,7 +1114,7 @@ func (c *RDS) CopyDBSnapshotRequest(input *CopyDBSnapshotInput) (req *request.Re
 
 // CopyDBSnapshot API operation for Amazon Relational Database Service.
 //
-// Copies the specified DB snapshot. The source DB snapshot must be in the "available"
+// Copies the specified DB snapshot. The source DB snapshot must be in the available
 // state.
 //
 // You can copy a snapshot from one AWS Region to another. In that case, the
@@ -1145,6 +1146,10 @@ func (c *RDS) CopyDBSnapshotRequest(input *CopyDBSnapshotInput) (req *request.Re
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
 //   An error occurred accessing an AWS KMS key.
+//
+//   * ErrCodeCustomAvailabilityZoneNotFoundFault "CustomAvailabilityZoneNotFound"
+//   CustomAvailabilityZoneId doesn't refer to an existing custom Availability
+//   Zone identifier.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshot
 func (c *RDS) CopyDBSnapshot(input *CopyDBSnapshotInput) (*CopyDBSnapshotOutput, error) {
@@ -1463,8 +1468,12 @@ func (c *RDS) CreateDBClusterRequest(input *CreateDBClusterInput) (req *request.
 //   unless there is only one Availability Zone.
 //
 //   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//   The GlobalClusterIdentifier doesn't refer to an existing global database
+//   cluster.
 //
 //   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//   The global cluster is in an invalid state and can't perform the requested
+//   operation.
 //
 //   * ErrCodeDomainNotFoundFault "DomainNotFoundFault"
 //   Domain doesn't refer to an existing Active Directory domain.
@@ -2415,7 +2424,8 @@ func (c *RDS) CreateDBSnapshotRequest(input *CreateDBSnapshotInput) (req *reques
 
 // CreateDBSnapshot API operation for Amazon Relational Database Service.
 //
-// Creates a DBSnapshot. The source DBInstance must be in "available" state.
+// Creates a snapshot of a DB instance. The source DB instance must be in the
+// available or storage-optimization state.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2717,9 +2727,9 @@ func (c *RDS) CreateGlobalClusterRequest(input *CreateGlobalClusterInput) (req *
 
 // CreateGlobalCluster API operation for Amazon Relational Database Service.
 //
-// Creates an Aurora global database spread across multiple regions. The global
-// database contains a single primary cluster with read-write capability, and
-// a read-only secondary cluster that receives data from the primary cluster
+// Creates an Aurora global database spread across multiple AWS Regions. The
+// global database contains a single primary cluster with read-write capability,
+// and a read-only secondary cluster that receives data from the primary cluster
 // through high-speed replication performed by the Aurora storage subsystem.
 //
 // You can create a global database that is initially empty, and then add a
@@ -2738,8 +2748,12 @@ func (c *RDS) CreateGlobalClusterRequest(input *CreateGlobalClusterInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeGlobalClusterAlreadyExistsFault "GlobalClusterAlreadyExistsFault"
+//   The GlobalClusterIdentifier already exists. Choose a new global database
+//   identifier (unique name) to create a new global database cluster.
 //
 //   * ErrCodeGlobalClusterQuotaExceededFault "GlobalClusterQuotaExceededFault"
+//   The number of global database clusters for this account is already at the
+//   maximum allowed.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
 //   The requested operation can't be performed while the cluster is in this state.
@@ -3472,8 +3486,8 @@ func (c *RDS) DeleteDBInstanceAutomatedBackupRequest(input *DeleteDBInstanceAuto
 
 // DeleteDBInstanceAutomatedBackup API operation for Amazon Relational Database Service.
 //
-// Deletes automated backups based on the source instance's DbiResourceId value
-// or the restorable instance's resource ID.
+// Deletes automated backups using the DbiResourceId value of the source DB
+// instance or the Amazon Resource Name (ARN) of the automated backups.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3654,7 +3668,7 @@ func (c *RDS) DeleteDBProxyRequest(input *DeleteDBProxyInput) (req *request.Requ
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeInvalidDBProxyStateFault "InvalidDBProxyStateFault"
 //   The requested operation can't be performed while the proxy is in this state.
@@ -4080,8 +4094,12 @@ func (c *RDS) DeleteGlobalClusterRequest(input *DeleteGlobalClusterInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//   The GlobalClusterIdentifier doesn't refer to an existing global database
+//   cluster.
 //
 //   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//   The global cluster is in an invalid state and can't perform the requested
+//   operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteGlobalCluster
 func (c *RDS) DeleteGlobalCluster(input *DeleteGlobalClusterInput) (*DeleteGlobalClusterOutput, error) {
@@ -4334,7 +4352,7 @@ func (c *RDS) DeregisterDBProxyTargetsRequest(input *DeregisterDBProxyTargetsInp
 //
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeInvalidDBProxyStateFault "InvalidDBProxyStateFault"
 //   The requested operation can't be performed while the proxy is in this state.
@@ -6561,7 +6579,7 @@ func (c *RDS) DescribeDBProxiesRequest(input *DescribeDBProxiesInput) (req *requ
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBProxies
 func (c *RDS) DescribeDBProxies(input *DescribeDBProxiesInput) (*DescribeDBProxiesOutput, error) {
@@ -6700,7 +6718,7 @@ func (c *RDS) DescribeDBProxyTargetGroupsRequest(input *DescribeDBProxyTargetGro
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetGroupNotFoundFault "DBProxyTargetGroupNotFoundFault"
 //   The specified target group isn't available for a proxy owned by your AWS
@@ -6845,7 +6863,7 @@ func (c *RDS) DescribeDBProxyTargetsRequest(input *DescribeDBProxyTargetsInput) 
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetNotFoundFault "DBProxyTargetNotFoundFault"
 //   The specified RDS DB instance or Aurora DB cluster isn't available for a
@@ -7921,8 +7939,9 @@ func (c *RDS) DescribeEventsRequest(input *DescribeEventsInput) (req *request.Re
 // DB security groups, DB snapshots, and DB cluster snapshots for the past 14
 // days. Events specific to a particular DB instances, DB clusters, DB parameter
 // groups, DB security groups, DB snapshots, and DB cluster snapshots group
-// can be obtained by providing the name as a parameter. By default, the past
-// hour of events are returned.
+// can be obtained by providing the name as a parameter.
+//
+// By default, the past hour of events are returned.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8209,6 +8228,8 @@ func (c *RDS) DescribeGlobalClustersRequest(input *DescribeGlobalClustersInput) 
 //
 // Returned Error Codes:
 //   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//   The GlobalClusterIdentifier doesn't refer to an existing global database
+//   cluster.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeGlobalClusters
 func (c *RDS) DescribeGlobalClusters(input *DescribeGlobalClustersInput) (*DescribeGlobalClustersOutput, error) {
@@ -9287,8 +9308,8 @@ func (c *RDS) DescribeSourceRegionsRequest(input *DescribeSourceRegionsInput) (r
 // DescribeSourceRegions API operation for Amazon Relational Database Service.
 //
 // Returns a list of the source AWS Regions where the current AWS Region can
-// create a read replica or copy a DB snapshot from. This API action supports
-// pagination.
+// create a read replica, copy a DB snapshot from, or replicate automated backups
+// from. This API action supports pagination.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9694,6 +9715,112 @@ func (c *RDS) FailoverDBClusterWithContext(ctx aws.Context, input *FailoverDBClu
 	return out, req.Send()
 }
 
+const opFailoverGlobalCluster = "FailoverGlobalCluster"
+
+// FailoverGlobalClusterRequest generates a "aws/request.Request" representing the
+// client's request for the FailoverGlobalCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See FailoverGlobalCluster for more information on using the FailoverGlobalCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the FailoverGlobalClusterRequest method.
+//    req, resp := client.FailoverGlobalClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverGlobalCluster
+func (c *RDS) FailoverGlobalClusterRequest(input *FailoverGlobalClusterInput) (req *request.Request, output *FailoverGlobalClusterOutput) {
+	op := &request.Operation{
+		Name:       opFailoverGlobalCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &FailoverGlobalClusterInput{}
+	}
+
+	output = &FailoverGlobalClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// FailoverGlobalCluster API operation for Amazon Relational Database Service.
+//
+// Initiates the failover process for an Aurora global database (GlobalCluster).
+//
+// A failover for an Aurora global database promotes one of secondary read-only
+// DB clusters to be the primary DB cluster and demotes the primary DB cluster
+// to being a secondary (read-only) DB cluster. In other words, the role of
+// the current primary DB cluster and the selected (target) DB cluster are switched.
+// The selected secondary DB cluster assumes full read/write capabilities for
+// the Aurora global database.
+//
+// For more information about failing over an Amazon Aurora global database,
+// see Managed planned failover for Amazon Aurora global databases (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.managed-failover)
+// in the Amazon Aurora User Guide.
+//
+// This action applies to GlobalCluster (Aurora global databases) only. Use
+// this action only on healthy Aurora global databases with running Aurora DB
+// clusters and no Region-wide outages, to test disaster recovery scenarios
+// or to reconfigure your Aurora global database topology.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation FailoverGlobalCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//   The GlobalClusterIdentifier doesn't refer to an existing global database
+//   cluster.
+//
+//   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//   The global cluster is in an invalid state and can't perform the requested
+//   operation.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverGlobalCluster
+func (c *RDS) FailoverGlobalCluster(input *FailoverGlobalClusterInput) (*FailoverGlobalClusterOutput, error) {
+	req, out := c.FailoverGlobalClusterRequest(input)
+	return out, req.Send()
+}
+
+// FailoverGlobalClusterWithContext is the same as FailoverGlobalCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See FailoverGlobalCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) FailoverGlobalClusterWithContext(ctx aws.Context, input *FailoverGlobalClusterInput, opts ...request.Option) (*FailoverGlobalClusterOutput, error) {
+	req, out := c.FailoverGlobalClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opImportInstallationMedia = "ImportInstallationMedia"
 
 // ImportInstallationMediaRequest generates a "aws/request.Request" representing the
@@ -9847,7 +9974,7 @@ func (c *RDS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 //
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetGroupNotFoundFault "DBProxyTargetGroupNotFoundFault"
 //   The specified target group isn't available for a proxy owned by your AWS
@@ -10821,7 +10948,7 @@ func (c *RDS) ModifyDBProxyRequest(input *ModifyDBProxyInput) (req *request.Requ
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyAlreadyExistsFault "DBProxyTargetExistsFault"
 //   The specified proxy name must be unique for all proxies owned by your AWS
@@ -10908,7 +11035,7 @@ func (c *RDS) ModifyDBProxyTargetGroupRequest(input *ModifyDBProxyTargetGroupInp
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetGroupNotFoundFault "DBProxyTargetGroupNotFoundFault"
 //   The specified target group isn't available for a proxy owned by your AWS
@@ -11382,8 +11509,18 @@ func (c *RDS) ModifyGlobalClusterRequest(input *ModifyGlobalClusterInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//   The GlobalClusterIdentifier doesn't refer to an existing global database
+//   cluster.
 //
 //   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//   The global cluster is in an invalid state and can't perform the requested
+//   operation.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyGlobalCluster
 func (c *RDS) ModifyGlobalCluster(input *ModifyGlobalClusterInput) (*ModifyGlobalClusterOutput, error) {
@@ -11899,7 +12036,7 @@ func (c *RDS) RegisterDBProxyTargetsRequest(input *RegisterDBProxyTargetsInput) 
 // Returned Error Codes:
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetGroupNotFoundFault "DBProxyTargetGroupNotFoundFault"
 //   The specified target group isn't available for a proxy owned by your AWS
@@ -11923,6 +12060,11 @@ func (c *RDS) RegisterDBProxyTargetsRequest(input *RegisterDBProxyTargetsInput) 
 //
 //   * ErrCodeInvalidDBProxyStateFault "InvalidDBProxyStateFault"
 //   The requested operation can't be performed while the proxy is in this state.
+//
+//   * ErrCodeInsufficientAvailableIPsInSubnetFault "InsufficientAvailableIPsInSubnetFault"
+//   The requested operation can't be performed because there aren't enough available
+//   IP addresses in the proxy's subnets. Add more CIDR blocks to the VPC or remove
+//   IP address that aren't required from the subnets.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RegisterDBProxyTargets
 func (c *RDS) RegisterDBProxyTargets(input *RegisterDBProxyTargetsInput) (*RegisterDBProxyTargetsOutput, error) {
@@ -12006,8 +12148,12 @@ func (c *RDS) RemoveFromGlobalClusterRequest(input *RemoveFromGlobalClusterInput
 //
 // Returned Error Codes:
 //   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//   The GlobalClusterIdentifier doesn't refer to an existing global database
+//   cluster.
 //
 //   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//   The global cluster is in an invalid state and can't perform the requested
+//   operation.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
 //   DBClusterIdentifier doesn't refer to an existing DB cluster.
@@ -12366,7 +12512,7 @@ func (c *RDS) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) 
 //
 //   * ErrCodeDBProxyNotFoundFault "DBProxyNotFoundFault"
 //   The specified proxy name doesn't correspond to a proxy owned by your AWS
-//   accoutn in the specified AWS Region.
+//   account in the specified AWS Region.
 //
 //   * ErrCodeDBProxyTargetGroupNotFoundFault "DBProxyTargetGroupNotFoundFault"
 //   The specified target group isn't available for a proxy owned by your AWS
@@ -13080,20 +13226,20 @@ func (c *RDS) RestoreDBInstanceFromDBSnapshotRequest(input *RestoreDBInstanceFro
 // RestoreDBInstanceFromDBSnapshot API operation for Amazon Relational Database Service.
 //
 // Creates a new DB instance from a DB snapshot. The target database is created
-// from the source database restore point with the most of original configuration
-// with the default security group and the default DB parameter group. By default,
-// the new DB instance is created as a single-AZ deployment except when the
-// instance is a SQL Server instance that has an option group that is associated
-// with mirroring; in this case, the instance becomes a mirrored AZ deployment
-// and not a single-AZ deployment.
+// from the source database restore point with most of the source's original
+// configuration, including the default security group and DB parameter group.
+// By default, the new DB instance is created as a Single-AZ deployment, except
+// when the instance is a SQL Server instance that has an option group associated
+// with mirroring. In this case, the instance becomes a Multi-AZ deployment,
+// not a Single-AZ deployment.
 //
-// If your intent is to replace your original DB instance with the new, restored
-// DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot
-// action. RDS doesn't allow two DB instances with the same name. Once you have
-// renamed your original DB instance with a different identifier, then you can
-// pass the original name of the DB instance as the DBInstanceIdentifier in
-// the call to the RestoreDBInstanceFromDBSnapshot action. The result is that
-// you will replace the original DB instance with the DB instance created from
+// If you want to replace your original DB instance with the new, restored DB
+// instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot
+// action. RDS doesn't allow two DB instances with the same name. After you
+// have renamed your original DB instance with a different identifier, then
+// you can pass the original name of the DB instance as the DBInstanceIdentifier
+// in the call to the RestoreDBInstanceFromDBSnapshot action. The result is
+// that you replace the original DB instance with the DB instance created from
 // the snapshot.
 //
 // If you are restoring from a shared manual DB snapshot, the DBSnapshotIdentifier
@@ -13912,6 +14058,103 @@ func (c *RDS) StartDBInstanceWithContext(ctx aws.Context, input *StartDBInstance
 	return out, req.Send()
 }
 
+const opStartDBInstanceAutomatedBackupsReplication = "StartDBInstanceAutomatedBackupsReplication"
+
+// StartDBInstanceAutomatedBackupsReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the StartDBInstanceAutomatedBackupsReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartDBInstanceAutomatedBackupsReplication for more information on using the StartDBInstanceAutomatedBackupsReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartDBInstanceAutomatedBackupsReplicationRequest method.
+//    req, resp := client.StartDBInstanceAutomatedBackupsReplicationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstanceAutomatedBackupsReplication
+func (c *RDS) StartDBInstanceAutomatedBackupsReplicationRequest(input *StartDBInstanceAutomatedBackupsReplicationInput) (req *request.Request, output *StartDBInstanceAutomatedBackupsReplicationOutput) {
+	op := &request.Operation{
+		Name:       opStartDBInstanceAutomatedBackupsReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartDBInstanceAutomatedBackupsReplicationInput{}
+	}
+
+	output = &StartDBInstanceAutomatedBackupsReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartDBInstanceAutomatedBackupsReplication API operation for Amazon Relational Database Service.
+//
+// Enables replication of automated backups to a different AWS Region.
+//
+// For more information, see Replicating Automated Backups to Another AWS Region
+// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html)
+// in the Amazon RDS User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation StartDBInstanceAutomatedBackupsReplication for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+//   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
+//   An error occurred accessing an AWS KMS key.
+//
+//   * ErrCodeDBInstanceAutomatedBackupQuotaExceededFault "DBInstanceAutomatedBackupQuotaExceeded"
+//   The quota for retained automated backups was exceeded. This prevents you
+//   from retaining any additional automated backups. The retained automated backups
+//   quota is the same as your DB Instance quota.
+//
+//   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
+//   Storage of the StorageType specified can't be associated with the DB instance.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstanceAutomatedBackupsReplication
+func (c *RDS) StartDBInstanceAutomatedBackupsReplication(input *StartDBInstanceAutomatedBackupsReplicationInput) (*StartDBInstanceAutomatedBackupsReplicationOutput, error) {
+	req, out := c.StartDBInstanceAutomatedBackupsReplicationRequest(input)
+	return out, req.Send()
+}
+
+// StartDBInstanceAutomatedBackupsReplicationWithContext is the same as StartDBInstanceAutomatedBackupsReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartDBInstanceAutomatedBackupsReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) StartDBInstanceAutomatedBackupsReplicationWithContext(ctx aws.Context, input *StartDBInstanceAutomatedBackupsReplicationInput, opts ...request.Option) (*StartDBInstanceAutomatedBackupsReplicationOutput, error) {
+	req, out := c.StartDBInstanceAutomatedBackupsReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartExportTask = "StartExportTask"
 
 // StartExportTaskRequest generates a "aws/request.Request" representing the
@@ -14308,6 +14551,92 @@ func (c *RDS) StopDBInstanceWithContext(ctx aws.Context, input *StopDBInstanceIn
 	return out, req.Send()
 }
 
+const opStopDBInstanceAutomatedBackupsReplication = "StopDBInstanceAutomatedBackupsReplication"
+
+// StopDBInstanceAutomatedBackupsReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the StopDBInstanceAutomatedBackupsReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopDBInstanceAutomatedBackupsReplication for more information on using the StopDBInstanceAutomatedBackupsReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopDBInstanceAutomatedBackupsReplicationRequest method.
+//    req, resp := client.StopDBInstanceAutomatedBackupsReplicationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstanceAutomatedBackupsReplication
+func (c *RDS) StopDBInstanceAutomatedBackupsReplicationRequest(input *StopDBInstanceAutomatedBackupsReplicationInput) (req *request.Request, output *StopDBInstanceAutomatedBackupsReplicationOutput) {
+	op := &request.Operation{
+		Name:       opStopDBInstanceAutomatedBackupsReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopDBInstanceAutomatedBackupsReplicationInput{}
+	}
+
+	output = &StopDBInstanceAutomatedBackupsReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopDBInstanceAutomatedBackupsReplication API operation for Amazon Relational Database Service.
+//
+// Stops automated backup replication for a DB instance.
+//
+// For more information, see Replicating Automated Backups to Another AWS Region
+// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReplicateBackups.html)
+// in the Amazon RDS User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation StopDBInstanceAutomatedBackupsReplication for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstanceAutomatedBackupsReplication
+func (c *RDS) StopDBInstanceAutomatedBackupsReplication(input *StopDBInstanceAutomatedBackupsReplicationInput) (*StopDBInstanceAutomatedBackupsReplicationOutput, error) {
+	req, out := c.StopDBInstanceAutomatedBackupsReplicationRequest(input)
+	return out, req.Send()
+}
+
+// StopDBInstanceAutomatedBackupsReplicationWithContext is the same as StopDBInstanceAutomatedBackupsReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopDBInstanceAutomatedBackupsReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) StopDBInstanceAutomatedBackupsReplicationWithContext(ctx aws.Context, input *StopDBInstanceAutomatedBackupsReplicationInput, opts ...request.Option) (*StopDBInstanceAutomatedBackupsReplicationOutput, error) {
+	req, out := c.StopDBInstanceAutomatedBackupsReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // Describes a quota for an AWS account.
 //
 // The following are account quotas:
@@ -14444,7 +14773,7 @@ type AddRoleToDBClusterInput struct {
 	FeatureName *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the IAM role to associate with the Aurora
-	// DB cluster, for example arn:aws:iam::123456789012:role/AuroraAccessRole.
+	// DB cluster, for example, arn:aws:iam::123456789012:role/AuroraAccessRole.
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
@@ -15292,11 +15621,11 @@ type CancelExportTaskOutput struct {
 	// a snapshot.
 	IamRoleArn *string `type:"string"`
 
-	// The ID of the AWS KMS key that is used to encrypt the snapshot when it's
-	// exported to Amazon S3. The KMS key ID is the Amazon Resource Name (ARN),
-	// the KMS key identifier, or the KMS key alias for the KMS encryption key.
-	// The IAM role used for the snapshot export must have encryption and decryption
-	// permissions to use this KMS key.
+	// The key identifier of the AWS KMS customer master key (CMK) that is used
+	// to encrypt the snapshot when it's exported to Amazon S3. The AWS KMS CMK
+	// identifier is its key ARN, key ID, alias ARN, or alias name. The IAM role
+	// used for the snapshot export must have encryption and decryption permissions
+	// to use this AWS KMS CMK.
 	KmsKeyId *string `type:"string"`
 
 	// The progress of the snapshot export task as a percentage.
@@ -15557,9 +15886,15 @@ func (s *CharacterSet) SetCharacterSetName(v string) *CharacterSet {
 //
 // The EnableLogTypes and DisableLogTypes arrays determine which logs will be
 // exported (or not exported) to CloudWatch Logs. The values within these arrays
-// depend on the DB engine being used. For more information, see Publishing
-// Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+// depend on the DB engine being used.
+//
+// For more information about exporting CloudWatch Logs for Amazon RDS DB instances,
+// see Publishing Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
 // in the Amazon RDS User Guide.
+//
+// For more information about exporting CloudWatch Logs for Amazon Aurora DB
+// clusters, see Publishing Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+// in the Amazon Aurora User Guide.
 type CloudwatchLogsExportConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -15589,6 +15924,69 @@ func (s *CloudwatchLogsExportConfiguration) SetDisableLogTypes(v []*string) *Clo
 // SetEnableLogTypes sets the EnableLogTypes field's value.
 func (s *CloudwatchLogsExportConfiguration) SetEnableLogTypes(v []*string) *CloudwatchLogsExportConfiguration {
 	s.EnableLogTypes = v
+	return s
+}
+
+// This data type is used as a response element in the ModifyDBCluster operation
+// and contains changes that will be applied during the next maintenance window.
+type ClusterPendingModifiedValues struct {
+	_ struct{} `type:"structure"`
+
+	// The DBClusterIdentifier value for the DB cluster.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The database engine version.
+	EngineVersion *string `type:"string"`
+
+	// A value that indicates whether mapping of AWS Identity and Access Management
+	// (IAM) accounts to database accounts is enabled.
+	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
+
+	// The master credentials for the DB cluster.
+	MasterUserPassword *string `type:"string"`
+
+	// A list of the log types whose configuration is still pending. In other words,
+	// these log types are in the process of being activated or deactivated.
+	PendingCloudwatchLogsExports *PendingCloudwatchLogsExports `type:"structure"`
+}
+
+// String returns the string representation
+func (s ClusterPendingModifiedValues) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClusterPendingModifiedValues) GoString() string {
+	return s.String()
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *ClusterPendingModifiedValues) SetDBClusterIdentifier(v string) *ClusterPendingModifiedValues {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *ClusterPendingModifiedValues) SetEngineVersion(v string) *ClusterPendingModifiedValues {
+	s.EngineVersion = &v
+	return s
+}
+
+// SetIAMDatabaseAuthenticationEnabled sets the IAMDatabaseAuthenticationEnabled field's value.
+func (s *ClusterPendingModifiedValues) SetIAMDatabaseAuthenticationEnabled(v bool) *ClusterPendingModifiedValues {
+	s.IAMDatabaseAuthenticationEnabled = &v
+	return s
+}
+
+// SetMasterUserPassword sets the MasterUserPassword field's value.
+func (s *ClusterPendingModifiedValues) SetMasterUserPassword(v string) *ClusterPendingModifiedValues {
+	s.MasterUserPassword = &v
+	return s
+}
+
+// SetPendingCloudwatchLogsExports sets the PendingCloudwatchLogsExports field's value.
+func (s *ClusterPendingModifiedValues) SetPendingCloudwatchLogsExports(v *PendingCloudwatchLogsExports) *ClusterPendingModifiedValues {
+	s.PendingCloudwatchLogsExports = v
 	return s
 }
 
@@ -15776,13 +16174,6 @@ type CopyDBClusterParameterGroupInput struct {
 	//
 	//    * Must specify a valid DB cluster parameter group.
 	//
-	//    * If the source DB cluster parameter group is in the same AWS Region as
-	//    the copy, specify a valid DB parameter group identifier, for example my-db-cluster-param-group,
-	//    or a valid ARN.
-	//
-	//    * If the source DB parameter group is in a different AWS Region than the
-	//    copy, specify a valid DB cluster parameter group ARN, for example arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1.
-	//
 	// SourceDBClusterParameterGroupIdentifier is a required field
 	SourceDBClusterParameterGroupIdentifier *string `type:"string" required:"true"`
 
@@ -15902,23 +16293,24 @@ type CopyDBClusterSnapshotInput struct {
 	// DestinationRegion is used for presigning the request to a given region.
 	DestinationRegion *string `type:"string"`
 
-	// The AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is
-	// the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias
-	// for the KMS encryption key.
+	// The AWS KMS key identifier for an encrypted DB cluster snapshot. The AWS
+	// KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the
+	// AWS KMS customer master key (CMK).
 	//
 	// If you copy an encrypted DB cluster snapshot from your AWS account, you can
-	// specify a value for KmsKeyId to encrypt the copy with a new KMS encryption
-	// key. If you don't specify a value for KmsKeyId, then the copy of the DB cluster
-	// snapshot is encrypted with the same KMS key as the source DB cluster snapshot.
+	// specify a value for KmsKeyId to encrypt the copy with a new AWS KMS CMK.
+	// If you don't specify a value for KmsKeyId, then the copy of the DB cluster
+	// snapshot is encrypted with the same AWS KMS key as the source DB cluster
+	// snapshot.
 	//
 	// If you copy an encrypted DB cluster snapshot that is shared from another
 	// AWS account, then you must specify a value for KmsKeyId.
 	//
 	// To copy an encrypted DB cluster snapshot to another AWS Region, you must
-	// set KmsKeyId to the KMS key ID you want to use to encrypt the copy of the
-	// DB cluster snapshot in the destination AWS Region. KMS encryption keys are
-	// specific to the AWS Region that they are created in, and you can't use encryption
-	// keys from one AWS Region in another AWS Region.
+	// set KmsKeyId to the AWS KMS key identifier you want to use to encrypt the
+	// copy of the DB cluster snapshot in the destination AWS Region. AWS KMS CMKs
+	// are specific to the AWS Region that they are created in, and you can't use
+	// CMKs from one AWS Region in another AWS Region.
 	//
 	// If you copy an unencrypted DB cluster snapshot and specify a value for the
 	// KmsKeyId parameter, an error is returned.
@@ -15935,11 +16327,11 @@ type CopyDBClusterSnapshotInput struct {
 	// encrypted DB cluster snapshot to be copied. The pre-signed URL request must
 	// contain the following parameter values:
 	//
-	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
-	//    the copy of the DB cluster snapshot in the destination AWS Region. This
-	//    is the same identifier for both the CopyDBClusterSnapshot action that
-	//    is called in the destination AWS Region, and the action contained in the
-	//    pre-signed URL.
+	//    * KmsKeyId - The AWS KMS key identifier for the customer master key (CMK)
+	//    to use to encrypt the copy of the DB cluster snapshot in the destination
+	//    AWS Region. This is the same identifier for both the CopyDBClusterSnapshot
+	//    action that is called in the destination AWS Region, and the action contained
+	//    in the pre-signed URL.
 	//
 	//    * DestinationRegion - The name of the AWS Region that the DB cluster snapshot
 	//    is to be created in.
@@ -16120,9 +16512,6 @@ type CopyDBParameterGroupInput struct {
 	//
 	//    * Must specify a valid DB parameter group.
 	//
-	//    * Must specify a valid DB parameter group identifier, for example my-db-param-group,
-	//    or a valid ARN.
-	//
 	// SourceDBParameterGroupIdentifier is a required field
 	SourceDBParameterGroupIdentifier *string `type:"string" required:"true"`
 
@@ -16242,14 +16631,14 @@ type CopyDBSnapshotInput struct {
 	// DestinationRegion is used for presigning the request to a given region.
 	DestinationRegion *string `type:"string"`
 
-	// The AWS KMS key ID for an encrypted DB snapshot. The KMS key ID is the Amazon
-	// Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS
-	// encryption key.
+	// The AWS KMS key identifier for an encrypted DB snapshot. The AWS KMS key
+	// identifier is the key ARN, key ID, alias ARN, or alias name for the AWS KMS
+	// customer master key (CMK).
 	//
 	// If you copy an encrypted DB snapshot from your AWS account, you can specify
-	// a value for this parameter to encrypt the copy with a new KMS encryption
-	// key. If you don't specify a value for this parameter, then the copy of the
-	// DB snapshot is encrypted with the same KMS key as the source DB snapshot.
+	// a value for this parameter to encrypt the copy with a new AWS KMS CMK. If
+	// you don't specify a value for this parameter, then the copy of the DB snapshot
+	// is encrypted with the same AWS KMS key as the source DB snapshot.
 	//
 	// If you copy an encrypted DB snapshot that is shared from another AWS account,
 	// then you must specify a value for this parameter.
@@ -16258,9 +16647,9 @@ type CopyDBSnapshotInput struct {
 	// copy is encrypted.
 	//
 	// If you copy an encrypted snapshot to a different AWS Region, then you must
-	// specify a KMS key for the destination AWS Region. KMS encryption keys are
-	// specific to the AWS Region that they are created in, and you can't use encryption
-	// keys from one AWS Region in another AWS Region.
+	// specify a AWS KMS key identifier for the destination AWS Region. AWS KMS
+	// CMKs are specific to the AWS Region that they are created in, and you can't
+	// use CMKs from one AWS Region in another AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// The name of an option group to associate with the copy of the snapshot.
@@ -16269,7 +16658,7 @@ type CopyDBSnapshotInput struct {
 	// another, and your DB instance uses a nondefault option group. If your source
 	// DB instance uses Transparent Data Encryption for Oracle or Microsoft SQL
 	// Server, you must specify this option when copying across AWS Regions. For
-	// more information, see Option Group Considerations (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options)
+	// more information, see Option group considerations (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options)
 	// in the Amazon RDS User Guide.
 	OptionGroupName *string `type:"string"`
 
@@ -16295,10 +16684,11 @@ type CopyDBSnapshotInput struct {
 	//    action in the us-west-2 AWS Region. For this example, the DestinationRegion
 	//    in the presigned URL must be set to the us-east-1 AWS Region.
 	//
-	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
-	//    the copy of the DB snapshot in the destination AWS Region. This is the
-	//    same identifier for both the CopyDBSnapshot action that is called in the
-	//    destination AWS Region, and the action contained in the presigned URL.
+	//    * KmsKeyId - The AWS KMS key identifier for the customer master key (CMK)
+	//    to use to encrypt the copy of the DB snapshot in the destination AWS Region.
+	//    This is the same identifier for both the CopyDBSnapshot action that is
+	//    called in the destination AWS Region, and the action contained in the
+	//    presigned URL.
 	//
 	//    * SourceDBSnapshotIdentifier - The DB snapshot identifier for the encrypted
 	//    snapshot to be copied. This identifier must be in the Amazon Resource
@@ -16350,6 +16740,11 @@ type CopyDBSnapshotInput struct {
 	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
 	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// The external custom Availability Zone (CAZ) identifier for the target CAZ.
+	//
+	// Example: rds-caz-aiqhTgQv.
+	TargetCustomAvailabilityZone *string `type:"string"`
 
 	// The identifier for the copy of the snapshot.
 	//
@@ -16443,6 +16838,12 @@ func (s *CopyDBSnapshotInput) SetTags(v []*Tag) *CopyDBSnapshotInput {
 	return s
 }
 
+// SetTargetCustomAvailabilityZone sets the TargetCustomAvailabilityZone field's value.
+func (s *CopyDBSnapshotInput) SetTargetCustomAvailabilityZone(v string) *CopyDBSnapshotInput {
+	s.TargetCustomAvailabilityZone = &v
+	return s
+}
+
 // SetTargetDBSnapshotIdentifier sets the TargetDBSnapshotIdentifier field's value.
 func (s *CopyDBSnapshotInput) SetTargetDBSnapshotIdentifier(v string) *CopyDBSnapshotInput {
 	s.TargetDBSnapshotIdentifier = &v
@@ -16477,20 +16878,11 @@ func (s *CopyDBSnapshotOutput) SetDBSnapshot(v *DBSnapshot) *CopyDBSnapshotOutpu
 type CopyOptionGroupInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier or ARN for the source option group. For information about
-	// creating an ARN, see Constructing an ARN for Amazon RDS (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
-	// in the Amazon RDS User Guide.
+	// The identifier for the source option group.
 	//
 	// Constraints:
 	//
 	//    * Must specify a valid option group.
-	//
-	//    * If the source option group is in the same AWS Region as the copy, specify
-	//    a valid option group identifier, for example my-option-group, or a valid
-	//    ARN.
-	//
-	//    * If the source option group is in a different AWS Region than the copy,
-	//    specify a valid option group ARN, for example arn:aws:rds:us-west-2:123456789012:og:special-options.
 	//
 	// SourceOptionGroupIdentifier is a required field
 	SourceOptionGroupIdentifier *string `type:"string" required:"true"`
@@ -17020,13 +17412,27 @@ type CreateDBClusterInput struct {
 	// Logs. The values in the list depend on the DB engine being used. For more
 	// information, see Publishing Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
 	// in the Amazon Aurora User Guide.
+	//
+	// Aurora MySQL
+	//
+	// Possible values are audit, error, general, and slowquery.
+	//
+	// Aurora PostgreSQL
+	//
+	// Possible values are postgresql and upgrade.
 	EnableCloudwatchLogsExports []*string `type:"list"`
 
-	// A value that indicates whether to enable write operations to be forwarded
-	// from this cluster to the primary cluster in an Aurora global database. The
-	// resulting changes are replicated back to this cluster. This parameter only
-	// applies to DB clusters that are secondary clusters in an Aurora global database.
-	// By default, Aurora disallows write operations for secondary clusters.
+	// A value that indicates whether to enable this DB cluster to forward write
+	// operations to the primary cluster of an Aurora global database (GlobalCluster).
+	// By default, write operations are not allowed on Aurora DB clusters that are
+	// secondary clusters in an Aurora global database.
+	//
+	// You can set this value only on Aurora DB clusters that are members of an
+	// Aurora global database. With this parameter enabled, a secondary cluster
+	// can forward writes to the current primary cluster and the resulting changes
+	// are replicated back to this cluster. For the primary DB cluster of an Aurora
+	// global database, this value is used immediately if the primary is demoted
+	// by the FailoverGlobalCluster API operation, but it does nothing until then.
 	EnableGlobalWriteForwarding *bool `type:"boolean"`
 
 	// A value that indicates whether to enable the HTTP endpoint for an Aurora
@@ -17058,9 +17464,17 @@ type CreateDBClusterInput struct {
 	// The DB engine mode of the DB cluster, either provisioned, serverless, parallelquery,
 	// global, or multimaster.
 	//
-	// global engine mode only applies for global database clusters created with
-	// Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters
-	// in a global database use provisioned engine mode.
+	// The parallelquery engine mode isn't required for Aurora MySQL version 1.23
+	// and higher 1.x versions, and version 2.09 and higher 2.x versions.
+	//
+	// The global engine mode isn't required for Aurora MySQL version 1.22 and higher
+	// 1.x versions, and global engine mode isn't required for any 2.x versions.
+	//
+	// The multimaster engine mode only applies for DB clusters created with Aurora
+	// MySQL version 5.6.10a.
+	//
+	// For Aurora PostgreSQL, the global engine mode isn't required, and both the
+	// parallelquery and the multimaster engine modes currently aren't supported.
 	//
 	// Limitations and requirements apply to some DB engine modes. For more information,
 	// see the following sections in the Amazon Aurora User Guide:
@@ -17069,7 +17483,7 @@ type CreateDBClusterInput struct {
 	//
 	//    * Limitations of Parallel Query (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-mysql-parallel-query.html#aurora-mysql-parallel-query-limitations)
 	//
-	//    * Requirements for Aurora Global Databases (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html#aurora-global-database.limitations)
+	//    * Limitations of Aurora Global Databases (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html#aurora-global-database.limitations)
 	//
 	//    * Limitations of Multi-Master Clusters (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-multi-master.html#aurora-multi-master-limitations)
 	EngineMode *string `type:"string"`
@@ -17106,26 +17520,25 @@ type CreateDBClusterInput struct {
 
 	// The AWS KMS key identifier for an encrypted DB cluster.
 	//
-	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are creating a DB cluster with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB cluster, then you can use
-	// the KMS key alias instead of the ARN for the KMS encryption key.
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK). To use a CMK in a different AWS
+	// account, specify the key ARN or alias ARN.
 	//
-	// If an encryption key isn't specified in KmsKeyId:
+	// When a CMK isn't specified in KmsKeyId:
 	//
 	//    * If ReplicationSourceIdentifier identifies an encrypted source, then
-	//    Amazon RDS will use the encryption key used to encrypt the source. Otherwise,
-	//    Amazon RDS will use your default encryption key.
+	//    Amazon RDS will use the CMK used to encrypt the source. Otherwise, Amazon
+	//    RDS will use your default CMK.
 	//
 	//    * If the StorageEncrypted parameter is enabled and ReplicationSourceIdentifier
-	//    isn't specified, then Amazon RDS will use your default encryption key.
+	//    isn't specified, then Amazon RDS will use your default CMK.
 	//
-	// AWS KMS creates the default encryption key for your AWS account. Your AWS
-	// account has a different default encryption key for each AWS Region.
+	// There is a default CMK for your AWS account. Your AWS account has a different
+	// default CMK for each AWS Region.
 	//
 	// If you create a read replica of an encrypted DB cluster in another AWS Region,
-	// you must set KmsKeyId to a KMS key ID that is valid in the destination AWS
-	// Region. This key is used to encrypt the read replica in that AWS Region.
+	// you must set KmsKeyId to a AWS KMS key identifier that is valid in the destination
+	// AWS Region. This CMK is used to encrypt the read replica in that AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// The password for the master database user. This password can contain any
@@ -17170,8 +17583,8 @@ type CreateDBClusterInput struct {
 	//
 	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
 	//    the copy of the DB cluster in the destination AWS Region. This should
-	//    refer to the same KMS key for both the CreateDBCluster action that is
-	//    called in the destination AWS Region, and the action contained in the
+	//    refer to the same AWS KMS CMK for both the CreateDBCluster action that
+	//    is called in the destination AWS Region, and the action contained in the
 	//    pre-signed URL.
 	//
 	//    * DestinationRegion - The name of the AWS Region that Aurora read replica
@@ -17929,8 +18342,8 @@ type CreateDBInstanceInput struct {
 	// PostgreSQL
 	//
 	// The name of the database to create when the DB instance is created. If this
-	// parameter isn't specified, the default "postgres" database is created in
-	// the DB instance.
+	// parameter isn't specified, a database named postgres is created in the DB
+	// instance.
 	//
 	// Constraints:
 	//
@@ -17957,17 +18370,33 @@ type CreateDBInstanceInput struct {
 	//
 	// Not applicable. Must be null.
 	//
-	// Amazon Aurora
+	// Amazon Aurora MySQL
 	//
-	// The name of the database to create when the primary instance of the DB cluster
-	// is created. If this parameter isn't specified, no database is created in
-	// the DB instance.
+	// The name of the database to create when the primary DB instance of the Aurora
+	// MySQL DB cluster is created. If this parameter isn't specified for an Aurora
+	// MySQL DB cluster, no database is created in the DB cluster.
 	//
 	// Constraints:
 	//
-	//    * Must contain 1 to 64 letters or numbers.
+	//    * It must contain 1 to 64 alphanumeric characters.
 	//
-	//    * Can't be a word reserved by the specified database engine
+	//    * It can't be a word reserved by the database engine.
+	//
+	// Amazon Aurora PostgreSQL
+	//
+	// The name of the database to create when the primary DB instance of the Aurora
+	// PostgreSQL DB cluster is created. If this parameter isn't specified for an
+	// Aurora PostgreSQL DB cluster, a database named postgres is created in the
+	// DB cluster.
+	//
+	// Constraints:
+	//
+	//    * It must contain 1 to 63 alphanumeric characters.
+	//
+	//    * It must begin with a letter or an underscore. Subsequent characters
+	//    can be letters, underscores, or digits (0 to 9).
+	//
+	//    * It can't be a word reserved by the database engine.
 	DBName *string `type:"string"`
 
 	// The name of the DB parameter group to associate with this DB instance. If
@@ -18022,33 +18451,53 @@ type CreateDBInstanceInput struct {
 	// Logs. The values in the list depend on the DB engine being used. For more
 	// information, see Publishing Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
 	// in the Amazon Relational Database Service User Guide.
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. CloudWatch Logs exports are managed by the DB cluster.
+	//
+	// MariaDB
+	//
+	// Possible values are audit, error, general, and slowquery.
+	//
+	// Microsoft SQL Server
+	//
+	// Possible values are agent and error.
+	//
+	// MySQL
+	//
+	// Possible values are audit, error, general, and slowquery.
+	//
+	// Oracle
+	//
+	// Possible values are alert, audit, listener, trace, and oemagent.
+	//
+	// PostgreSQL
+	//
+	// Possible values are postgresql and upgrade.
 	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// A value that indicates whether to enable a customer-owned IP address (CoIP)
+	// for an RDS on Outposts DB instance.
+	//
+	// A CoIP provides local or external connectivity to resources in your Outpost
+	// subnets through your on-premises network. For some use cases, a CoIP can
+	// provide lower latency for connections to the DB instance from outside of
+	// its virtual private cloud (VPC) on your local network.
+	//
+	// For more information about RDS on Outposts, see Working with Amazon RDS on
+	// AWS Outposts (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html)
+	// in the Amazon RDS User Guide.
+	//
+	// For more information about CoIPs, see Customer-owned IP addresses (https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing)
+	// in the AWS Outposts User Guide.
+	EnableCustomerOwnedIp *bool `type:"boolean"`
 
 	// A value that indicates whether to enable mapping of AWS Identity and Access
 	// Management (IAM) accounts to database accounts. By default, mapping is disabled.
 	//
-	// You can enable IAM database authentication for the following database engines:
-	//
-	// Amazon Aurora
-	//
-	// Not applicable. Mapping AWS IAM accounts to database accounts is managed
-	// by the DB cluster.
-	//
-	// MySQL
-	//
-	//    * For MySQL 5.6, minor version 5.6.34 or higher
-	//
-	//    * For MySQL 5.7, minor version 5.7.16 or higher
-	//
-	//    * For MySQL 8.0, minor version 8.0.16 or higher
-	//
-	// PostgreSQL
-	//
-	//    * For PostgreSQL 9.5, minor version 9.5.15 or higher
-	//
-	//    * For PostgreSQL 9.6, minor version 9.6.11 or higher
-	//
-	//    * PostgreSQL 10.6, 10.7, and 10.9
+	// This setting doesn't apply to Amazon Aurora. Mapping AWS IAM accounts to
+	// database accounts is managed by the DB cluster.
 	//
 	// For more information, see IAM Database Authentication for MySQL and PostgreSQL
 	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html)
@@ -18119,7 +18568,7 @@ type CreateDBInstanceInput struct {
 	//
 	// Microsoft SQL Server
 	//
-	// See Version and Feature Support on Amazon RDS (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.FeatureSupport)
+	// See Microsoft SQL Server Versions on Amazon RDS (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.VersionSupport)
 	// in the Amazon RDS User Guide.
 	//
 	// MySQL
@@ -18134,7 +18583,7 @@ type CreateDBInstanceInput struct {
 	//
 	// PostgreSQL
 	//
-	// See Supported PostgreSQL Database Versions (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts.General.DBVersions)
+	// See Amazon RDS for PostgreSQL versions and extensions (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts)
 	// in the Amazon RDS User Guide.
 	EngineVersion *string `type:"string"`
 
@@ -18151,20 +18600,19 @@ type CreateDBInstanceInput struct {
 
 	// The AWS KMS key identifier for an encrypted DB instance.
 	//
-	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are creating a DB instance with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB instance, then you can
-	// use the KMS key alias instead of the ARN for the KM encryption key.
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK). To use a CMK in a different AWS
+	// account, specify the key ARN or alias ARN.
 	//
 	// Amazon Aurora
 	//
-	// Not applicable. The KMS key identifier is managed by the DB cluster. For
-	// more information, see CreateDBCluster.
+	// Not applicable. The AWS KMS key identifier is managed by the DB cluster.
+	// For more information, see CreateDBCluster.
 	//
 	// If StorageEncrypted is enabled, and you do not specify a value for the KmsKeyId
-	// parameter, then Amazon RDS will use your default encryption key. AWS KMS
-	// creates the default encryption key for your AWS account. Your AWS account
-	// has a different default encryption key for each AWS Region.
+	// parameter, then Amazon RDS uses your default CMK. There is a default CMK
+	// for your AWS account. Your AWS account has a different default CMK for each
+	// AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// License model information for this DB instance.
@@ -18267,6 +18715,11 @@ type CreateDBInstanceInput struct {
 
 	// The upper limit to which Amazon RDS can automatically scale the storage of
 	// the DB instance.
+	//
+	// For more information about this setting, including limitations that apply
+	// to it, see Managing capacity automatically with Amazon RDS storage autoscaling
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling)
+	// in the Amazon RDS User Guide.
 	MaxAllocatedStorage *int64 `type:"integer"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -18294,22 +18747,25 @@ type CreateDBInstanceInput struct {
 	// deployment.
 	MultiAZ *bool `type:"boolean"`
 
-	// Indicates that the DB instance should be associated with the specified option
-	// group.
+	// The name of the NCHAR character set for the Oracle DB instance.
+	NcharCharacterSetName *string `type:"string"`
+
+	// A value that indicates that the DB instance should be associated with the
+	// specified option group.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
 	// can't be removed from an option group. Also, that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
 
-	// The AWS KMS key identifier for encryption of Performance Insights data. The
-	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
-	// KMS key alias for the KMS encryption key.
+	// The AWS KMS key identifier for encryption of Performance Insights data.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	//
 	// If you do not specify a value for PerformanceInsightsKMSKeyId, then Amazon
-	// RDS uses your default encryption key. AWS KMS creates the default encryption
-	// key for your AWS account. Your AWS account has a different default encryption
-	// key for each AWS Region.
+	// RDS uses your default CMK. There is a default CMK for your AWS account. Your
+	// AWS account has a different default CMK for each AWS Region.
 	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The amount of time, in days, to retain Performance Insights data. Valid values
@@ -18625,6 +19081,12 @@ func (s *CreateDBInstanceInput) SetEnableCloudwatchLogsExports(v []*string) *Cre
 	return s
 }
 
+// SetEnableCustomerOwnedIp sets the EnableCustomerOwnedIp field's value.
+func (s *CreateDBInstanceInput) SetEnableCustomerOwnedIp(v bool) *CreateDBInstanceInput {
+	s.EnableCustomerOwnedIp = &v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *CreateDBInstanceInput) SetEnableIAMDatabaseAuthentication(v bool) *CreateDBInstanceInput {
 	s.EnableIAMDatabaseAuthentication = &v
@@ -18700,6 +19162,12 @@ func (s *CreateDBInstanceInput) SetMonitoringRoleArn(v string) *CreateDBInstance
 // SetMultiAZ sets the MultiAZ field's value.
 func (s *CreateDBInstanceInput) SetMultiAZ(v bool) *CreateDBInstanceInput {
 	s.MultiAZ = &v
+	return s
+}
+
+// SetNcharCharacterSetName sets the NcharCharacterSetName field's value.
+func (s *CreateDBInstanceInput) SetNcharCharacterSetName(v string) *CreateDBInstanceInput {
+	s.NcharCharacterSetName = &v
 	return s
 }
 
@@ -18931,7 +19399,6 @@ type CreateDBInstanceReadReplicaInput struct {
 
 	// A value that indicates whether to enable mapping of AWS Identity and Access
 	// Management (IAM) accounts to database accounts. By default, mapping is disabled.
-	// For information about the supported DB engines, see CreateDBInstance.
 	//
 	// For more information about IAM database authentication, see IAM Database
 	// Authentication for MySQL and PostgreSQL (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html)
@@ -18949,21 +19416,32 @@ type CreateDBInstanceReadReplicaInput struct {
 	// initially allocated for the DB instance.
 	Iops *int64 `type:"integer"`
 
-	// The AWS KMS key ID for an encrypted read replica. The KMS key ID is the Amazon
-	// Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS
-	// encryption key.
+	// The AWS KMS key identifier for an encrypted read replica.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS CMK.
 	//
 	// If you create an encrypted read replica in the same AWS Region as the source
-	// DB instance, then you do not have to specify a value for this parameter.
-	// The read replica is encrypted with the same KMS key as the source DB instance.
+	// DB instance, then do not specify a value for this parameter. A read replica
+	// in the same Region is always encrypted with the same AWS KMS CMK as the source
+	// DB instance.
 	//
 	// If you create an encrypted read replica in a different AWS Region, then you
-	// must specify a KMS key for the destination AWS Region. KMS encryption keys
-	// are specific to the AWS Region that they are created in, and you can't use
-	// encryption keys from one AWS Region in another AWS Region.
+	// must specify a AWS KMS key identifier for the destination AWS Region. AWS
+	// KMS CMKs are specific to the AWS Region that they are created in, and you
+	// can't use CMKs from one AWS Region in another AWS Region.
 	//
 	// You can't create an encrypted read replica from an unencrypted DB instance.
 	KmsKeyId *string `type:"string"`
+
+	// The upper limit to which Amazon RDS can automatically scale the storage of
+	// the DB instance.
+	//
+	// For more information about this setting, including limitations that apply
+	// to it, see Managing capacity automatically with Amazon RDS storage autoscaling
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling)
+	// in the Amazon RDS User Guide.
+	MaxAllocatedStorage *int64 `type:"integer"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
 	// are collected for the read replica. To disable collecting Enhanced Monitoring
@@ -19000,14 +19478,14 @@ type CreateDBInstanceReadReplicaInput struct {
 	// instance.
 	OptionGroupName *string `type:"string"`
 
-	// The AWS KMS key identifier for encryption of Performance Insights data. The
-	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
-	// KMS key alias for the KMS encryption key.
+	// The AWS KMS key identifier for encryption of Performance Insights data.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	//
 	// If you do not specify a value for PerformanceInsightsKMSKeyId, then Amazon
-	// RDS uses your default encryption key. AWS KMS creates the default encryption
-	// key for your AWS account. Your AWS account has a different default encryption
-	// key for each AWS Region.
+	// RDS uses your default CMK. There is a default CMK for your AWS account. Your
+	// AWS account has a different default CMK for each AWS Region.
 	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The amount of time, in days, to retain Performance Insights data. Valid values
@@ -19287,6 +19765,12 @@ func (s *CreateDBInstanceReadReplicaInput) SetIops(v int64) *CreateDBInstanceRea
 // SetKmsKeyId sets the KmsKeyId field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetKmsKeyId(v string) *CreateDBInstanceReadReplicaInput {
 	s.KmsKeyId = &v
+	return s
+}
+
+// SetMaxAllocatedStorage sets the MaxAllocatedStorage field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetMaxAllocatedStorage(v int64) *CreateDBInstanceReadReplicaInput {
+	s.MaxAllocatedStorage = &v
 	return s
 }
 
@@ -20199,7 +20683,7 @@ type CreateGlobalClusterInput struct {
 	// can't be deleted when deletion protection is enabled.
 	DeletionProtection *bool `type:"boolean"`
 
-	// Provides the name of the database engine to be used for this DB cluster.
+	// The name of the database engine to be used for this DB cluster.
 	Engine *string `type:"string"`
 
 	// The engine version of the Aurora global database.
@@ -20296,6 +20780,30 @@ type CreateOptionGroupInput struct {
 
 	// Specifies the name of the engine that this option group should be associated
 	// with.
+	//
+	// Valid Values:
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
 	//
 	// EngineName is a required field
 	EngineName *string `type:"string" required:"true"`
@@ -20485,6 +20993,9 @@ type DBCluster struct {
 
 	// The AWS KMS key identifier used for encrypting messages in the database activity
 	// stream.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	ActivityStreamKmsKeyId *string `type:"string"`
 
 	// The mode of the database activity stream. Database events such as a change
@@ -20577,7 +21088,7 @@ type DBCluster struct {
 	DatabaseName *string `type:"string"`
 
 	// The AWS Region-unique, immutable identifier for the DB cluster. This identifier
-	// is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB
+	// is found in AWS CloudTrail log entries whenever the AWS KMS CMK for the DB
 	// cluster is accessed.
 	DbClusterResourceId *string `type:"string"`
 
@@ -20606,17 +21117,13 @@ type DBCluster struct {
 	// Specifies the connection endpoint for the primary instance of the DB cluster.
 	Endpoint *string `type:"string"`
 
-	// Provides the name of the database engine to be used for this DB cluster.
+	// The name of the database engine to be used for this DB cluster.
 	Engine *string `type:"string"`
 
 	// The DB engine mode of the DB cluster, either provisioned, serverless, parallelquery,
 	// global, or multimaster.
 	//
-	// global engine mode only applies for global database clusters created with
-	// Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters
-	// in a global database use provisioned engine mode. To check if a DB cluster
-	// is part of a global database, use DescribeGlobalClusters instead of checking
-	// the EngineMode return value from DescribeDBClusters.
+	// For more information, see CreateDBCluster (https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBCluster.html).
 	EngineMode *string `type:"string"`
 
 	// Indicates the database engine version.
@@ -20653,6 +21160,9 @@ type DBCluster struct {
 
 	// If StorageEncrypted is enabled, the AWS KMS key identifier for the encrypted
 	// DB cluster.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the latest time to which a database can be restored with point-in-time
@@ -20664,6 +21174,11 @@ type DBCluster struct {
 
 	// Specifies whether the DB cluster has instances in multiple Availability Zones.
 	MultiAZ *bool `type:"boolean"`
+
+	// A value that specifies that changes to the DB cluster are pending. This element
+	// is only included when changes are pending. Specific changes are identified
+	// by subelements.
+	PendingModifiedValues *ClusterPendingModifiedValues `type:"structure"`
 
 	// Specifies the progress of the operation as a percentage.
 	PercentProgress *string `type:"string"`
@@ -20712,6 +21227,10 @@ type DBCluster struct {
 
 	// Specifies whether the DB cluster is encrypted.
 	StorageEncrypted *bool `type:"boolean"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	TagList []*Tag `locationNameList:"Tag" type:"list"`
 
 	// Provides a list of VPC security groups that the DB cluster belongs to.
 	VpcSecurityGroups []*VpcSecurityGroupMembership `locationNameList:"VpcSecurityGroupMembership" type:"list"`
@@ -20985,6 +21504,12 @@ func (s *DBCluster) SetMultiAZ(v bool) *DBCluster {
 	return s
 }
 
+// SetPendingModifiedValues sets the PendingModifiedValues field's value.
+func (s *DBCluster) SetPendingModifiedValues(v *ClusterPendingModifiedValues) *DBCluster {
+	s.PendingModifiedValues = v
+	return s
+}
+
 // SetPercentProgress sets the PercentProgress field's value.
 func (s *DBCluster) SetPercentProgress(v string) *DBCluster {
 	s.PercentProgress = &v
@@ -21042,6 +21567,12 @@ func (s *DBCluster) SetStatus(v string) *DBCluster {
 // SetStorageEncrypted sets the StorageEncrypted field's value.
 func (s *DBCluster) SetStorageEncrypted(v bool) *DBCluster {
 	s.StorageEncrypted = &v
+	return s
+}
+
+// SetTagList sets the TagList field's value.
+func (s *DBCluster) SetTagList(v []*Tag) *DBCluster {
+	s.TagList = v
 	return s
 }
 
@@ -21276,10 +21807,10 @@ type DBClusterParameterGroup struct {
 	// The Amazon Resource Name (ARN) for the DB cluster parameter group.
 	DBClusterParameterGroupArn *string `type:"string"`
 
-	// Provides the name of the DB cluster parameter group.
+	// The name of the DB cluster parameter group.
 	DBClusterParameterGroupName *string `type:"string"`
 
-	// Provides the name of the DB parameter group family that this DB cluster parameter
+	// The name of the DB parameter group family that this DB cluster parameter
 	// group is compatible with.
 	DBParameterGroupFamily *string `type:"string"`
 
@@ -21438,8 +21969,11 @@ type DBClusterSnapshot struct {
 	// Specifies the identifier for the DB cluster snapshot.
 	DBClusterSnapshotIdentifier *string `type:"string"`
 
-	// Specifies the name of the database engine.
+	// Specifies the name of the database engine for this DB cluster snapshot.
 	Engine *string `type:"string"`
+
+	// Provides the engine mode of the database engine for this DB cluster snapshot.
+	EngineMode *string `type:"string"`
 
 	// Provides the version of the database engine for this DB cluster snapshot.
 	EngineVersion *string `type:"string"`
@@ -21450,12 +21984,15 @@ type DBClusterSnapshot struct {
 
 	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
 	// DB cluster snapshot.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	KmsKeyId *string `type:"string"`
 
 	// Provides the license model information for this DB cluster snapshot.
 	LicenseModel *string `type:"string"`
 
-	// Provides the master username for the DB cluster snapshot.
+	// Provides the master username for this DB cluster snapshot.
 	MasterUsername *string `type:"string"`
 
 	// Specifies the percentage of the estimated data that has been transferred.
@@ -21482,6 +22019,10 @@ type DBClusterSnapshot struct {
 
 	// Specifies whether the DB cluster snapshot is encrypted.
 	StorageEncrypted *bool `type:"boolean"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	TagList []*Tag `locationNameList:"Tag" type:"list"`
 
 	// Provides the VPC ID associated with the DB cluster snapshot.
 	VpcId *string `type:"string"`
@@ -21536,6 +22077,12 @@ func (s *DBClusterSnapshot) SetDBClusterSnapshotIdentifier(v string) *DBClusterS
 // SetEngine sets the Engine field's value.
 func (s *DBClusterSnapshot) SetEngine(v string) *DBClusterSnapshot {
 	s.Engine = &v
+	return s
+}
+
+// SetEngineMode sets the EngineMode field's value.
+func (s *DBClusterSnapshot) SetEngineMode(v string) *DBClusterSnapshot {
+	s.EngineMode = &v
 	return s
 }
 
@@ -21608,6 +22155,12 @@ func (s *DBClusterSnapshot) SetStatus(v string) *DBClusterSnapshot {
 // SetStorageEncrypted sets the StorageEncrypted field's value.
 func (s *DBClusterSnapshot) SetStorageEncrypted(v bool) *DBClusterSnapshot {
 	s.StorageEncrypted = &v
+	return s
+}
+
+// SetTagList sets the TagList field's value.
+func (s *DBClusterSnapshot) SetTagList(v []*Tag) *DBClusterSnapshot {
+	s.TagList = v
 	return s
 }
 
@@ -21734,14 +22287,10 @@ type DBEngineVersion struct {
 	Status *string `type:"string"`
 
 	// A list of the character sets supported by this engine for the CharacterSetName
-	// parameter of the CreateDBInstance action.
+	// parameter of the CreateDBInstance operation.
 	SupportedCharacterSets []*CharacterSet `locationNameList:"CharacterSet" type:"list"`
 
 	// A list of the supported DB engine modes.
-	//
-	// global engine mode only applies for global database clusters created with
-	// Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters
-	// in a global database use provisioned engine mode.
 	SupportedEngineModes []*string `type:"list"`
 
 	// A list of features supported by the DB engine. Supported feature names include
@@ -21749,6 +22298,10 @@ type DBEngineVersion struct {
 	//
 	//    * s3Import
 	SupportedFeatureNames []*string `type:"list"`
+
+	// A list of the character sets supported by the Oracle DB engine for the NcharCharacterSetName
+	// parameter of the CreateDBInstance operation.
+	SupportedNcharCharacterSets []*CharacterSet `locationNameList:"CharacterSet" type:"list"`
 
 	// A list of the time zones supported by this engine for the Timezone parameter
 	// of the CreateDBInstance action.
@@ -21850,6 +22403,12 @@ func (s *DBEngineVersion) SetSupportedFeatureNames(v []*string) *DBEngineVersion
 	return s
 }
 
+// SetSupportedNcharCharacterSets sets the SupportedNcharCharacterSets field's value.
+func (s *DBEngineVersion) SetSupportedNcharCharacterSets(v []*CharacterSet) *DBEngineVersion {
+	s.SupportedNcharCharacterSets = v
+	return s
+}
+
 // SetSupportedTimezones sets the SupportedTimezones field's value.
 func (s *DBEngineVersion) SetSupportedTimezones(v []*Timezone) *DBEngineVersion {
 	s.SupportedTimezones = v
@@ -21899,7 +22458,7 @@ type DBInstance struct {
 	// instance.
 	AssociatedRoles []*DBInstanceRole `locationNameList:"DBInstanceRole" type:"list"`
 
-	// Indicates that minor version patches are applied automatically.
+	// A value that indicates that minor version patches are applied automatically.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
 	// Specifies the name of the Availability Zone the DB instance is located in.
@@ -21925,12 +22484,31 @@ type DBInstance struct {
 	// For more information, see DBCluster.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
+	// Specifies whether a customer-owned IP address (CoIP) is enabled for an RDS
+	// on Outposts DB instance.
+	//
+	// A CoIP provides local or external connectivity to resources in your Outpost
+	// subnets through your on-premises network. For some use cases, a CoIP can
+	// provide lower latency for connections to the DB instance from outside of
+	// its virtual private cloud (VPC) on your local network.
+	//
+	// For more information about RDS on Outposts, see Working with Amazon RDS on
+	// AWS Outposts (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html)
+	// in the Amazon RDS User Guide.
+	//
+	// For more information about CoIPs, see Customer-owned IP addresses (https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing)
+	// in the AWS Outposts User Guide.
+	CustomerOwnedIpEnabled *bool `type:"boolean"`
+
 	// If the DB instance is a member of a DB cluster, contains the name of the
 	// DB cluster that the DB instance is a member of.
 	DBClusterIdentifier *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) for the DB instance.
 	DBInstanceArn *string `type:"string"`
+
+	// The list of replicated automated backups associated with the DB instance.
+	DBInstanceAutomatedBackupsReplications []*DBInstanceAutomatedBackupsReplication `locationNameList:"DBInstanceAutomatedBackupsReplication" type:"list"`
 
 	// Contains the name of the compute and memory capacity class of the DB instance.
 	DBInstanceClass *string `type:"string"`
@@ -21978,8 +22556,8 @@ type DBInstance struct {
 	DbInstancePort *int64 `type:"integer"`
 
 	// The AWS Region-unique, immutable identifier for the DB instance. This identifier
-	// is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB
-	// instance is accessed.
+	// is found in AWS CloudTrail log entries whenever the AWS KMS customer master
+	// key (CMK) for the DB instance is accessed.
 	DbiResourceId *string `type:"string"`
 
 	// Indicates if the DB instance has deletion protection enabled. The database
@@ -22001,7 +22579,7 @@ type DBInstance struct {
 	// Specifies the connection endpoint.
 	Endpoint *Endpoint `type:"structure"`
 
-	// Provides the name of the database engine to be used for this DB instance.
+	// The name of the database engine to be used for this DB instance.
 	Engine *string `type:"string"`
 
 	// Indicates the database engine version.
@@ -22032,6 +22610,9 @@ type DBInstance struct {
 
 	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
 	// DB instance.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the latest time to which a database can be restored with point-in-time
@@ -22062,20 +22643,27 @@ type DBInstance struct {
 	// Specifies if the DB instance is a Multi-AZ deployment.
 	MultiAZ *bool `type:"boolean"`
 
+	// The name of the NCHAR character set for the Oracle DB instance. This character
+	// set specifies the Unicode encoding for data stored in table columns of type
+	// NCHAR, NCLOB, or NVARCHAR2.
+	NcharCharacterSetName *string `type:"string"`
+
 	// Provides the list of option group memberships for this DB instance.
 	OptionGroupMemberships []*OptionGroupMembership `locationNameList:"OptionGroupMembership" type:"list"`
 
-	// Specifies that changes to the DB instance are pending. This element is only
-	// included when changes are pending. Specific changes are identified by subelements.
+	// A value that specifies that changes to the DB instance are pending. This
+	// element is only included when changes are pending. Specific changes are identified
+	// by subelements.
 	PendingModifiedValues *PendingModifiedValues `type:"structure"`
 
 	// True if Performance Insights is enabled for the DB instance, and otherwise
 	// false.
 	PerformanceInsightsEnabled *bool `type:"boolean"`
 
-	// The AWS KMS key identifier for encryption of Performance Insights data. The
-	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
-	// KMS key alias for the KMS encryption key.
+	// The AWS KMS key identifier for encryption of Performance Insights data.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The amount of time, in days, to retain Performance Insights data. Valid values
@@ -22153,6 +22741,10 @@ type DBInstance struct {
 	// Specifies the storage type associated with DB instance.
 	StorageType *string `type:"string"`
 
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	TagList []*Tag `locationNameList:"Tag" type:"list"`
+
 	// The ARN from the key store with which the instance is associated for TDE
 	// encryption.
 	TdeCredentialArn *string `type:"string"`
@@ -22225,6 +22817,12 @@ func (s *DBInstance) SetCopyTagsToSnapshot(v bool) *DBInstance {
 	return s
 }
 
+// SetCustomerOwnedIpEnabled sets the CustomerOwnedIpEnabled field's value.
+func (s *DBInstance) SetCustomerOwnedIpEnabled(v bool) *DBInstance {
+	s.CustomerOwnedIpEnabled = &v
+	return s
+}
+
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *DBInstance) SetDBClusterIdentifier(v string) *DBInstance {
 	s.DBClusterIdentifier = &v
@@ -22234,6 +22832,12 @@ func (s *DBInstance) SetDBClusterIdentifier(v string) *DBInstance {
 // SetDBInstanceArn sets the DBInstanceArn field's value.
 func (s *DBInstance) SetDBInstanceArn(v string) *DBInstance {
 	s.DBInstanceArn = &v
+	return s
+}
+
+// SetDBInstanceAutomatedBackupsReplications sets the DBInstanceAutomatedBackupsReplications field's value.
+func (s *DBInstance) SetDBInstanceAutomatedBackupsReplications(v []*DBInstanceAutomatedBackupsReplication) *DBInstance {
+	s.DBInstanceAutomatedBackupsReplications = v
 	return s
 }
 
@@ -22405,6 +23009,12 @@ func (s *DBInstance) SetMultiAZ(v bool) *DBInstance {
 	return s
 }
 
+// SetNcharCharacterSetName sets the NcharCharacterSetName field's value.
+func (s *DBInstance) SetNcharCharacterSetName(v string) *DBInstance {
+	s.NcharCharacterSetName = &v
+	return s
+}
+
 // SetOptionGroupMemberships sets the OptionGroupMemberships field's value.
 func (s *DBInstance) SetOptionGroupMemberships(v []*OptionGroupMembership) *DBInstance {
 	s.OptionGroupMemberships = v
@@ -22513,6 +23123,12 @@ func (s *DBInstance) SetStorageType(v string) *DBInstance {
 	return s
 }
 
+// SetTagList sets the TagList field's value.
+func (s *DBInstance) SetTagList(v []*Tag) *DBInstance {
+	s.TagList = v
+	return s
+}
+
 // SetTdeCredentialArn sets the TdeCredentialArn field's value.
 func (s *DBInstance) SetTdeCredentialArn(v string) *DBInstance {
 	s.TdeCredentialArn = &v
@@ -22531,7 +23147,7 @@ func (s *DBInstance) SetVpcSecurityGroups(v []*VpcSecurityGroupMembership) *DBIn
 	return s
 }
 
-// An automated backup of a DB instance. It it consists of system backups, transaction
+// An automated backup of a DB instance. It consists of system backups, transaction
 // logs, and the database instance properties that existed at the time you deleted
 // the source instance.
 type DBInstanceAutomatedBackup struct {
@@ -22545,8 +23161,18 @@ type DBInstanceAutomatedBackup struct {
 	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html).
 	AvailabilityZone *string `type:"string"`
 
-	// The Amazon Resource Name (ARN) for the automated backup.
+	// The retention period for the automated backups.
+	BackupRetentionPeriod *int64 `type:"integer"`
+
+	// The Amazon Resource Name (ARN) for the automated backups.
 	DBInstanceArn *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the replicated automated backups.
+	DBInstanceAutomatedBackupsArn *string `type:"string"`
+
+	// The list of replications to different AWS Regions associated with the automated
+	// backup.
+	DBInstanceAutomatedBackupsReplications []*DBInstanceAutomatedBackupsReplication `locationNameList:"DBInstanceAutomatedBackupsReplication" type:"list"`
 
 	// The customer id of the instance that is/was associated with the automated
 	// backup.
@@ -22575,9 +23201,10 @@ type DBInstanceAutomatedBackup struct {
 	// The IOPS (I/O operations per second) value for the automated backup.
 	Iops *int64 `type:"integer"`
 
-	// The AWS KMS key ID for an automated backup. The KMS key ID is the Amazon
-	// Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS
-	// encryption key.
+	// The AWS KMS key ID for an automated backup.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	KmsKeyId *string `type:"string"`
 
 	// License model information for the automated backup.
@@ -22651,9 +23278,27 @@ func (s *DBInstanceAutomatedBackup) SetAvailabilityZone(v string) *DBInstanceAut
 	return s
 }
 
+// SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
+func (s *DBInstanceAutomatedBackup) SetBackupRetentionPeriod(v int64) *DBInstanceAutomatedBackup {
+	s.BackupRetentionPeriod = &v
+	return s
+}
+
 // SetDBInstanceArn sets the DBInstanceArn field's value.
 func (s *DBInstanceAutomatedBackup) SetDBInstanceArn(v string) *DBInstanceAutomatedBackup {
 	s.DBInstanceArn = &v
+	return s
+}
+
+// SetDBInstanceAutomatedBackupsArn sets the DBInstanceAutomatedBackupsArn field's value.
+func (s *DBInstanceAutomatedBackup) SetDBInstanceAutomatedBackupsArn(v string) *DBInstanceAutomatedBackup {
+	s.DBInstanceAutomatedBackupsArn = &v
+	return s
+}
+
+// SetDBInstanceAutomatedBackupsReplications sets the DBInstanceAutomatedBackupsReplications field's value.
+func (s *DBInstanceAutomatedBackup) SetDBInstanceAutomatedBackupsReplications(v []*DBInstanceAutomatedBackupsReplication) *DBInstanceAutomatedBackup {
+	s.DBInstanceAutomatedBackupsReplications = v
 	return s
 }
 
@@ -22777,6 +23422,31 @@ func (s *DBInstanceAutomatedBackup) SetVpcId(v string) *DBInstanceAutomatedBacku
 	return s
 }
 
+// Automated backups of a DB instance replicated to another AWS Region. They
+// consist of system backups, transaction logs, and database instance properties.
+type DBInstanceAutomatedBackupsReplication struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the replicated automated backups.
+	DBInstanceAutomatedBackupsArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DBInstanceAutomatedBackupsReplication) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DBInstanceAutomatedBackupsReplication) GoString() string {
+	return s.String()
+}
+
+// SetDBInstanceAutomatedBackupsArn sets the DBInstanceAutomatedBackupsArn field's value.
+func (s *DBInstanceAutomatedBackupsReplication) SetDBInstanceAutomatedBackupsArn(v string) *DBInstanceAutomatedBackupsReplication {
+	s.DBInstanceAutomatedBackupsArn = &v
+	return s
+}
+
 // Describes an AWS Identity and Access Management (IAM) role that is associated
 // with a DB instance.
 type DBInstanceRole struct {
@@ -22897,11 +23567,11 @@ type DBParameterGroup struct {
 	// The Amazon Resource Name (ARN) for the DB parameter group.
 	DBParameterGroupArn *string `type:"string"`
 
-	// Provides the name of the DB parameter group family that this DB parameter
-	// group is compatible with.
+	// The name of the DB parameter group family that this DB parameter group is
+	// compatible with.
 	DBParameterGroupFamily *string `type:"string"`
 
-	// Provides the name of the DB parameter group.
+	// The name of the DB parameter group.
 	DBParameterGroupName *string `type:"string"`
 
 	// Provides the customer-specified description for this DB parameter group.
@@ -22947,7 +23617,7 @@ func (s *DBParameterGroup) SetDescription(v string) *DBParameterGroup {
 type DBParameterGroupNameMessage struct {
 	_ struct{} `type:"structure"`
 
-	// Provides the name of the DB parameter group.
+	// The name of the DB parameter group.
 	DBParameterGroupName *string `type:"string"`
 }
 
@@ -23534,6 +24204,9 @@ type DBSnapshot struct {
 	Iops *int64 `type:"integer"`
 
 	// If Encrypted is true, the AWS KMS key identifier for the encrypted DB snapshot.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	KmsKeyId *string `type:"string"`
 
 	// License model information for the restored DB instance.
@@ -23556,7 +24229,7 @@ type DBSnapshot struct {
 	// class of the DB instance when the DB snapshot was created.
 	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
 
-	// Specifies when the snapshot was taken in Coodinated Universal Time (UTC).
+	// Specifies when the snapshot was taken in Coordinated Universal Time (UTC).
 	SnapshotCreateTime *time.Time `type:"timestamp"`
 
 	// Provides the type of the DB snapshot.
@@ -23574,6 +24247,10 @@ type DBSnapshot struct {
 
 	// Specifies the storage type associated with DB snapshot.
 	StorageType *string `type:"string"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	TagList []*Tag `locationNameList:"Tag" type:"list"`
 
 	// The ARN from the key store with which to associate the instance for TDE encryption.
 	TdeCredentialArn *string `type:"string"`
@@ -23744,6 +24421,12 @@ func (s *DBSnapshot) SetStatus(v string) *DBSnapshot {
 // SetStorageType sets the StorageType field's value.
 func (s *DBSnapshot) SetStorageType(v string) *DBSnapshot {
 	s.StorageType = &v
+	return s
+}
+
+// SetTagList sets the TagList field's value.
+func (s *DBSnapshot) SetTagList(v []*Tag) *DBSnapshot {
+	s.TagList = v
 	return s
 }
 
@@ -24388,11 +25071,13 @@ func (s *DeleteDBClusterSnapshotOutput) SetDBClusterSnapshot(v *DBClusterSnapsho
 type DeleteDBInstanceAutomatedBackupInput struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the automated backups to delete, for example,
+	// arn:aws:rds:us-east-1:123456789012:auto-backup:ab-L2IJCEXJP7XQ7HOJ4SIEXAMPLE.
+	DBInstanceAutomatedBackupsArn *string `type:"string"`
+
 	// The identifier for the source DB instance, which can't be changed and which
 	// is unique to an AWS Region.
-	//
-	// DbiResourceId is a required field
-	DbiResourceId *string `type:"string" required:"true"`
+	DbiResourceId *string `type:"string"`
 }
 
 // String returns the string representation
@@ -24405,17 +25090,10 @@ func (s DeleteDBInstanceAutomatedBackupInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeleteDBInstanceAutomatedBackupInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeleteDBInstanceAutomatedBackupInput"}
-	if s.DbiResourceId == nil {
-		invalidParams.Add(request.NewErrParamRequired("DbiResourceId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+// SetDBInstanceAutomatedBackupsArn sets the DBInstanceAutomatedBackupsArn field's value.
+func (s *DeleteDBInstanceAutomatedBackupInput) SetDBInstanceAutomatedBackupsArn(v string) *DeleteDBInstanceAutomatedBackupInput {
+	s.DBInstanceAutomatedBackupsArn = &v
+	return s
 }
 
 // SetDbiResourceId sets the DbiResourceId field's value.
@@ -24427,7 +25105,7 @@ func (s *DeleteDBInstanceAutomatedBackupInput) SetDbiResourceId(v string) *Delet
 type DeleteDBInstanceAutomatedBackupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An automated backup of a DB instance. It it consists of system backups, transaction
+	// An automated backup of a DB instance. It consists of system backups, transaction
 	// logs, and the database instance properties that existed at the time you deleted
 	// the source instance.
 	DBInstanceAutomatedBackup *DBInstanceAutomatedBackup `type:"structure"`
@@ -26497,6 +27175,36 @@ type DescribeDBEngineVersionsInput struct {
 	DefaultOnly *bool `type:"boolean"`
 
 	// The database engine to return.
+	//
+	// Valid Values:
+	//
+	//    * aurora (for MySQL 5.6-compatible Aurora)
+	//
+	//    * aurora-mysql (for MySQL 5.7-compatible Aurora)
+	//
+	//    * aurora-postgresql
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
 	Engine *string `type:"string"`
 
 	// The database engine version to return.
@@ -26672,6 +27380,10 @@ func (s *DescribeDBEngineVersionsOutput) SetMarker(v string) *DescribeDBEngineVe
 type DescribeDBInstanceAutomatedBackupsInput struct {
 	_ struct{} `type:"structure"`
 
+	// The Amazon Resource Name (ARN) of the replicated automated backups, for example,
+	// arn:aws:rds:us-east-1:123456789012:auto-backup:ab-L2IJCEXJP7XQ7HOJ4SIEXAMPLE.
+	DBInstanceAutomatedBackupsArn *string `type:"string"`
+
 	// (Optional) The user-supplied instance identifier. If this parameter is specified,
 	// it must match the identifier of an existing DB instance. It returns information
 	// from the specific DB instance' automated backup. This parameter isn't case-sensitive.
@@ -26686,16 +27398,17 @@ type DescribeDBInstanceAutomatedBackupsInput struct {
 	// Supported filters are the following:
 	//
 	//    * status active - automated backups for current instances retained - automated
-	//    backups for deleted instances creating - automated backups that are waiting
-	//    for the first automated snapshot to be available
+	//    backups for deleted instances and after backup replication is stopped
+	//    creating - automated backups that are waiting for the first automated
+	//    snapshot to be available
 	//
 	//    * db-instance-id - Accepts DB instance identifiers and Amazon Resource
-	//    Names (ARNs) for DB instances. The results list includes only information
-	//    about the DB instance automated backupss identified by these ARNs.
+	//    Names (ARNs). The results list includes only information about the DB
+	//    instance automated backups identified by these ARNs.
 	//
-	//    * dbi-resource-id - Accepts DB instance resource identifiers and DB Amazon
-	//    Resource Names (ARNs) for DB instances. The results list includes only
-	//    information about the DB instance resources identified by these ARNs.
+	//    * dbi-resource-id - Accepts DB resource identifiers and Amazon Resource
+	//    Names (ARNs). The results list includes only information about the DB
+	//    instance resources identified by these ARNs.
 	//
 	// Returns all resources by default. The status for each resource is specified
 	// in the response.
@@ -26740,6 +27453,12 @@ func (s *DescribeDBInstanceAutomatedBackupsInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetDBInstanceAutomatedBackupsArn sets the DBInstanceAutomatedBackupsArn field's value.
+func (s *DescribeDBInstanceAutomatedBackupsInput) SetDBInstanceAutomatedBackupsArn(v string) *DescribeDBInstanceAutomatedBackupsInput {
+	s.DBInstanceAutomatedBackupsArn = &v
+	return s
 }
 
 // SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
@@ -28894,6 +29613,7 @@ type DescribeExportTasksInput struct {
 
 	// Filters specify one or more snapshot exports to describe. The filters are
 	// specified as name-value pairs that define what to include in the output.
+	// Filter names and values are case-sensitive.
 	//
 	// Supported filters include the following:
 	//
@@ -28904,7 +29624,8 @@ type DescribeExportTasksInput struct {
 	//    * source-arn - The Amazon Resource Name (ARN) of the snapshot exported
 	//    to Amazon S3
 	//
-	//    * status - The status of the export task.
+	//    * status - The status of the export task. Must be lowercase, for example,
+	//    complete.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
 	// An optional pagination token provided by a previous DescribeExportTasks request.
@@ -29269,6 +29990,30 @@ type DescribeOptionGroupOptionsInput struct {
 
 	// A required parameter. Options available for the given engine name are described.
 	//
+	// Valid Values:
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
+	//
 	// EngineName is a required field
 	EngineName *string `type:"string" required:"true"`
 
@@ -29396,6 +30141,30 @@ type DescribeOptionGroupsInput struct {
 
 	// Filters the list of option groups to only include groups associated with
 	// a specific database engine.
+	//
+	// Valid Values:
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
 	EngineName *string `type:"string"`
 
 	// This parameter isn't currently supported.
@@ -29541,6 +30310,36 @@ type DescribeOrderableDBInstanceOptionsInput struct {
 	DBInstanceClass *string `type:"string"`
 
 	// The name of the engine to retrieve DB instance options for.
+	//
+	// Valid Values:
+	//
+	//    * aurora (for MySQL 5.6-compatible Aurora)
+	//
+	//    * aurora-mysql (for MySQL 5.7-compatible Aurora)
+	//
+	//    * aurora-postgresql
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
 	//
 	// Engine is a required field
 	Engine *string `type:"string" required:"true"`
@@ -31004,11 +31803,11 @@ type ExportTask struct {
 	// a snapshot.
 	IamRoleArn *string `type:"string"`
 
-	// The ID of the AWS KMS key that is used to encrypt the snapshot when it's
-	// exported to Amazon S3. The KMS key ID is the Amazon Resource Name (ARN),
-	// the KMS key identifier, or the KMS key alias for the KMS encryption key.
-	// The IAM role used for the snapshot export must have encryption and decryption
-	// permissions to use this KMS key.
+	// The key identifier of the AWS KMS customer master key (CMK) that is used
+	// to encrypt the snapshot when it's exported to Amazon S3. The AWS KMS CMK
+	// identifier is its key ARN, key ID, alias ARN, or alias name. The IAM role
+	// used for the snapshot export must have encryption and decryption permissions
+	// to use this AWS KMS CMK.
 	KmsKeyId *string `type:"string"`
 
 	// The progress of the snapshot export task as a percentage.
@@ -31223,6 +32022,159 @@ func (s *FailoverDBClusterOutput) SetDBCluster(v *DBCluster) *FailoverDBClusterO
 	return s
 }
 
+type FailoverGlobalClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the Aurora global database (GlobalCluster) that should be failed
+	// over. The identifier is the unique key assigned by the user when the Aurora
+	// global database was created. In other words, it's the name of the Aurora
+	// global database that you want to fail over.
+	//
+	// Constraints:
+	//
+	//    * Must match the identifier of an existing GlobalCluster (Aurora global
+	//    database).
+	//
+	// GlobalClusterIdentifier is a required field
+	GlobalClusterIdentifier *string `min:"1" type:"string" required:"true"`
+
+	// Identifier of the secondary Aurora DB cluster that you want to promote to
+	// primary for the Aurora global database (GlobalCluster.) Use the Amazon Resource
+	// Name (ARN) for the identifier so that Aurora can locate the cluster in its
+	// AWS Region.
+	//
+	// TargetDbClusterIdentifier is a required field
+	TargetDbClusterIdentifier *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s FailoverGlobalClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailoverGlobalClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FailoverGlobalClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FailoverGlobalClusterInput"}
+	if s.GlobalClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("GlobalClusterIdentifier"))
+	}
+	if s.GlobalClusterIdentifier != nil && len(*s.GlobalClusterIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GlobalClusterIdentifier", 1))
+	}
+	if s.TargetDbClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetDbClusterIdentifier"))
+	}
+	if s.TargetDbClusterIdentifier != nil && len(*s.TargetDbClusterIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TargetDbClusterIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *FailoverGlobalClusterInput) SetGlobalClusterIdentifier(v string) *FailoverGlobalClusterInput {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+// SetTargetDbClusterIdentifier sets the TargetDbClusterIdentifier field's value.
+func (s *FailoverGlobalClusterInput) SetTargetDbClusterIdentifier(v string) *FailoverGlobalClusterInput {
+	s.TargetDbClusterIdentifier = &v
+	return s
+}
+
+type FailoverGlobalClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A data type representing an Aurora global database.
+	GlobalCluster *GlobalCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s FailoverGlobalClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailoverGlobalClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetGlobalCluster sets the GlobalCluster field's value.
+func (s *FailoverGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *FailoverGlobalClusterOutput {
+	s.GlobalCluster = v
+	return s
+}
+
+// Contains the state of scheduled or in-process failover operations on an Aurora
+// global database (GlobalCluster). This Data type is empty unless a failover
+// operation is scheduled or is currently underway on the Aurora global database.
+type FailoverState struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the Aurora DB cluster that is currently
+	// being demoted, and which is associated with this state.
+	FromDbClusterArn *string `type:"string"`
+
+	// The current status of the Aurora global database (GlobalCluster). Possible
+	// values are as follows:
+	//
+	//    * pending – A request to fail over the Aurora global database (GlobalCluster)
+	//    has been received by the service. The GlobalCluster's primary DB cluster
+	//    and the specified secondary DB cluster are being verified before the failover
+	//    process can start.
+	//
+	//    * failing-over – This status covers the range of Aurora internal operations
+	//    that take place during the failover process, such as demoting the primary
+	//    Aurora DB cluster, promoting the secondary Aurora DB, and synchronizing
+	//    replicas.
+	//
+	//    * cancelling – The request to fail over the Aurora global database (GlobalCluster)
+	//    was cancelled and the primary Aurora DB cluster and the selected secondary
+	//    Aurora DB cluster are returning to their previous states.
+	Status *string `type:"string" enum:"FailoverStatus"`
+
+	// The Amazon Resource Name (ARN) of the Aurora DB cluster that is currently
+	// being promoted, and which is associated with this state.
+	ToDbClusterArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s FailoverState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailoverState) GoString() string {
+	return s.String()
+}
+
+// SetFromDbClusterArn sets the FromDbClusterArn field's value.
+func (s *FailoverState) SetFromDbClusterArn(v string) *FailoverState {
+	s.FromDbClusterArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *FailoverState) SetStatus(v string) *FailoverState {
+	s.Status = &v
+	return s
+}
+
+// SetToDbClusterArn sets the ToDbClusterArn field's value.
+func (s *FailoverState) SetToDbClusterArn(v string) *FailoverState {
+	s.ToDbClusterArn = &v
+	return s
+}
+
 // A filter name and value pair that is used to return a more specific list
 // of results from a describe operation. Filters can be used to match a set
 // of resources by specific criteria, such as IDs. The filters supported by
@@ -31309,6 +32261,12 @@ type GlobalCluster struct {
 	// Indicates the database engine version.
 	EngineVersion *string `type:"string"`
 
+	// A data object containing all properties for the current state of an in-process
+	// or pending failover process for this Aurora global database. This object
+	// is empty unless the FailoverGlobalCluster API operation has been called on
+	// this Aurora global database (GlobalCluster).
+	FailoverState *FailoverState `type:"structure"`
+
 	// The Amazon Resource Name (ARN) for the global database cluster.
 	GlobalClusterArn *string `type:"string"`
 
@@ -31322,7 +32280,7 @@ type GlobalCluster struct {
 
 	// The AWS Region-unique, immutable identifier for the global database cluster.
 	// This identifier is found in AWS CloudTrail log entries whenever the AWS KMS
-	// key for the DB cluster is accessed.
+	// customer master key (CMK) for the DB cluster is accessed.
 	GlobalClusterResourceId *string `type:"string"`
 
 	// Specifies the current state of this global database cluster.
@@ -31363,6 +32321,12 @@ func (s *GlobalCluster) SetEngine(v string) *GlobalCluster {
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *GlobalCluster) SetEngineVersion(v string) *GlobalCluster {
 	s.EngineVersion = &v
+	return s
+}
+
+// SetFailoverState sets the FailoverState field's value.
+func (s *GlobalCluster) SetFailoverState(v *FailoverState) *GlobalCluster {
+	s.FailoverState = v
 	return s
 }
 
@@ -31536,7 +32500,7 @@ type ImportInstallationMediaInput struct {
 	//
 	// Microsoft SQL Server
 	//
-	// See Version and Feature Support on Amazon RDS (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.FeatureSupport)
+	// See Microsoft SQL Server Versions on Amazon RDS (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.VersionSupport)
 	// in the Amazon RDS User Guide.
 	//
 	// EngineVersion is a required field
@@ -32447,11 +33411,17 @@ type ModifyDBClusterInput struct {
 	// Directory Service.
 	DomainIAMRoleName *string `type:"string"`
 
-	// A value that indicates whether to enable write operations to be forwarded
-	// from this cluster to the primary cluster in an Aurora global database. The
-	// resulting changes are replicated back to this cluster. This parameter only
-	// applies to DB clusters that are secondary clusters in an Aurora global database.
-	// By default, Aurora disallows write operations for secondary clusters.
+	// A value that indicates whether to enable this DB cluster to forward write
+	// operations to the primary cluster of an Aurora global database (GlobalCluster).
+	// By default, write operations are not allowed on Aurora DB clusters that are
+	// secondary clusters in an Aurora global database.
+	//
+	// You can set this value only on Aurora DB clusters that are members of an
+	// Aurora global database. With this parameter enabled, a secondary cluster
+	// can forward writes to the current primary cluster and the resulting changes
+	// are replicated back to this cluster. For the primary DB cluster of an Aurora
+	// global database, this value is used immediately if the primary is demoted
+	// by the FailoverGlobalCluster API operation, but it does nothing until then.
 	EnableGlobalWriteForwarding *bool `type:"boolean"`
 
 	// A value that indicates whether to enable the HTTP endpoint for an Aurora
@@ -33149,7 +34119,7 @@ type ModifyDBInstanceInput struct {
 	// The new DB subnet group for the DB instance. You can use this parameter to
 	// move your DB instance to a different VPC. If your DB instance isn't in a
 	// VPC, you can also use this parameter to move your DB instance into a VPC.
-	// For more information, see Updating the VPC for a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC)
+	// For more information, see Working with a DB instance in a VPC (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC)
 	// in the Amazon RDS User Guide.
 	//
 	// Changing the subnet group causes an outage during the change. The change
@@ -33178,9 +34148,27 @@ type ModifyDBInstanceInput struct {
 	// The name of the IAM role to use when making API calls to the Directory Service.
 	DomainIAMRoleName *string `type:"string"`
 
+	// A value that indicates whether to enable a customer-owned IP address (CoIP)
+	// for an RDS on Outposts DB instance.
+	//
+	// A CoIP provides local or external connectivity to resources in your Outpost
+	// subnets through your on-premises network. For some use cases, a CoIP can
+	// provide lower latency for connections to the DB instance from outside of
+	// its virtual private cloud (VPC) on your local network.
+	//
+	// For more information about RDS on Outposts, see Working with Amazon RDS on
+	// AWS Outposts (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html)
+	// in the Amazon RDS User Guide.
+	//
+	// For more information about CoIPs, see Customer-owned IP addresses (https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing)
+	// in the AWS Outposts User Guide.
+	EnableCustomerOwnedIp *bool `type:"boolean"`
+
 	// A value that indicates whether to enable mapping of AWS Identity and Access
 	// Management (IAM) accounts to database accounts. By default, mapping is disabled.
-	// For information about the supported DB engines, see CreateDBInstance.
+	//
+	// This setting doesn't apply to Amazon Aurora. Mapping AWS IAM accounts to
+	// database accounts is managed by the DB cluster.
 	//
 	// For more information about IAM database authentication, see IAM Database
 	// Authentication for MySQL and PostgreSQL (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html)
@@ -33196,15 +34184,16 @@ type ModifyDBInstanceInput struct {
 
 	// The version number of the database engine to upgrade to. Changing this parameter
 	// results in an outage and the change is applied during the next maintenance
-	// window unless the ApplyImmediately parameter is eanbled for this request.
+	// window unless the ApplyImmediately parameter is enabled for this request.
 	//
 	// For major version upgrades, if a nondefault DB parameter group is currently
 	// in use, a new DB parameter group in the DB parameter group family for the
 	// new engine version must be specified. The new DB parameter group can be the
 	// default for that DB parameter group family.
 	//
-	// For information about valid engine versions, see CreateDBInstance, or call
-	// DescribeDBEngineVersions.
+	// If you specify only a major version, Amazon RDS will update the DB instance
+	// to the default minor version if the current minor version is lower. For information
+	// about valid engine versions, see CreateDBInstance, or call DescribeDBEngineVersions.
 	EngineVersion *string `type:"string"`
 
 	// The new Provisioned IOPS (I/O operations per second) value for the RDS instance.
@@ -33283,6 +34272,11 @@ type ModifyDBInstanceInput struct {
 
 	// The upper limit to which Amazon RDS can automatically scale the storage of
 	// the DB instance.
+	//
+	// For more information about this setting, including limitations that apply
+	// to it, see Managing capacity automatically with Amazon RDS storage autoscaling
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling)
+	// in the Amazon RDS User Guide.
 	MaxAllocatedStorage *int64 `type:"integer"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -33328,27 +34322,27 @@ type ModifyDBInstanceInput struct {
 	// Example: mydbinstance
 	NewDBInstanceIdentifier *string `type:"string"`
 
-	// Indicates that the DB instance should be associated with the specified option
-	// group. Changing this parameter doesn't result in an outage except in the
-	// following case and the change is applied during the next maintenance window
-	// unless the ApplyImmediately parameter is enabled for this request. If the
-	// parameter change results in an option group that enables OEM, this change
-	// can cause a brief (sub-second) period during which new connections are rejected
-	// but existing connections are not interrupted.
+	// A value that indicates the DB instance should be associated with the specified
+	// option group. Changing this parameter doesn't result in an outage except
+	// in the following case and the change is applied during the next maintenance
+	// window unless the ApplyImmediately parameter is enabled for this request.
+	// If the parameter change results in an option group that enables OEM, this
+	// change can cause a brief (sub-second) period during which new connections
+	// are rejected but existing connections are not interrupted.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
 	// can't be removed from an option group, and that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
 
-	// The AWS KMS key identifier for encryption of Performance Insights data. The
-	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
-	// KMS key alias for the KMS encryption key.
+	// The AWS KMS key identifier for encryption of Performance Insights data.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	//
 	// If you do not specify a value for PerformanceInsightsKMSKeyId, then Amazon
-	// RDS uses your default encryption key. AWS KMS creates the default encryption
-	// key for your AWS account. Your AWS account has a different default encryption
-	// key for each AWS Region.
+	// RDS uses your default CMK. There is a default CMK for your AWS account. Your
+	// AWS account has a different default CMK for each AWS Region.
 	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The amount of time, in days, to retain Performance Insights data. Valid values
@@ -33618,6 +34612,12 @@ func (s *ModifyDBInstanceInput) SetDomain(v string) *ModifyDBInstanceInput {
 // SetDomainIAMRoleName sets the DomainIAMRoleName field's value.
 func (s *ModifyDBInstanceInput) SetDomainIAMRoleName(v string) *ModifyDBInstanceInput {
 	s.DomainIAMRoleName = &v
+	return s
+}
+
+// SetEnableCustomerOwnedIp sets the EnableCustomerOwnedIp field's value.
+func (s *ModifyDBInstanceInput) SetEnableCustomerOwnedIp(v bool) *ModifyDBInstanceInput {
+	s.EnableCustomerOwnedIp = &v
 	return s
 }
 
@@ -34246,8 +35246,8 @@ type ModifyDBSnapshotInput struct {
 	//
 	// You can specify this parameter when you upgrade an Oracle DB snapshot. The
 	// same option group considerations apply when upgrading a DB snapshot as when
-	// upgrading a DB instance. For more information, see Option Group Considerations
-	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Oracle.html#USER_UpgradeDBInstance.Oracle.OGPG.OG)
+	// upgrading a DB instance. For more information, see Option group considerations
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Oracle.html#USER_UpgradeDBInstance.Oracle.OGPG.OG)
 	// in the Amazon RDS User Guide.
 	OptionGroupName *string `type:"string"`
 }
@@ -34522,10 +35522,44 @@ func (s *ModifyEventSubscriptionOutput) SetEventSubscription(v *EventSubscriptio
 type ModifyGlobalClusterInput struct {
 	_ struct{} `type:"structure"`
 
+	// A value that indicates whether major version upgrades are allowed.
+	//
+	// Constraints: You must allow major version upgrades when specifying a value
+	// for the EngineVersion parameter that is a different major version than the
+	// DB cluster's current version.
+	//
+	// If you upgrade the major version of a global database, the cluster and DB
+	// instance parameter groups are set to the default parameter groups for the
+	// new version. Apply any custom parameter groups after completing the upgrade.
+	AllowMajorVersionUpgrade *bool `type:"boolean"`
+
 	// Indicates if the global database cluster has deletion protection enabled.
 	// The global database cluster can't be deleted when deletion protection is
 	// enabled.
 	DeletionProtection *bool `type:"boolean"`
+
+	// The version number of the database engine to which you want to upgrade. Changing
+	// this parameter results in an outage. The change is applied during the next
+	// maintenance window unless ApplyImmediately is enabled.
+	//
+	// To list all of the available engine versions for aurora (for MySQL 5.6-compatible
+	// Aurora), use the following command:
+	//
+	// aws rds describe-db-engine-versions --engine aurora --query '*[]|[?SupportsGlobalDatabases
+	// == `true`].[EngineVersion]'
+	//
+	// To list all of the available engine versions for aurora-mysql (for MySQL
+	// 5.7-compatible Aurora), use the following command:
+	//
+	// aws rds describe-db-engine-versions --engine aurora-mysql --query '*[]|[?SupportsGlobalDatabases
+	// == `true`].[EngineVersion]'
+	//
+	// To list all of the available engine versions for aurora-postgresql, use the
+	// following command:
+	//
+	// aws rds describe-db-engine-versions --engine aurora-postgresql --query '*[]|[?SupportsGlobalDatabases
+	// == `true`].[EngineVersion]'
+	EngineVersion *string `type:"string"`
 
 	// The DB cluster identifier for the global cluster being modified. This parameter
 	// isn't case-sensitive.
@@ -34560,9 +35594,21 @@ func (s ModifyGlobalClusterInput) GoString() string {
 	return s.String()
 }
 
+// SetAllowMajorVersionUpgrade sets the AllowMajorVersionUpgrade field's value.
+func (s *ModifyGlobalClusterInput) SetAllowMajorVersionUpgrade(v bool) *ModifyGlobalClusterInput {
+	s.AllowMajorVersionUpgrade = &v
+	return s
+}
+
 // SetDeletionProtection sets the DeletionProtection field's value.
 func (s *ModifyGlobalClusterInput) SetDeletionProtection(v bool) *ModifyGlobalClusterInput {
 	s.DeletionProtection = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *ModifyGlobalClusterInput) SetEngineVersion(v string) *ModifyGlobalClusterInput {
+	s.EngineVersion = &v
 	return s
 }
 
@@ -35472,10 +36518,6 @@ type OrderableDBInstanceOption struct {
 	StorageType *string `type:"string"`
 
 	// A list of the supported DB engine modes.
-	//
-	// global engine mode only applies for global database clusters created with
-	// Aurora MySQL version 5.6.10a. For higher Aurora MySQL versions, the clusters
-	// in a global database use provisioned engine mode.
 	SupportedEngineModes []*string `type:"list"`
 
 	// Indicates whether a DB instance supports Enhanced Monitoring at intervals
@@ -35888,9 +36930,12 @@ type PendingMaintenanceAction struct {
 	// A description providing more detail about the maintenance action.
 	Description *string `type:"string"`
 
-	// The date when the maintenance action is automatically applied. The maintenance
-	// action is applied to the resource on this date regardless of the maintenance
-	// window for the resource.
+	// The date when the maintenance action is automatically applied.
+	//
+	// On this date, the maintenance action is applied to the resource as soon as
+	// possible, regardless of the maintenance window for the resource. There might
+	// be a delay of one or more days from this date before the maintenance action
+	// is applied.
 	ForcedApplyDate *time.Time `type:"timestamp"`
 
 	// Indicates the type of opt-in request that has been received for the resource.
@@ -35943,36 +36988,37 @@ func (s *PendingMaintenanceAction) SetOptInStatus(v string) *PendingMaintenanceA
 	return s
 }
 
-// This data type is used as a response element in the ModifyDBInstance action.
+// This data type is used as a response element in the ModifyDBInstance operation
+// and contains changes that will be applied during the next maintenance window.
 type PendingModifiedValues struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the new AllocatedStorage size for the DB instance that will be applied
-	// or is currently being applied.
+	// The allocated storage size for the DB instance specified in gibibytes .
 	AllocatedStorage *int64 `type:"integer"`
 
-	// Specifies the pending number of days for which automated backups are retained.
+	// The number of days for which automated backups are retained.
 	BackupRetentionPeriod *int64 `type:"integer"`
 
-	// Specifies the identifier of the CA certificate for the DB instance.
+	// The identifier of the CA certificate for the DB instance.
 	CACertificateIdentifier *string `type:"string"`
 
-	// Contains the new DBInstanceClass for the DB instance that will be applied
-	// or is currently being applied.
+	// The name of the compute and memory capacity class for the DB instance.
 	DBInstanceClass *string `type:"string"`
 
-	// Contains the new DBInstanceIdentifier for the DB instance that will be applied
-	// or is currently being applied.
+	// The database identifier for the DB instance.
 	DBInstanceIdentifier *string `type:"string"`
 
-	// The new DB subnet group for the DB instance.
+	// The DB subnet group for the DB instance.
 	DBSubnetGroupName *string `type:"string"`
 
-	// Indicates the database engine version.
+	// The database engine version.
 	EngineVersion *string `type:"string"`
 
-	// Specifies the new Provisioned IOPS value for the DB instance that will be
-	// applied or is currently being applied.
+	// Whether mapping of AWS Identity and Access Management (IAM) accounts to database
+	// accounts is enabled.
+	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
+
+	// The Provisioned IOPS value for the DB instance.
 	Iops *int64 `type:"integer"`
 
 	// The license model for the DB instance.
@@ -35980,25 +37026,25 @@ type PendingModifiedValues struct {
 	// Valid values: license-included | bring-your-own-license | general-public-license
 	LicenseModel *string `type:"string"`
 
-	// Contains the pending or currently-in-progress change of the master credentials
-	// for the DB instance.
+	// The master credentials for the DB instance.
 	MasterUserPassword *string `type:"string"`
 
-	// Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.
+	// A value that indicates that the Single-AZ DB instance will change to a Multi-AZ
+	// deployment.
 	MultiAZ *bool `type:"boolean"`
 
 	// A list of the log types whose configuration is still pending. In other words,
 	// these log types are in the process of being activated or deactivated.
 	PendingCloudwatchLogsExports *PendingCloudwatchLogsExports `type:"structure"`
 
-	// Specifies the pending port for the DB instance.
+	// The port for the DB instance.
 	Port *int64 `type:"integer"`
 
 	// The number of CPU cores and the number of threads per core for the DB instance
 	// class of the DB instance.
 	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
 
-	// Specifies the storage type to be associated with the DB instance.
+	// The storage type of the DB instance.
 	StorageType *string `type:"string"`
 }
 
@@ -36051,6 +37097,12 @@ func (s *PendingModifiedValues) SetDBSubnetGroupName(v string) *PendingModifiedV
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *PendingModifiedValues) SetEngineVersion(v string) *PendingModifiedValues {
 	s.EngineVersion = &v
+	return s
+}
+
+// SetIAMDatabaseAuthenticationEnabled sets the IAMDatabaseAuthenticationEnabled field's value.
+func (s *PendingModifiedValues) SetIAMDatabaseAuthenticationEnabled(v bool) *PendingModifiedValues {
+	s.IAMDatabaseAuthenticationEnabled = &v
 	return s
 }
 
@@ -36133,6 +37185,16 @@ func (s *PendingModifiedValues) SetStorageType(v string) *PendingModifiedValues 
 //    * DescribeDBSnapshots
 //
 //    * DescribeValidDBInstanceModifications
+//
+// If you call DescribeDBInstances, ProcessorFeature returns non-null values
+// only if the following conditions are met:
+//
+//    * You are accessing an Oracle DB instance.
+//
+//    * Your Oracle DB instance class supports configuring the number of CPU
+//    cores and threads per core.
+//
+//    * The current number CPU cores and threads is set to a non-default value.
 //
 // For more information, see Configuring the Processor of the DB Instance Class
 // (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor)
@@ -36845,7 +37907,7 @@ type RemoveRoleFromDBInstanceInput struct {
 	FeatureName *string `type:"string" required:"true"`
 
 	// The Amazon Resource Name (ARN) of the IAM role to disassociate from the DB
-	// instance, for example arn:aws:iam::123456789012:role/AccessRole.
+	// instance, for example, arn:aws:iam::123456789012:role/AccessRole.
 	//
 	// RoleArn is a required field
 	RoleArn *string `type:"string" required:"true"`
@@ -37646,15 +38708,14 @@ type RestoreDBClusterFromS3Input struct {
 
 	// The AWS KMS key identifier for an encrypted DB cluster.
 	//
-	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are creating a DB cluster with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB cluster, then you can use
-	// the KMS key alias instead of the ARN for the KM encryption key.
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK). To use a CMK in a different AWS
+	// account, specify the key ARN or alias ARN.
 	//
 	// If the StorageEncrypted parameter is enabled, and you do not specify a value
-	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
-	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS Region.
+	// for the KmsKeyId parameter, then Amazon RDS will use your default CMK. There
+	// is a default CMK for your AWS account. Your AWS account has a different default
+	// CMK for each AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// The password for the master database user. This password can contain any
@@ -38137,6 +39198,8 @@ type RestoreDBClusterFromSnapshotInput struct {
 
 	// The DB engine mode of the DB cluster, either provisioned, serverless, parallelquery,
 	// global, or multimaster.
+	//
+	// For more information, see CreateDBCluster (https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBCluster.html).
 	EngineMode *string `type:"string"`
 
 	// The version of the database engine to use for the new DB cluster.
@@ -38171,17 +39234,16 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// The AWS KMS key identifier to use when restoring an encrypted DB cluster
 	// from a DB snapshot or DB cluster snapshot.
 	//
-	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are restoring a DB cluster with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB cluster, then you can use
-	// the KMS key alias instead of the ARN for the KMS encryption key.
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK). To use a CMK in a different AWS
+	// account, specify the key ARN or alias ARN.
 	//
-	// If you don't specify a value for the KmsKeyId parameter, then the following
+	// When you don't specify a value for the KmsKeyId parameter, then the following
 	// occurs:
 	//
 	//    * If the DB snapshot or DB cluster snapshot in SnapshotIdentifier is encrypted,
-	//    then the restored DB cluster is encrypted using the KMS key that was used
-	//    to encrypt the DB snapshot or DB cluster snapshot.
+	//    then the restored DB cluster is encrypted using the AWS KMS CMK that was
+	//    used to encrypt the DB snapshot or DB cluster snapshot.
 	//
 	//    * If the DB snapshot or DB cluster snapshot in SnapshotIdentifier isn't
 	//    encrypted, then the restored DB cluster isn't encrypted.
@@ -38498,21 +39560,20 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// The AWS KMS key identifier to use when restoring an encrypted DB cluster
 	// from an encrypted DB cluster.
 	//
-	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are restoring a DB cluster with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB cluster, then you can use
-	// the KMS key alias instead of the ARN for the KMS encryption key.
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK). To use a CMK in a different AWS
+	// account, specify the key ARN or alias ARN.
 	//
 	// You can restore to a new DB cluster and encrypt the new DB cluster with a
-	// KMS key that is different than the KMS key used to encrypt the source DB
-	// cluster. The new DB cluster is encrypted with the KMS key identified by the
-	// KmsKeyId parameter.
+	// AWS KMS CMK that is different than the AWS KMS key used to encrypt the source
+	// DB cluster. The new DB cluster is encrypted with the AWS KMS CMK identified
+	// by the KmsKeyId parameter.
 	//
 	// If you don't specify a value for the KmsKeyId parameter, then the following
 	// occurs:
 	//
 	//    * If the DB cluster is encrypted, then the restored DB cluster is encrypted
-	//    using the KMS key that was used to encrypt the source DB cluster.
+	//    using the AWS KMS CMK that was used to encrypt the source DB cluster.
 	//
 	//    * If the DB cluster isn't encrypted, then the restored DB cluster isn't
 	//    encrypted.
@@ -38861,13 +39922,28 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 
 	// The list of logs that the restored DB instance is to export to CloudWatch
 	// Logs. The values in the list depend on the DB engine being used. For more
-	// information, see Publishing Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
-	// in the Amazon Aurora User Guide.
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon RDS User Guide.
 	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// A value that indicates whether to enable a customer-owned IP address (CoIP)
+	// for an RDS on Outposts DB instance.
+	//
+	// A CoIP provides local or external connectivity to resources in your Outpost
+	// subnets through your on-premises network. For some use cases, a CoIP can
+	// provide lower latency for connections to the DB instance from outside of
+	// its virtual private cloud (VPC) on your local network.
+	//
+	// For more information about RDS on Outposts, see Working with Amazon RDS on
+	// AWS Outposts (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html)
+	// in the Amazon RDS User Guide.
+	//
+	// For more information about CoIPs, see Customer-owned IP addresses (https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing)
+	// in the AWS Outposts User Guide.
+	EnableCustomerOwnedIp *bool `type:"boolean"`
 
 	// A value that indicates whether to enable mapping of AWS Identity and Access
 	// Management (IAM) accounts to database accounts. By default, mapping is disabled.
-	// For information about the supported DB engines, see CreateDBInstance.
 	//
 	// For more information about IAM database authentication, see IAM Database
 	// Authentication for MySQL and PostgreSQL (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html)
@@ -39101,6 +40177,12 @@ func (s *RestoreDBInstanceFromDBSnapshotInput) SetEnableCloudwatchLogsExports(v 
 	return s
 }
 
+// SetEnableCustomerOwnedIp sets the EnableCustomerOwnedIp field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetEnableCustomerOwnedIp(v bool) *RestoreDBInstanceFromDBSnapshotInput {
+	s.EnableCustomerOwnedIp = &v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *RestoreDBInstanceFromDBSnapshotInput) SetEnableIAMDatabaseAuthentication(v bool) *RestoreDBInstanceFromDBSnapshotInput {
 	s.EnableIAMDatabaseAuthentication = &v
@@ -39314,7 +40396,6 @@ type RestoreDBInstanceFromS3Input struct {
 
 	// A value that indicates whether to enable mapping of AWS Identity and Access
 	// Management (IAM) accounts to database accounts. By default, mapping is disabled.
-	// For information about the supported DB engines, see CreateDBInstance.
 	//
 	// For more information about IAM database authentication, see IAM Database
 	// Authentication for MySQL and PostgreSQL (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html)
@@ -39348,15 +40429,14 @@ type RestoreDBInstanceFromS3Input struct {
 
 	// The AWS KMS key identifier for an encrypted DB instance.
 	//
-	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
-	// key. If you are creating a DB instance with the same AWS account that owns
-	// the KMS encryption key used to encrypt the new DB instance, then you can
-	// use the KMS key alias instead of the ARN for the KM encryption key.
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK). To use a CMK in a different AWS
+	// account, specify the key ARN or alias ARN.
 	//
 	// If the StorageEncrypted parameter is enabled, and you do not specify a value
-	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
-	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS Region.
+	// for the KmsKeyId parameter, then Amazon RDS will use your default CMK. There
+	// is a default CMK for your AWS account. Your AWS account has a different default
+	// CMK for each AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// The license model for this DB instance. Use general-public-license.
@@ -39378,6 +40458,15 @@ type RestoreDBInstanceFromS3Input struct {
 	//
 	//    * Can't be a reserved word for the chosen database engine.
 	MasterUsername *string `type:"string"`
+
+	// The upper limit to which Amazon RDS can automatically scale the storage of
+	// the DB instance.
+	//
+	// For more information about this setting, including limitations that apply
+	// to it, see Managing capacity automatically with Amazon RDS storage autoscaling
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling)
+	// in the Amazon RDS User Guide.
+	MaxAllocatedStorage *int64 `type:"integer"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
 	// are collected for the DB instance. To disable collecting Enhanced Monitoring
@@ -39411,14 +40500,14 @@ type RestoreDBInstanceFromS3Input struct {
 	// used.
 	OptionGroupName *string `type:"string"`
 
-	// The AWS KMS key identifier for encryption of Performance Insights data. The
-	// KMS key ID is the Amazon Resource Name (ARN), the KMS key identifier, or
-	// the KMS key alias for the KMS encryption key.
+	// The AWS KMS key identifier for encryption of Performance Insights data.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	//
 	// If you do not specify a value for PerformanceInsightsKMSKeyId, then Amazon
-	// RDS uses your default encryption key. AWS KMS creates the default encryption
-	// key for your AWS account. Your AWS account has a different default encryption
-	// key for each AWS Region.
+	// RDS uses your default CMK. There is a default CMK for your AWS account. Your
+	// AWS account has a different default CMK for each AWS Region.
 	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The amount of time, in days, to retain Performance Insights data. Valid values
@@ -39714,6 +40803,12 @@ func (s *RestoreDBInstanceFromS3Input) SetMasterUsername(v string) *RestoreDBIns
 	return s
 }
 
+// SetMaxAllocatedStorage sets the MaxAllocatedStorage field's value.
+func (s *RestoreDBInstanceFromS3Input) SetMaxAllocatedStorage(v int64) *RestoreDBInstanceFromS3Input {
+	s.MaxAllocatedStorage = &v
+	return s
+}
+
 // SetMonitoringInterval sets the MonitoringInterval field's value.
 func (s *RestoreDBInstanceFromS3Input) SetMonitoringInterval(v int64) *RestoreDBInstanceFromS3Input {
 	s.MonitoringInterval = &v
@@ -39948,9 +41043,24 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	// in the Amazon RDS User Guide.
 	EnableCloudwatchLogsExports []*string `type:"list"`
 
+	// A value that indicates whether to enable a customer-owned IP address (CoIP)
+	// for an RDS on Outposts DB instance.
+	//
+	// A CoIP provides local or external connectivity to resources in your Outpost
+	// subnets through your on-premises network. For some use cases, a CoIP can
+	// provide lower latency for connections to the DB instance from outside of
+	// its virtual private cloud (VPC) on your local network.
+	//
+	// For more information about RDS on Outposts, see Working with Amazon RDS on
+	// AWS Outposts (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html)
+	// in the Amazon RDS User Guide.
+	//
+	// For more information about CoIPs, see Customer-owned IP addresses (https://docs.aws.amazon.com/outposts/latest/userguide/outposts-networking-components.html#ip-addressing)
+	// in the AWS Outposts User Guide.
+	EnableCustomerOwnedIp *bool `type:"boolean"`
+
 	// A value that indicates whether to enable mapping of AWS Identity and Access
 	// Management (IAM) accounts to database accounts. By default, mapping is disabled.
-	// For information about the supported DB engines, see CreateDBInstance.
 	//
 	// For more information about IAM database authentication, see IAM Database
 	// Authentication for MySQL and PostgreSQL (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html)
@@ -40005,6 +41115,15 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	// Valid values: license-included | bring-your-own-license | general-public-license
 	LicenseModel *string `type:"string"`
 
+	// The upper limit to which Amazon RDS can automatically scale the storage of
+	// the DB instance.
+	//
+	// For more information about this setting, including limitations that apply
+	// to it, see Managing capacity automatically with Amazon RDS storage autoscaling
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.Autoscaling)
+	// in the Amazon RDS User Guide.
+	MaxAllocatedStorage *int64 `type:"integer"`
+
 	// A value that indicates whether the DB instance is a Multi-AZ deployment.
 	//
 	// Constraint: You can't specify the AvailabilityZone parameter if the DB instance
@@ -40056,6 +41175,10 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	//
 	// Example: 2009-09-07T23:45:00Z
 	RestoreTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of the replicated automated backups from which
+	// to restore, for example, arn:aws:rds:useast-1:123456789012:auto-backup:ab-L2IJCEXJP7XQ7HOJ4SIEXAMPLE.
+	SourceDBInstanceAutomatedBackupsArn *string `type:"string"`
 
 	// The identifier of the source DB instance from which to restore.
 	//
@@ -40206,6 +41329,12 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetEnableCloudwatchLogsExports(v [
 	return s
 }
 
+// SetEnableCustomerOwnedIp sets the EnableCustomerOwnedIp field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetEnableCustomerOwnedIp(v bool) *RestoreDBInstanceToPointInTimeInput {
+	s.EnableCustomerOwnedIp = &v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetEnableIAMDatabaseAuthentication(v bool) *RestoreDBInstanceToPointInTimeInput {
 	s.EnableIAMDatabaseAuthentication = &v
@@ -40227,6 +41356,12 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetIops(v int64) *RestoreDBInstanc
 // SetLicenseModel sets the LicenseModel field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetLicenseModel(v string) *RestoreDBInstanceToPointInTimeInput {
 	s.LicenseModel = &v
+	return s
+}
+
+// SetMaxAllocatedStorage sets the MaxAllocatedStorage field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetMaxAllocatedStorage(v int64) *RestoreDBInstanceToPointInTimeInput {
+	s.MaxAllocatedStorage = &v
 	return s
 }
 
@@ -40263,6 +41398,12 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetPubliclyAccessible(v bool) *Res
 // SetRestoreTime sets the RestoreTime field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetRestoreTime(v time.Time) *RestoreDBInstanceToPointInTimeInput {
 	s.RestoreTime = &v
+	return s
+}
+
+// SetSourceDBInstanceAutomatedBackupsArn sets the SourceDBInstanceAutomatedBackupsArn field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetSourceDBInstanceAutomatedBackupsArn(v string) *RestoreDBInstanceToPointInTimeInput {
+	s.SourceDBInstanceAutomatedBackupsArn = &v
 	return s
 }
 
@@ -40676,6 +41817,10 @@ type SourceRegion struct {
 
 	// The status of the source AWS Region.
 	Status *string `type:"string"`
+
+	// Whether the source AWS Region supports replicating automated backups to the
+	// current AWS Region.
+	SupportsDBInstanceAutomatedBackupsReplication *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -40706,6 +41851,12 @@ func (s *SourceRegion) SetStatus(v string) *SourceRegion {
 	return s
 }
 
+// SetSupportsDBInstanceAutomatedBackupsReplication sets the SupportsDBInstanceAutomatedBackupsReplication field's value.
+func (s *SourceRegion) SetSupportsDBInstanceAutomatedBackupsReplication(v bool) *SourceRegion {
+	s.SupportsDBInstanceAutomatedBackupsReplication = &v
+	return s
+}
+
 type StartActivityStreamInput struct {
 	_ struct{} `type:"structure"`
 
@@ -40714,7 +41865,8 @@ type StartActivityStreamInput struct {
 	ApplyImmediately *bool `type:"boolean"`
 
 	// The AWS KMS key identifier for encrypting messages in the database activity
-	// stream. The key identifier can be either a key ID, a key ARN, or a key alias.
+	// stream. The AWS KMS key identifier is the key ARN, key ID, alias ARN, or
+	// alias name for the AWS KMS customer master key (CMK).
 	//
 	// KmsKeyId is a required field
 	KmsKeyId *string `type:"string" required:"true"`
@@ -40726,7 +41878,7 @@ type StartActivityStreamInput struct {
 	// Mode is a required field
 	Mode *string `type:"string" required:"true" enum:"ActivityStreamMode"`
 
-	// The Amazon Resource Name (ARN) of the DB cluster, for example arn:aws:rds:us-east-1:12345667890:cluster:das-cluster.
+	// The Amazon Resource Name (ARN) of the DB cluster, for example, arn:aws:rds:us-east-1:12345667890:cluster:das-cluster.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `type:"string" required:"true"`
@@ -40912,6 +42064,123 @@ func (s *StartDBClusterOutput) SetDBCluster(v *DBCluster) *StartDBClusterOutput 
 	return s
 }
 
+type StartDBInstanceAutomatedBackupsReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The retention period for the replicated automated backups.
+	BackupRetentionPeriod *int64 `type:"integer"`
+
+	// DestinationRegion is used for presigning the request to a given region.
+	DestinationRegion *string `type:"string"`
+
+	// The AWS KMS key identifier for encryption of the replicated automated backups.
+	// The KMS key ID is the Amazon Resource Name (ARN) for the KMS encryption key
+	// in the destination AWS Region, for example, arn:aws:kms:us-east-1:123456789012:key/AKIAIOSFODNN7EXAMPLE.
+	KmsKeyId *string `type:"string"`
+
+	// A URL that contains a Signature Version 4 signed request for the StartDBInstanceAutomatedBackupsReplication
+	// action to be called in the AWS Region of the source DB instance. The presigned
+	// URL must be a valid request for the StartDBInstanceAutomatedBackupsReplication
+	// API action that can be executed in the AWS Region that contains the source
+	// DB instance.
+	PreSignedUrl *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the source DB instance for the replicated
+	// automated backups, for example, arn:aws:rds:us-west-2:123456789012:db:mydatabase.
+	//
+	// SourceDBInstanceArn is a required field
+	SourceDBInstanceArn *string `type:"string" required:"true"`
+
+	// SourceRegion is the source region where the resource exists. This is not
+	// sent over the wire and is only used for presigning. This value should always
+	// have the same region as the source ARN.
+	SourceRegion *string `type:"string" ignore:"true"`
+}
+
+// String returns the string representation
+func (s StartDBInstanceAutomatedBackupsReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDBInstanceAutomatedBackupsReplicationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartDBInstanceAutomatedBackupsReplicationInput"}
+	if s.SourceDBInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceDBInstanceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) SetBackupRetentionPeriod(v int64) *StartDBInstanceAutomatedBackupsReplicationInput {
+	s.BackupRetentionPeriod = &v
+	return s
+}
+
+// SetDestinationRegion sets the DestinationRegion field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) SetDestinationRegion(v string) *StartDBInstanceAutomatedBackupsReplicationInput {
+	s.DestinationRegion = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) SetKmsKeyId(v string) *StartDBInstanceAutomatedBackupsReplicationInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetPreSignedUrl sets the PreSignedUrl field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) SetPreSignedUrl(v string) *StartDBInstanceAutomatedBackupsReplicationInput {
+	s.PreSignedUrl = &v
+	return s
+}
+
+// SetSourceDBInstanceArn sets the SourceDBInstanceArn field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) SetSourceDBInstanceArn(v string) *StartDBInstanceAutomatedBackupsReplicationInput {
+	s.SourceDBInstanceArn = &v
+	return s
+}
+
+// SetSourceRegion sets the SourceRegion field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationInput) SetSourceRegion(v string) *StartDBInstanceAutomatedBackupsReplicationInput {
+	s.SourceRegion = &v
+	return s
+}
+
+type StartDBInstanceAutomatedBackupsReplicationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An automated backup of a DB instance. It consists of system backups, transaction
+	// logs, and the database instance properties that existed at the time you deleted
+	// the source instance.
+	DBInstanceAutomatedBackup *DBInstanceAutomatedBackup `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartDBInstanceAutomatedBackupsReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDBInstanceAutomatedBackupsReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBInstanceAutomatedBackup sets the DBInstanceAutomatedBackup field's value.
+func (s *StartDBInstanceAutomatedBackupsReplicationOutput) SetDBInstanceAutomatedBackup(v *DBInstanceAutomatedBackup) *StartDBInstanceAutomatedBackupsReplicationOutput {
+	s.DBInstanceAutomatedBackup = v
+	return s
+}
+
 type StartDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -41005,11 +42274,11 @@ type StartExportTaskInput struct {
 	// IamRoleArn is a required field
 	IamRoleArn *string `type:"string" required:"true"`
 
-	// The ID of the AWS KMS key to use to encrypt the snapshot exported to Amazon
-	// S3. The KMS key ID is the Amazon Resource Name (ARN), the KMS key identifier,
-	// or the KMS key alias for the KMS encryption key. The caller of this operation
-	// must be authorized to execute the following operations. These can be set
-	// in the KMS key policy:
+	// The ID of the AWS KMS customer master key (CMK) to use to encrypt the snapshot
+	// exported to Amazon S3. The AWS KMS key identifier is the key ARN, key ID,
+	// alias ARN, or alias name for the AWS KMS customer master key (CMK). The caller
+	// of this operation must be authorized to execute the following operations.
+	// These can be set in the AWS KMS key policy:
 	//
 	//    * GrantOperation.Encrypt
 	//
@@ -41155,11 +42424,11 @@ type StartExportTaskOutput struct {
 	// a snapshot.
 	IamRoleArn *string `type:"string"`
 
-	// The ID of the AWS KMS key that is used to encrypt the snapshot when it's
-	// exported to Amazon S3. The KMS key ID is the Amazon Resource Name (ARN),
-	// the KMS key identifier, or the KMS key alias for the KMS encryption key.
-	// The IAM role used for the snapshot export must have encryption and decryption
-	// permissions to use this KMS key.
+	// The key identifier of the AWS KMS customer master key (CMK) that is used
+	// to encrypt the snapshot when it's exported to Amazon S3. The AWS KMS CMK
+	// identifier is its key ARN, key ID, alias ARN, or alias name. The IAM role
+	// used for the snapshot export must have encryption and decryption permissions
+	// to use this AWS KMS CMK.
 	KmsKeyId *string `type:"string"`
 
 	// The progress of the snapshot export task as a percentage.
@@ -41352,6 +42621,9 @@ type StopActivityStreamOutput struct {
 
 	// The AWS KMS key identifier used for encrypting messages in the database activity
 	// stream.
+	//
+	// The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias name
+	// for the AWS KMS customer master key (CMK).
 	KmsKeyId *string `type:"string"`
 
 	// The status of the database activity stream.
@@ -41448,6 +42720,70 @@ func (s StopDBClusterOutput) GoString() string {
 // SetDBCluster sets the DBCluster field's value.
 func (s *StopDBClusterOutput) SetDBCluster(v *DBCluster) *StopDBClusterOutput {
 	s.DBCluster = v
+	return s
+}
+
+type StopDBInstanceAutomatedBackupsReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the source DB instance for which to stop
+	// replicating automated backups, for example, arn:aws:rds:us-west-2:123456789012:db:mydatabase.
+	//
+	// SourceDBInstanceArn is a required field
+	SourceDBInstanceArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopDBInstanceAutomatedBackupsReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDBInstanceAutomatedBackupsReplicationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopDBInstanceAutomatedBackupsReplicationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopDBInstanceAutomatedBackupsReplicationInput"}
+	if s.SourceDBInstanceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceDBInstanceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSourceDBInstanceArn sets the SourceDBInstanceArn field's value.
+func (s *StopDBInstanceAutomatedBackupsReplicationInput) SetSourceDBInstanceArn(v string) *StopDBInstanceAutomatedBackupsReplicationInput {
+	s.SourceDBInstanceArn = &v
+	return s
+}
+
+type StopDBInstanceAutomatedBackupsReplicationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An automated backup of a DB instance. It consists of system backups, transaction
+	// logs, and the database instance properties that existed at the time you deleted
+	// the source instance.
+	DBInstanceAutomatedBackup *DBInstanceAutomatedBackup `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopDBInstanceAutomatedBackupsReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDBInstanceAutomatedBackupsReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBInstanceAutomatedBackup sets the DBInstanceAutomatedBackup field's value.
+func (s *StopDBInstanceAutomatedBackupsReplicationOutput) SetDBInstanceAutomatedBackup(v *DBInstanceAutomatedBackup) *StopDBInstanceAutomatedBackupsReplicationOutput {
+	s.DBInstanceAutomatedBackup = v
 	return s
 }
 
@@ -41590,13 +42926,13 @@ type Tag struct {
 	// A key is the required name of the tag. The string value can be from 1 to
 	// 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:".
 	// The string can only contain only the set of Unicode letters, digits, white-space,
-	// '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").
+	// '_', '.', ':', '/', '=', '+', '-', '@' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$").
 	Key *string `type:"string"`
 
 	// A value is the optional value of the tag. The string value can be from 1
 	// to 256 Unicode characters in length and can't be prefixed with "aws:" or
 	// "rds:". The string can only contain only the set of Unicode letters, digits,
-	// white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").
+	// white-space, '_', '.', ':', '/', '=', '+', '-', '@' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$").
 	Value *string `type:"string"`
 }
 
@@ -41712,8 +43048,20 @@ type UpgradeTarget struct {
 	// The version number of the upgrade target database engine.
 	EngineVersion *string `type:"string"`
 
-	// A value that indicates whether a database engine is upgraded to a major version.
+	// A value that indicates whether upgrading to the target version requires upgrading
+	// the major version of the database engine.
 	IsMajorVersionUpgrade *bool `type:"boolean"`
+
+	// A list of the supported DB engine modes for the target engine version.
+	SupportedEngineModes []*string `type:"list"`
+
+	// A value that indicates whether you can use Aurora global databases with the
+	// target engine version.
+	SupportsGlobalDatabases *bool `type:"boolean"`
+
+	// A value that indicates whether you can use Aurora parallel query with the
+	// target engine version.
+	SupportsParallelQuery *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -41753,6 +43101,24 @@ func (s *UpgradeTarget) SetEngineVersion(v string) *UpgradeTarget {
 // SetIsMajorVersionUpgrade sets the IsMajorVersionUpgrade field's value.
 func (s *UpgradeTarget) SetIsMajorVersionUpgrade(v bool) *UpgradeTarget {
 	s.IsMajorVersionUpgrade = &v
+	return s
+}
+
+// SetSupportedEngineModes sets the SupportedEngineModes field's value.
+func (s *UpgradeTarget) SetSupportedEngineModes(v []*string) *UpgradeTarget {
+	s.SupportedEngineModes = v
+	return s
+}
+
+// SetSupportsGlobalDatabases sets the SupportsGlobalDatabases field's value.
+func (s *UpgradeTarget) SetSupportsGlobalDatabases(v bool) *UpgradeTarget {
+	s.SupportsGlobalDatabases = &v
+	return s
+}
+
+// SetSupportsParallelQuery sets the SupportsParallelQuery field's value.
+func (s *UpgradeTarget) SetSupportsParallelQuery(v bool) *UpgradeTarget {
+	s.SupportsParallelQuery = &v
 	return s
 }
 
@@ -42221,6 +43587,26 @@ func EngineFamily_Values() []string {
 	return []string{
 		EngineFamilyMysql,
 		EngineFamilyPostgresql,
+	}
+}
+
+const (
+	// FailoverStatusPending is a FailoverStatus enum value
+	FailoverStatusPending = "pending"
+
+	// FailoverStatusFailingOver is a FailoverStatus enum value
+	FailoverStatusFailingOver = "failing-over"
+
+	// FailoverStatusCancelling is a FailoverStatus enum value
+	FailoverStatusCancelling = "cancelling"
+)
+
+// FailoverStatus_Values returns all elements of the FailoverStatus enum
+func FailoverStatus_Values() []string {
+	return []string{
+		FailoverStatusPending,
+		FailoverStatusFailingOver,
+		FailoverStatusCancelling,
 	}
 }
 

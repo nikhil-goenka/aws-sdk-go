@@ -347,6 +347,20 @@ func (c *WorkSpaces) CopyWorkspaceImageRequest(input *CopyWorkspaceImageInput) (
 // CopyWorkspaceImage API operation for Amazon WorkSpaces.
 //
 // Copies the specified image from the specified Region to the current Region.
+// For more information about copying images, see Copy a Custom WorkSpaces Image
+// (https://docs.aws.amazon.com/workspaces/latest/adminguide/copy-custom-image.html).
+//
+// In the China (Ningxia) Region, you can copy images only within the same Region.
+//
+// In the AWS GovCloud (US-West) Region, to copy images to and from other AWS
+// Regions, contact AWS Support.
+//
+// Before copying a shared image, be sure to verify that it has been shared
+// from the correct AWS account. To determine if an image has been shared and
+// to see the AWS account ID that owns an image, use the DescribeWorkSpaceImages
+// (https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImages.html)
+// and DescribeWorkspaceImagePermissions (https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceImagePermissions.html)
+// API operations.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1185,6 +1199,18 @@ func (c *WorkSpaces) DeregisterWorkspaceDirectoryRequest(input *DeregisterWorksp
 // Deregisters the specified directory. This operation is asynchronous and returns
 // before the WorkSpace directory is deregistered. If any WorkSpaces are registered
 // to this directory, you must remove them before you can deregister the directory.
+//
+// Simple AD and AD Connector are made available to you free of charge to use
+// with WorkSpaces. If there are no WorkSpaces being used with your Simple AD
+// or AD Connector directory for 30 consecutive days, this directory will be
+// automatically deregistered for use with Amazon WorkSpaces, and you will be
+// charged for this directory as per the AWS Directory Services pricing terms
+// (http://aws.amazon.com/directoryservice/pricing/).
+//
+// To delete empty directories, see Delete the Directory for Your WorkSpaces
+// (https://docs.aws.amazon.com/workspaces/latest/adminguide/delete-workspaces-directory.html).
+// If you delete your Simple AD or AD Connector directory, you can always create
+// a new one when you want to start using WorkSpaces again.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2895,6 +2921,10 @@ func (c *WorkSpaces) ListAvailableManagementCidrRangesRequest(input *ListAvailab
 // you can use for the network management interface when you enable Bring Your
 // Own License (BYOL).
 //
+// This operation can be run only by AWS accounts that are enabled for BYOL.
+// If your account isn't enabled for BYOL, you'll receive an AccessDeniedException
+// error.
+//
 // The management network interface is connected to a secure Amazon WorkSpaces
 // management network. It is used for interactive streaming of the WorkSpace
 // desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage
@@ -4334,13 +4364,30 @@ func (c *WorkSpaces) TerminateWorkspacesRequest(input *TerminateWorkspacesInput)
 // Terminates the specified WorkSpaces.
 //
 // Terminating a WorkSpace is a permanent action and cannot be undone. The user's
-// data is destroyed. If you need to archive any user data, contact Amazon Web
-// Services before terminating the WorkSpace.
+// data is destroyed. If you need to archive any user data, contact AWS Support
+// before terminating the WorkSpace.
 //
 // You can terminate a WorkSpace that is in any state except SUSPENDED.
 //
 // This operation is asynchronous and returns before the WorkSpaces have been
-// completely terminated.
+// completely terminated. After a WorkSpace is terminated, the TERMINATED state
+// is returned only briefly before the WorkSpace directory metadata is cleaned
+// up, so this state is rarely returned. To confirm that a WorkSpace is terminated,
+// check for the WorkSpace ID by using DescribeWorkSpaces (https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaces.html).
+// If the WorkSpace ID isn't returned, then the WorkSpace has been successfully
+// terminated.
+//
+// Simple AD and AD Connector are made available to you free of charge to use
+// with WorkSpaces. If there are no WorkSpaces being used with your Simple AD
+// or AD Connector directory for 30 consecutive days, this directory will be
+// automatically deregistered for use with Amazon WorkSpaces, and you will be
+// charged for this directory as per the AWS Directory Services pricing terms
+// (http://aws.amazon.com/directoryservice/pricing/).
+//
+// To delete empty directories, see Delete the Directory for Your WorkSpaces
+// (https://docs.aws.amazon.com/workspaces/latest/adminguide/delete-workspaces-directory.html).
+// If you delete your Simple AD or AD Connector directory, you can always create
+// a new one when you want to start using WorkSpaces again.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4621,10 +4668,21 @@ func (c *WorkSpaces) UpdateWorkspaceImagePermissionRequest(input *UpdateWorkspac
 
 // UpdateWorkspaceImagePermission API operation for Amazon WorkSpaces.
 //
-// Shares or unshares an image with one account by specifying whether that account
-// has permission to copy the image. If the copy image permission is granted,
-// the image is shared with that account. If the copy image permission is revoked,
-// the image is unshared with the account.
+// Shares or unshares an image with one account in the same AWS Region by specifying
+// whether that account has permission to copy the image. If the copy image
+// permission is granted, the image is shared with that account. If the copy
+// image permission is revoked, the image is unshared with the account.
+//
+// After an image has been shared, the recipient account can copy the image
+// to other AWS Regions as needed.
+//
+// In the China (Ningxia) Region, you can copy images only within the same Region.
+//
+// In the AWS GovCloud (US-West) Region, to copy images to and from other AWS
+// Regions, contact AWS Support.
+//
+// For more information about sharing images, see Share or Unshare a Custom
+// WorkSpaces Image (https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html).
 //
 //    * To delete an image that has been shared, you must unshare the image
 //    before you delete it.
@@ -5607,9 +5665,7 @@ type CreateTagsInput struct {
 	// ResourceId is a required field
 	ResourceId *string `min:"1" type:"string" required:"true"`
 
-	// The tags. Each WorkSpaces resource can have a maximum of 50 tags. If you
-	// want to add new tags to a set of existing tags, you must submit all of the
-	// existing tags along with the new ones.
+	// The tags. Each WorkSpaces resource can have a maximum of 50 tags.
 	//
 	// Tags is a required field
 	Tags []*Tag `type:"list" required:"true"`
@@ -7598,7 +7654,8 @@ func (s *FailedWorkspaceChangeRequest) SetWorkspaceId(v string) *FailedWorkspace
 }
 
 // Describes the AWS accounts that have been granted permission to use a shared
-// image.
+// image. For more information about sharing images, see Share or Unshare a
+// Custom WorkSpaces Image (https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html).
 type ImagePermission struct {
 	_ struct{} `type:"structure"`
 
@@ -7647,8 +7704,13 @@ type ImportWorkspaceImageInput struct {
 	// ImageName is a required field
 	ImageName *string `min:"1" type:"string" required:"true"`
 
-	// The ingestion process to be used when importing the image. For non-GPU-enabled
-	// bundles (bundles other than Graphics or GraphicsPro), specify BYOL_REGULAR.
+	// The ingestion process to be used when importing the image, depending on which
+	// protocol you want to use for your BYOL Workspace image, either PCoIP or WorkSpaces
+	// Streaming Protocol (WSP). To use WSP, specify a value that ends in _WSP.
+	// To use PCoIP, specify a value that does not end in _WSP.
+	//
+	// For non-GPU-enabled bundles (bundles other than Graphics or GraphicsPro),
+	// specify BYOL_REGULAR or BYOL_REGULAR_WSP, depending on the protocol.
 	//
 	// IngestionProcess is a required field
 	IngestionProcess *string `type:"string" required:"true" enum:"WorkspaceImageIngestionProcess"`
@@ -10329,6 +10391,9 @@ type UpdateWorkspaceImagePermissionInput struct {
 
 	// The identifier of the AWS account to share or unshare the image with.
 	//
+	// Before sharing the image, confirm that you are sharing to the correct AWS
+	// account ID.
+	//
 	// SharedAccountId is a required field
 	SharedAccountId *string `type:"string" required:"true"`
 }
@@ -10449,6 +10514,13 @@ type Workspace struct {
 	RootVolumeEncryptionEnabled *bool `type:"boolean"`
 
 	// The operational state of the WorkSpace.
+	//
+	// After a WorkSpace is terminated, the TERMINATED state is returned only briefly
+	// before the WorkSpace directory metadata is cleaned up, so this state is rarely
+	// returned. To confirm that a WorkSpace is terminated, check for the WorkSpace
+	// ID by using DescribeWorkSpaces (https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaces.html).
+	// If the WorkSpace ID isn't returned, then the WorkSpace has been successfully
+	// terminated.
 	State *string `type:"string" enum:"WorkspaceState"`
 
 	// The identifier of the subnet for the WorkSpace.
@@ -10948,7 +11020,13 @@ type WorkspaceDirectory struct {
 	// The default self-service permissions for WorkSpaces in the directory.
 	SelfservicePermissions *SelfservicePermissions `type:"structure"`
 
-	// The state of the directory's registration with Amazon WorkSpaces.
+	// The state of the directory's registration with Amazon WorkSpaces. After a
+	// directory is deregistered, the DEREGISTERED state is returned very briefly
+	// before the directory metadata is cleaned up, so this state is rarely returned.
+	// To confirm that a directory is deregistered, check for the directory ID by
+	// using DescribeWorkspaceDirectories (https://docs.aws.amazon.com/workspaces/latest/api/API_DescribeWorkspaceDirectories.html).
+	// If the directory ID isn't returned, then the directory has been successfully
+	// deregistered.
 	State *string `type:"string" enum:"WorkspaceDirectoryState"`
 
 	// The identifiers of the subnets used with the directory.
@@ -11808,6 +11886,9 @@ const (
 
 	// WorkspaceImageIngestionProcessByolGraphicspro is a WorkspaceImageIngestionProcess enum value
 	WorkspaceImageIngestionProcessByolGraphicspro = "BYOL_GRAPHICSPRO"
+
+	// WorkspaceImageIngestionProcessByolRegularWsp is a WorkspaceImageIngestionProcess enum value
+	WorkspaceImageIngestionProcessByolRegularWsp = "BYOL_REGULAR_WSP"
 )
 
 // WorkspaceImageIngestionProcess_Values returns all elements of the WorkspaceImageIngestionProcess enum
@@ -11816,6 +11897,7 @@ func WorkspaceImageIngestionProcess_Values() []string {
 		WorkspaceImageIngestionProcessByolRegular,
 		WorkspaceImageIngestionProcessByolGraphics,
 		WorkspaceImageIngestionProcessByolGraphicspro,
+		WorkspaceImageIngestionProcessByolRegularWsp,
 	}
 }
 

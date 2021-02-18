@@ -13,6 +13,220 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opAssociateIdentityProviderConfig = "AssociateIdentityProviderConfig"
+
+// AssociateIdentityProviderConfigRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateIdentityProviderConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateIdentityProviderConfig for more information on using the AssociateIdentityProviderConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateIdentityProviderConfigRequest method.
+//    req, resp := client.AssociateIdentityProviderConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/AssociateIdentityProviderConfig
+func (c *EKS) AssociateIdentityProviderConfigRequest(input *AssociateIdentityProviderConfigInput) (req *request.Request, output *AssociateIdentityProviderConfigOutput) {
+	op := &request.Operation{
+		Name:       opAssociateIdentityProviderConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/identity-provider-configs/associate",
+	}
+
+	if input == nil {
+		input = &AssociateIdentityProviderConfigInput{}
+	}
+
+	output = &AssociateIdentityProviderConfigOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AssociateIdentityProviderConfig API operation for Amazon Elastic Kubernetes Service.
+//
+// Associate an identity provider configuration to a cluster.
+//
+// If you want to authenticate identities using an identity provider, you can
+// create an identity provider configuration and associate it to your cluster.
+// After configuring authentication to your cluster you can create Kubernetes
+// roles and clusterroles to assign permissions to the roles, and then bind
+// the roles to the identities using Kubernetes rolebindings and clusterrolebindings.
+// For more information see Using RBAC Authorization (https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+// in the Kubernetes documentation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation AssociateIdentityProviderConfig for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+//   * ResourceInUseException
+//   The specified resource is in use.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/AssociateIdentityProviderConfig
+func (c *EKS) AssociateIdentityProviderConfig(input *AssociateIdentityProviderConfigInput) (*AssociateIdentityProviderConfigOutput, error) {
+	req, out := c.AssociateIdentityProviderConfigRequest(input)
+	return out, req.Send()
+}
+
+// AssociateIdentityProviderConfigWithContext is the same as AssociateIdentityProviderConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateIdentityProviderConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) AssociateIdentityProviderConfigWithContext(ctx aws.Context, input *AssociateIdentityProviderConfigInput, opts ...request.Option) (*AssociateIdentityProviderConfigOutput, error) {
+	req, out := c.AssociateIdentityProviderConfigRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateAddon = "CreateAddon"
+
+// CreateAddonRequest generates a "aws/request.Request" representing the
+// client's request for the CreateAddon operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateAddon for more information on using the CreateAddon
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateAddonRequest method.
+//    req, resp := client.CreateAddonRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/CreateAddon
+func (c *EKS) CreateAddonRequest(input *CreateAddonInput) (req *request.Request, output *CreateAddonOutput) {
+	op := &request.Operation{
+		Name:       opCreateAddon,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/addons",
+	}
+
+	if input == nil {
+		input = &CreateAddonInput{}
+	}
+
+	output = &CreateAddonOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateAddon API operation for Amazon Elastic Kubernetes Service.
+//
+// Creates an Amazon EKS add-on.
+//
+// Amazon EKS add-ons help to automate the provisioning and lifecycle management
+// of common operational software for Amazon EKS clusters. Amazon EKS add-ons
+// can only be used with Amazon EKS clusters running version 1.18 with platform
+// version eks.3 or later because add-ons rely on the Server-side Apply Kubernetes
+// feature, which is only available in Kubernetes 1.18 and later.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation CreateAddon for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * ResourceInUseException
+//   The specified resource is in use.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/CreateAddon
+func (c *EKS) CreateAddon(input *CreateAddonInput) (*CreateAddonOutput, error) {
+	req, out := c.CreateAddonRequest(input)
+	return out, req.Send()
+}
+
+// CreateAddonWithContext is the same as CreateAddon with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateAddon for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) CreateAddonWithContext(ctx aws.Context, input *CreateAddonInput, opts ...request.Option) (*CreateAddonOutput, error) {
+	req, out := c.CreateAddonRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateCluster = "CreateCluster"
 
 // CreateClusterRequest generates a "aws/request.Request" representing the
@@ -68,12 +282,12 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 // The cluster control plane is provisioned across multiple Availability Zones
 // and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS
 // also provisions elastic network interfaces in your VPC subnets to provide
-// connectivity from the control plane instances to the worker nodes (for example,
+// connectivity from the control plane instances to the nodes (for example,
 // to support kubectl exec, logs, and proxy data flows).
 //
-// Amazon EKS worker nodes run in your AWS account and connect to your cluster's
-// control plane via the Kubernetes API server endpoint and a certificate file
-// that is created for your cluster.
+// Amazon EKS nodes run in your AWS account and connect to your cluster's control
+// plane via the Kubernetes API server endpoint and a certificate file that
+// is created for your cluster.
 //
 // You can use the endpointPublicAccess and endpointPrivateAccess parameters
 // to enable or disable public and private access to your cluster's Kubernetes
@@ -94,9 +308,9 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 //
 // Cluster creation typically takes between 10 and 15 minutes. After you create
 // an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate
-// with the API server and launch worker nodes into your cluster. For more information,
+// with the API server and launch nodes into your cluster. For more information,
 // see Managing Cluster Authentication (https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html)
-// and Launching Amazon EKS Worker Nodes (https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html)
+// and Launching Amazon EKS nodes (https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html)
 // in the Amazon EKS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -332,16 +546,16 @@ func (c *EKS) CreateNodegroupRequest(input *CreateNodegroupInput) (req *request.
 
 // CreateNodegroup API operation for Amazon Elastic Kubernetes Service.
 //
-// Creates a managed worker node group for an Amazon EKS cluster. You can only
-// create a node group for your cluster that is equal to the current Kubernetes
-// version for the cluster. All node groups are created with the latest AMI
-// release version for the respective minor Kubernetes version of the cluster,
-// unless you deploy a custom AMI using a launch template. For more information
-// about using launch templates, see Launch template support (https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html).
+// Creates a managed node group for an Amazon EKS cluster. You can only create
+// a node group for your cluster that is equal to the current Kubernetes version
+// for the cluster. All node groups are created with the latest AMI release
+// version for the respective minor Kubernetes version of the cluster, unless
+// you deploy a custom AMI using a launch template. For more information about
+// using launch templates, see Launch template support (https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html).
 //
 // An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and
 // associated Amazon EC2 instances that are managed by AWS for an Amazon EKS
-// cluster. Each node group uses a version of the Amazon EKS-optimized Amazon
+// cluster. Each node group uses a version of the Amazon EKS optimized Amazon
 // Linux 2 AMI. For more information, see Managed Node Groups (https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html)
 // in the Amazon EKS User Guide.
 //
@@ -395,6 +609,106 @@ func (c *EKS) CreateNodegroup(input *CreateNodegroupInput) (*CreateNodegroupOutp
 // for more information on using Contexts.
 func (c *EKS) CreateNodegroupWithContext(ctx aws.Context, input *CreateNodegroupInput, opts ...request.Option) (*CreateNodegroupOutput, error) {
 	req, out := c.CreateNodegroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteAddon = "DeleteAddon"
+
+// DeleteAddonRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAddon operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAddon for more information on using the DeleteAddon
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteAddonRequest method.
+//    req, resp := client.DeleteAddonRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DeleteAddon
+func (c *EKS) DeleteAddonRequest(input *DeleteAddonInput) (req *request.Request, output *DeleteAddonOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAddon,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/clusters/{name}/addons/{addonName}",
+	}
+
+	if input == nil {
+		input = &DeleteAddonInput{}
+	}
+
+	output = &DeleteAddonOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteAddon API operation for Amazon Elastic Kubernetes Service.
+//
+// Delete an Amazon EKS add-on.
+//
+// When you remove the add-on, it will also be deleted from the cluster. You
+// can always manually start an add-on on the cluster using the Kubernetes API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation DeleteAddon for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DeleteAddon
+func (c *EKS) DeleteAddon(input *DeleteAddonInput) (*DeleteAddonOutput, error) {
+	req, out := c.DeleteAddonRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAddonWithContext is the same as DeleteAddon with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAddon for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DeleteAddonWithContext(ctx aws.Context, input *DeleteAddonInput, opts ...request.Option) (*DeleteAddonOutput, error) {
+	req, out := c.DeleteAddonRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -708,6 +1022,249 @@ func (c *EKS) DeleteNodegroupWithContext(ctx aws.Context, input *DeleteNodegroup
 	return out, req.Send()
 }
 
+const opDescribeAddon = "DescribeAddon"
+
+// DescribeAddonRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAddon operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeAddon for more information on using the DescribeAddon
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeAddonRequest method.
+//    req, resp := client.DescribeAddonRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeAddon
+func (c *EKS) DescribeAddonRequest(input *DescribeAddonInput) (req *request.Request, output *DescribeAddonOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAddon,
+		HTTPMethod: "GET",
+		HTTPPath:   "/clusters/{name}/addons/{addonName}",
+	}
+
+	if input == nil {
+		input = &DescribeAddonInput{}
+	}
+
+	output = &DescribeAddonOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeAddon API operation for Amazon Elastic Kubernetes Service.
+//
+// Describes an Amazon EKS add-on.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation DescribeAddon for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeAddon
+func (c *EKS) DescribeAddon(input *DescribeAddonInput) (*DescribeAddonOutput, error) {
+	req, out := c.DescribeAddonRequest(input)
+	return out, req.Send()
+}
+
+// DescribeAddonWithContext is the same as DescribeAddon with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeAddon for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DescribeAddonWithContext(ctx aws.Context, input *DescribeAddonInput, opts ...request.Option) (*DescribeAddonOutput, error) {
+	req, out := c.DescribeAddonRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeAddonVersions = "DescribeAddonVersions"
+
+// DescribeAddonVersionsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAddonVersions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeAddonVersions for more information on using the DescribeAddonVersions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeAddonVersionsRequest method.
+//    req, resp := client.DescribeAddonVersionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeAddonVersions
+func (c *EKS) DescribeAddonVersionsRequest(input *DescribeAddonVersionsInput) (req *request.Request, output *DescribeAddonVersionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAddonVersions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/addons/supported-versions",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeAddonVersionsInput{}
+	}
+
+	output = &DescribeAddonVersionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeAddonVersions API operation for Amazon Elastic Kubernetes Service.
+//
+// Describes the Kubernetes versions that the add-on can be used with.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation DescribeAddonVersions for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeAddonVersions
+func (c *EKS) DescribeAddonVersions(input *DescribeAddonVersionsInput) (*DescribeAddonVersionsOutput, error) {
+	req, out := c.DescribeAddonVersionsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeAddonVersionsWithContext is the same as DescribeAddonVersions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeAddonVersions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DescribeAddonVersionsWithContext(ctx aws.Context, input *DescribeAddonVersionsInput, opts ...request.Option) (*DescribeAddonVersionsOutput, error) {
+	req, out := c.DescribeAddonVersionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeAddonVersionsPages iterates over the pages of a DescribeAddonVersions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeAddonVersions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeAddonVersions operation.
+//    pageNum := 0
+//    err := client.DescribeAddonVersionsPages(params,
+//        func(page *eks.DescribeAddonVersionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EKS) DescribeAddonVersionsPages(input *DescribeAddonVersionsInput, fn func(*DescribeAddonVersionsOutput, bool) bool) error {
+	return c.DescribeAddonVersionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeAddonVersionsPagesWithContext same as DescribeAddonVersionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DescribeAddonVersionsPagesWithContext(ctx aws.Context, input *DescribeAddonVersionsInput, fn func(*DescribeAddonVersionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeAddonVersionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeAddonVersionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeAddonVersionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeCluster = "DescribeCluster"
 
 // DescribeClusterRequest generates a "aws/request.Request" representing the
@@ -896,6 +1453,102 @@ func (c *EKS) DescribeFargateProfile(input *DescribeFargateProfileInput) (*Descr
 // for more information on using Contexts.
 func (c *EKS) DescribeFargateProfileWithContext(ctx aws.Context, input *DescribeFargateProfileInput, opts ...request.Option) (*DescribeFargateProfileOutput, error) {
 	req, out := c.DescribeFargateProfileRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeIdentityProviderConfig = "DescribeIdentityProviderConfig"
+
+// DescribeIdentityProviderConfigRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeIdentityProviderConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeIdentityProviderConfig for more information on using the DescribeIdentityProviderConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeIdentityProviderConfigRequest method.
+//    req, resp := client.DescribeIdentityProviderConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeIdentityProviderConfig
+func (c *EKS) DescribeIdentityProviderConfigRequest(input *DescribeIdentityProviderConfigInput) (req *request.Request, output *DescribeIdentityProviderConfigOutput) {
+	op := &request.Operation{
+		Name:       opDescribeIdentityProviderConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/identity-provider-configs/describe",
+	}
+
+	if input == nil {
+		input = &DescribeIdentityProviderConfigInput{}
+	}
+
+	output = &DescribeIdentityProviderConfigOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeIdentityProviderConfig API operation for Amazon Elastic Kubernetes Service.
+//
+// Returns descriptive information about an identity provider configuration.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation DescribeIdentityProviderConfig for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+//   * ServiceUnavailableException
+//   The service is unavailable. Back off and retry the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeIdentityProviderConfig
+func (c *EKS) DescribeIdentityProviderConfig(input *DescribeIdentityProviderConfigInput) (*DescribeIdentityProviderConfigOutput, error) {
+	req, out := c.DescribeIdentityProviderConfigRequest(input)
+	return out, req.Send()
+}
+
+// DescribeIdentityProviderConfigWithContext is the same as DescribeIdentityProviderConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeIdentityProviderConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DescribeIdentityProviderConfigWithContext(ctx aws.Context, input *DescribeIdentityProviderConfigInput, opts ...request.Option) (*DescribeIdentityProviderConfigOutput, error) {
+	req, out := c.DescribeIdentityProviderConfigRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1093,6 +1746,264 @@ func (c *EKS) DescribeUpdateWithContext(ctx aws.Context, input *DescribeUpdateIn
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opDisassociateIdentityProviderConfig = "DisassociateIdentityProviderConfig"
+
+// DisassociateIdentityProviderConfigRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateIdentityProviderConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateIdentityProviderConfig for more information on using the DisassociateIdentityProviderConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateIdentityProviderConfigRequest method.
+//    req, resp := client.DisassociateIdentityProviderConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DisassociateIdentityProviderConfig
+func (c *EKS) DisassociateIdentityProviderConfigRequest(input *DisassociateIdentityProviderConfigInput) (req *request.Request, output *DisassociateIdentityProviderConfigOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateIdentityProviderConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/identity-provider-configs/disassociate",
+	}
+
+	if input == nil {
+		input = &DisassociateIdentityProviderConfigInput{}
+	}
+
+	output = &DisassociateIdentityProviderConfigOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisassociateIdentityProviderConfig API operation for Amazon Elastic Kubernetes Service.
+//
+// Disassociates an identity provider configuration from a cluster. If you disassociate
+// an identity provider from your cluster, users included in the provider can
+// no longer access the cluster. However, you can still access the cluster with
+// AWS IAM users.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation DisassociateIdentityProviderConfig for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+//   * ResourceInUseException
+//   The specified resource is in use.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DisassociateIdentityProviderConfig
+func (c *EKS) DisassociateIdentityProviderConfig(input *DisassociateIdentityProviderConfigInput) (*DisassociateIdentityProviderConfigOutput, error) {
+	req, out := c.DisassociateIdentityProviderConfigRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateIdentityProviderConfigWithContext is the same as DisassociateIdentityProviderConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateIdentityProviderConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DisassociateIdentityProviderConfigWithContext(ctx aws.Context, input *DisassociateIdentityProviderConfigInput, opts ...request.Option) (*DisassociateIdentityProviderConfigOutput, error) {
+	req, out := c.DisassociateIdentityProviderConfigRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListAddons = "ListAddons"
+
+// ListAddonsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAddons operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAddons for more information on using the ListAddons
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAddonsRequest method.
+//    req, resp := client.ListAddonsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/ListAddons
+func (c *EKS) ListAddonsRequest(input *ListAddonsInput) (req *request.Request, output *ListAddonsOutput) {
+	op := &request.Operation{
+		Name:       opListAddons,
+		HTTPMethod: "GET",
+		HTTPPath:   "/clusters/{name}/addons",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAddonsInput{}
+	}
+
+	output = &ListAddonsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListAddons API operation for Amazon Elastic Kubernetes Service.
+//
+// Lists the available add-ons.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation ListAddons for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/ListAddons
+func (c *EKS) ListAddons(input *ListAddonsInput) (*ListAddonsOutput, error) {
+	req, out := c.ListAddonsRequest(input)
+	return out, req.Send()
+}
+
+// ListAddonsWithContext is the same as ListAddons with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAddons for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) ListAddonsWithContext(ctx aws.Context, input *ListAddonsInput, opts ...request.Option) (*ListAddonsOutput, error) {
+	req, out := c.ListAddonsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAddonsPages iterates over the pages of a ListAddons operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAddons method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAddons operation.
+//    pageNum := 0
+//    err := client.ListAddonsPages(params,
+//        func(page *eks.ListAddonsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EKS) ListAddonsPages(input *ListAddonsInput, fn func(*ListAddonsOutput, bool) bool) error {
+	return c.ListAddonsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAddonsPagesWithContext same as ListAddonsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) ListAddonsPagesWithContext(ctx aws.Context, input *ListAddonsInput, fn func(*ListAddonsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAddonsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAddonsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAddonsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListClusters = "ListClusters"
@@ -1389,6 +2300,160 @@ func (c *EKS) ListFargateProfilesPagesWithContext(ctx aws.Context, input *ListFa
 
 	for p.Next() {
 		if !fn(p.Page().(*ListFargateProfilesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListIdentityProviderConfigs = "ListIdentityProviderConfigs"
+
+// ListIdentityProviderConfigsRequest generates a "aws/request.Request" representing the
+// client's request for the ListIdentityProviderConfigs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListIdentityProviderConfigs for more information on using the ListIdentityProviderConfigs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListIdentityProviderConfigsRequest method.
+//    req, resp := client.ListIdentityProviderConfigsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/ListIdentityProviderConfigs
+func (c *EKS) ListIdentityProviderConfigsRequest(input *ListIdentityProviderConfigsInput) (req *request.Request, output *ListIdentityProviderConfigsOutput) {
+	op := &request.Operation{
+		Name:       opListIdentityProviderConfigs,
+		HTTPMethod: "GET",
+		HTTPPath:   "/clusters/{name}/identity-provider-configs",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListIdentityProviderConfigsInput{}
+	}
+
+	output = &ListIdentityProviderConfigsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListIdentityProviderConfigs API operation for Amazon Elastic Kubernetes Service.
+//
+// A list of identity provider configurations.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation ListIdentityProviderConfigs for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+//   * ServiceUnavailableException
+//   The service is unavailable. Back off and retry the operation.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/ListIdentityProviderConfigs
+func (c *EKS) ListIdentityProviderConfigs(input *ListIdentityProviderConfigsInput) (*ListIdentityProviderConfigsOutput, error) {
+	req, out := c.ListIdentityProviderConfigsRequest(input)
+	return out, req.Send()
+}
+
+// ListIdentityProviderConfigsWithContext is the same as ListIdentityProviderConfigs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListIdentityProviderConfigs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) ListIdentityProviderConfigsWithContext(ctx aws.Context, input *ListIdentityProviderConfigsInput, opts ...request.Option) (*ListIdentityProviderConfigsOutput, error) {
+	req, out := c.ListIdentityProviderConfigsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListIdentityProviderConfigsPages iterates over the pages of a ListIdentityProviderConfigs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListIdentityProviderConfigs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListIdentityProviderConfigs operation.
+//    pageNum := 0
+//    err := client.ListIdentityProviderConfigsPages(params,
+//        func(page *eks.ListIdentityProviderConfigsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EKS) ListIdentityProviderConfigsPages(input *ListIdentityProviderConfigsInput, fn func(*ListIdentityProviderConfigsOutput, bool) bool) error {
+	return c.ListIdentityProviderConfigsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListIdentityProviderConfigsPagesWithContext same as ListIdentityProviderConfigsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) ListIdentityProviderConfigsPagesWithContext(ctx aws.Context, input *ListIdentityProviderConfigsInput, fn func(*ListIdentityProviderConfigsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListIdentityProviderConfigsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListIdentityProviderConfigsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListIdentityProviderConfigsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -1839,7 +2904,7 @@ func (c *EKS) TagResourceRequest(input *TagResourceInput) (req *request.Request,
 // that resource are deleted as well. Tags that you create for Amazon EKS resources
 // do not propagate to any other resources associated with the cluster. For
 // example, if you tag a cluster with this operation, that tag does not automatically
-// propagate to the subnets and worker nodes associated with the cluster.
+// propagate to the subnets and nodes associated with the cluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1959,6 +3024,106 @@ func (c *EKS) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, er
 // for more information on using Contexts.
 func (c *EKS) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateAddon = "UpdateAddon"
+
+// UpdateAddonRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateAddon operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateAddon for more information on using the UpdateAddon
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateAddonRequest method.
+//    req, resp := client.UpdateAddonRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/UpdateAddon
+func (c *EKS) UpdateAddonRequest(input *UpdateAddonInput) (req *request.Request, output *UpdateAddonOutput) {
+	op := &request.Operation{
+		Name:       opUpdateAddon,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/addons/{addonName}/update",
+	}
+
+	if input == nil {
+		input = &UpdateAddonInput{}
+	}
+
+	output = &UpdateAddonOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateAddon API operation for Amazon Elastic Kubernetes Service.
+//
+// Updates an Amazon EKS add-on.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
+// API operation UpdateAddon for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * InvalidRequestException
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+//   * ResourceNotFoundException
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. You can view your available managed node groups with ListNodegroups.
+//   Amazon EKS clusters and node groups are Region-specific.
+//
+//   * ResourceInUseException
+//   The specified resource is in use.
+//
+//   * ClientException
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ServerException
+//   These errors are usually caused by a server-side issue.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/UpdateAddon
+func (c *EKS) UpdateAddon(input *UpdateAddonInput) (*UpdateAddonOutput, error) {
+	req, out := c.UpdateAddonRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAddonWithContext is the same as UpdateAddon with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateAddon for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) UpdateAddonWithContext(ctx aws.Context, input *UpdateAddonInput, opts ...request.Option) (*UpdateAddonOutput, error) {
+	req, out := c.UpdateAddonRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2365,7 +3530,7 @@ func (c *EKS) UpdateNodegroupVersionRequest(input *UpdateNodegroupVersionInput) 
 // specifying a Kubernetes version in the request. You can update to the latest
 // AMI version of your cluster's current Kubernetes version by specifying your
 // cluster's Kubernetes version in the request. For more information, see Amazon
-// EKS-Optimized Linux AMI Versions (https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html)
+// EKS optimized Amazon Linux 2 AMI versions (https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html)
 // in the Amazon EKS User Guide.
 //
 // You cannot roll back a node group to an earlier Kubernetes version or AMI
@@ -2429,6 +3594,382 @@ func (c *EKS) UpdateNodegroupVersionWithContext(ctx aws.Context, input *UpdateNo
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// An Amazon EKS add-on.
+type Addon struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the add-on.
+	AddonArn *string `locationName:"addonArn" type:"string"`
+
+	// The name of the add-on.
+	AddonName *string `locationName:"addonName" type:"string"`
+
+	// The version of the add-on.
+	AddonVersion *string `locationName:"addonVersion" type:"string"`
+
+	// The name of the cluster.
+	ClusterName *string `locationName:"clusterName" min:"1" type:"string"`
+
+	// The date and time that the add-on was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// An object that represents the health of the add-on.
+	Health *AddonHealth `locationName:"health" type:"structure"`
+
+	// The date and time that the add-on was last modified.
+	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that is bound to the Kubernetes
+	// service account used by the add-on.
+	ServiceAccountRoleArn *string `locationName:"serviceAccountRoleArn" type:"string"`
+
+	// The status of the add-on.
+	Status *string `locationName:"status" type:"string" enum:"AddonStatus"`
+
+	// The metadata that you apply to the cluster to assist with categorization
+	// and organization. Each tag consists of a key and an optional value, both
+	// of which you define. Cluster tags do not propagate to any other resources
+	// associated with the cluster.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s Addon) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Addon) GoString() string {
+	return s.String()
+}
+
+// SetAddonArn sets the AddonArn field's value.
+func (s *Addon) SetAddonArn(v string) *Addon {
+	s.AddonArn = &v
+	return s
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *Addon) SetAddonName(v string) *Addon {
+	s.AddonName = &v
+	return s
+}
+
+// SetAddonVersion sets the AddonVersion field's value.
+func (s *Addon) SetAddonVersion(v string) *Addon {
+	s.AddonVersion = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *Addon) SetClusterName(v string) *Addon {
+	s.ClusterName = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *Addon) SetCreatedAt(v time.Time) *Addon {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetHealth sets the Health field's value.
+func (s *Addon) SetHealth(v *AddonHealth) *Addon {
+	s.Health = v
+	return s
+}
+
+// SetModifiedAt sets the ModifiedAt field's value.
+func (s *Addon) SetModifiedAt(v time.Time) *Addon {
+	s.ModifiedAt = &v
+	return s
+}
+
+// SetServiceAccountRoleArn sets the ServiceAccountRoleArn field's value.
+func (s *Addon) SetServiceAccountRoleArn(v string) *Addon {
+	s.ServiceAccountRoleArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Addon) SetStatus(v string) *Addon {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Addon) SetTags(v map[string]*string) *Addon {
+	s.Tags = v
+	return s
+}
+
+// The health of the add-on.
+type AddonHealth struct {
+	_ struct{} `type:"structure"`
+
+	// An object that represents the add-on's health issues.
+	Issues []*AddonIssue `locationName:"issues" type:"list"`
+}
+
+// String returns the string representation
+func (s AddonHealth) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddonHealth) GoString() string {
+	return s.String()
+}
+
+// SetIssues sets the Issues field's value.
+func (s *AddonHealth) SetIssues(v []*AddonIssue) *AddonHealth {
+	s.Issues = v
+	return s
+}
+
+// Information about an add-on.
+type AddonInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the add-on.
+	AddonName *string `locationName:"addonName" type:"string"`
+
+	// An object that represents information about available add-on versions and
+	// compatible Kubernetes versions.
+	AddonVersions []*AddonVersionInfo `locationName:"addonVersions" type:"list"`
+
+	// The type of the add-on.
+	Type *string `locationName:"type" type:"string"`
+}
+
+// String returns the string representation
+func (s AddonInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddonInfo) GoString() string {
+	return s.String()
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *AddonInfo) SetAddonName(v string) *AddonInfo {
+	s.AddonName = &v
+	return s
+}
+
+// SetAddonVersions sets the AddonVersions field's value.
+func (s *AddonInfo) SetAddonVersions(v []*AddonVersionInfo) *AddonInfo {
+	s.AddonVersions = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AddonInfo) SetType(v string) *AddonInfo {
+	s.Type = &v
+	return s
+}
+
+// An issue related to an add-on.
+type AddonIssue struct {
+	_ struct{} `type:"structure"`
+
+	// A code that describes the type of issue.
+	Code *string `locationName:"code" type:"string" enum:"AddonIssueCode"`
+
+	// A message that provides details about the issue and what might cause it.
+	Message *string `locationName:"message" type:"string"`
+
+	// The resource IDs of the issue.
+	ResourceIds []*string `locationName:"resourceIds" type:"list"`
+}
+
+// String returns the string representation
+func (s AddonIssue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddonIssue) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *AddonIssue) SetCode(v string) *AddonIssue {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *AddonIssue) SetMessage(v string) *AddonIssue {
+	s.Message = &v
+	return s
+}
+
+// SetResourceIds sets the ResourceIds field's value.
+func (s *AddonIssue) SetResourceIds(v []*string) *AddonIssue {
+	s.ResourceIds = v
+	return s
+}
+
+// Information about an add-on version.
+type AddonVersionInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The version of the add-on.
+	AddonVersion *string `locationName:"addonVersion" type:"string"`
+
+	// The architectures that the version supports.
+	Architecture []*string `locationName:"architecture" type:"list"`
+
+	// An object that represents the compatibilities of a version.
+	Compatibilities []*Compatibility `locationName:"compatibilities" type:"list"`
+}
+
+// String returns the string representation
+func (s AddonVersionInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddonVersionInfo) GoString() string {
+	return s.String()
+}
+
+// SetAddonVersion sets the AddonVersion field's value.
+func (s *AddonVersionInfo) SetAddonVersion(v string) *AddonVersionInfo {
+	s.AddonVersion = &v
+	return s
+}
+
+// SetArchitecture sets the Architecture field's value.
+func (s *AddonVersionInfo) SetArchitecture(v []*string) *AddonVersionInfo {
+	s.Architecture = v
+	return s
+}
+
+// SetCompatibilities sets the Compatibilities field's value.
+func (s *AddonVersionInfo) SetCompatibilities(v []*Compatibility) *AddonVersionInfo {
+	s.Compatibilities = v
+	return s
+}
+
+type AssociateIdentityProviderConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// The name of the cluster to associate the configuration to.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// An object that represents an OpenID Connect (OIDC) identity provider configuration.
+	//
+	// Oidc is a required field
+	Oidc *OidcIdentityProviderConfigRequest `locationName:"oidc" type:"structure" required:"true"`
+
+	// The metadata to apply to the configuration to assist with categorization
+	// and organization. Each tag consists of a key and an optional value, both
+	// of which you define.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s AssociateIdentityProviderConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateIdentityProviderConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateIdentityProviderConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateIdentityProviderConfigInput"}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.Oidc == nil {
+		invalidParams.Add(request.NewErrParamRequired("Oidc"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Oidc != nil {
+		if err := s.Oidc.Validate(); err != nil {
+			invalidParams.AddNested("Oidc", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *AssociateIdentityProviderConfigInput) SetClientRequestToken(v string) *AssociateIdentityProviderConfigInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *AssociateIdentityProviderConfigInput) SetClusterName(v string) *AssociateIdentityProviderConfigInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetOidc sets the Oidc field's value.
+func (s *AssociateIdentityProviderConfigInput) SetOidc(v *OidcIdentityProviderConfigRequest) *AssociateIdentityProviderConfigInput {
+	s.Oidc = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *AssociateIdentityProviderConfigInput) SetTags(v map[string]*string) *AssociateIdentityProviderConfigInput {
+	s.Tags = v
+	return s
+}
+
+type AssociateIdentityProviderConfigOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tags for the resource.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+
+	// An object representing an asynchronous update.
+	Update *Update `locationName:"update" type:"structure"`
+}
+
+// String returns the string representation
+func (s AssociateIdentityProviderConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateIdentityProviderConfigOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *AssociateIdentityProviderConfigOutput) SetTags(v map[string]*string) *AssociateIdentityProviderConfigOutput {
+	s.Tags = v
+	return s
+}
+
+// SetUpdate sets the Update field's value.
+func (s *AssociateIdentityProviderConfigOutput) SetUpdate(v *Update) *AssociateIdentityProviderConfigOutput {
+	s.Update = v
+	return s
 }
 
 // An Auto Scaling group that is associated with an Amazon EKS managed node
@@ -2547,6 +4088,8 @@ type ClientException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
+	AddonName *string `locationName:"addonName" type:"string"`
+
 	// The Amazon EKS cluster associated with the exception.
 	ClusterName *string `locationName:"clusterName" type:"string"`
 
@@ -2629,6 +4172,9 @@ type Cluster struct {
 
 	// The identity provider information for the cluster.
 	Identity *Identity `locationName:"identity" type:"structure"`
+
+	// The Kubernetes network configuration for the cluster.
+	KubernetesNetworkConfig *KubernetesNetworkConfigResponse `locationName:"kubernetesNetworkConfig" type:"structure"`
 
 	// The logging configuration for your cluster.
 	Logging *Logging `locationName:"logging" type:"structure"`
@@ -2718,6 +4264,12 @@ func (s *Cluster) SetIdentity(v *Identity) *Cluster {
 	return s
 }
 
+// SetKubernetesNetworkConfig sets the KubernetesNetworkConfig field's value.
+func (s *Cluster) SetKubernetesNetworkConfig(v *KubernetesNetworkConfigResponse) *Cluster {
+	s.KubernetesNetworkConfig = v
+	return s
+}
+
 // SetLogging sets the Logging field's value.
 func (s *Cluster) SetLogging(v *Logging) *Cluster {
 	s.Logging = v
@@ -2766,6 +4318,192 @@ func (s *Cluster) SetVersion(v string) *Cluster {
 	return s
 }
 
+// Compatibility information.
+type Compatibility struct {
+	_ struct{} `type:"structure"`
+
+	// The supported Kubernetes version of the cluster.
+	ClusterVersion *string `locationName:"clusterVersion" type:"string"`
+
+	// The supported default version.
+	DefaultVersion *bool `locationName:"defaultVersion" type:"boolean"`
+
+	// The supported compute platform.
+	PlatformVersions []*string `locationName:"platformVersions" type:"list"`
+}
+
+// String returns the string representation
+func (s Compatibility) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Compatibility) GoString() string {
+	return s.String()
+}
+
+// SetClusterVersion sets the ClusterVersion field's value.
+func (s *Compatibility) SetClusterVersion(v string) *Compatibility {
+	s.ClusterVersion = &v
+	return s
+}
+
+// SetDefaultVersion sets the DefaultVersion field's value.
+func (s *Compatibility) SetDefaultVersion(v bool) *Compatibility {
+	s.DefaultVersion = &v
+	return s
+}
+
+// SetPlatformVersions sets the PlatformVersions field's value.
+func (s *Compatibility) SetPlatformVersions(v []*string) *Compatibility {
+	s.PlatformVersions = v
+	return s
+}
+
+type CreateAddonInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the add-on. The name must match one of the names returned by
+	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	//
+	// AddonName is a required field
+	AddonName *string `locationName:"addonName" type:"string" required:"true"`
+
+	// The version of the add-on. The version must match one of the versions returned
+	// by DescribeAddonVersions (https://docs.aws.amazon.com/eks/latest/APIReference/API_DescribeAddonVersions.html).
+	AddonVersion *string `locationName:"addonVersion" type:"string"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// The name of the cluster to create the add-on for.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+
+	// How to resolve parameter value conflicts when migrating an existing add-on
+	// to an Amazon EKS add-on.
+	ResolveConflicts *string `locationName:"resolveConflicts" type:"string" enum:"ResolveConflicts"`
+
+	// The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on's
+	// service account. The role must be assigned the IAM permissions required by
+	// the add-on. If you don't specify an existing IAM role, then the add-on uses
+	// the permissions assigned to the node IAM role. For more information, see
+	// Amazon EKS node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)
+	// in the Amazon EKS User Guide.
+	//
+	// To specify an existing IAM role, you must have an IAM OpenID Connect (OIDC)
+	// provider created for your cluster. For more information, see Enabling IAM
+	// roles for service accounts on your cluster (https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html)
+	// in the Amazon EKS User Guide.
+	ServiceAccountRoleArn *string `locationName:"serviceAccountRoleArn" min:"1" type:"string"`
+
+	// The metadata to apply to the cluster to assist with categorization and organization.
+	// Each tag consists of a key and an optional value, both of which you define.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s CreateAddonInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAddonInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateAddonInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateAddonInput"}
+	if s.AddonName == nil {
+		invalidParams.Add(request.NewErrParamRequired("AddonName"))
+	}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.ServiceAccountRoleArn != nil && len(*s.ServiceAccountRoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceAccountRoleArn", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *CreateAddonInput) SetAddonName(v string) *CreateAddonInput {
+	s.AddonName = &v
+	return s
+}
+
+// SetAddonVersion sets the AddonVersion field's value.
+func (s *CreateAddonInput) SetAddonVersion(v string) *CreateAddonInput {
+	s.AddonVersion = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateAddonInput) SetClientRequestToken(v string) *CreateAddonInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *CreateAddonInput) SetClusterName(v string) *CreateAddonInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetResolveConflicts sets the ResolveConflicts field's value.
+func (s *CreateAddonInput) SetResolveConflicts(v string) *CreateAddonInput {
+	s.ResolveConflicts = &v
+	return s
+}
+
+// SetServiceAccountRoleArn sets the ServiceAccountRoleArn field's value.
+func (s *CreateAddonInput) SetServiceAccountRoleArn(v string) *CreateAddonInput {
+	s.ServiceAccountRoleArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateAddonInput) SetTags(v map[string]*string) *CreateAddonInput {
+	s.Tags = v
+	return s
+}
+
+type CreateAddonOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An Amazon EKS add-on.
+	Addon *Addon `locationName:"addon" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateAddonOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAddonOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddon sets the Addon field's value.
+func (s *CreateAddonOutput) SetAddon(v *Addon) *CreateAddonOutput {
+	s.Addon = v
+	return s
+}
+
 type CreateClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2775,6 +4513,9 @@ type CreateClusterInput struct {
 
 	// The encryption configuration for the cluster.
 	EncryptionConfig []*EncryptionConfig `locationName:"encryptionConfig" type:"list"`
+
+	// The Kubernetes network configuration for the cluster.
+	KubernetesNetworkConfig *KubernetesNetworkConfigRequest `locationName:"kubernetesNetworkConfig" type:"structure"`
 
 	// Enable or disable exporting the Kubernetes control plane logs for your cluster
 	// to CloudWatch Logs. By default, cluster control plane logs aren't exported
@@ -2864,6 +4605,12 @@ func (s *CreateClusterInput) SetClientRequestToken(v string) *CreateClusterInput
 // SetEncryptionConfig sets the EncryptionConfig field's value.
 func (s *CreateClusterInput) SetEncryptionConfig(v []*EncryptionConfig) *CreateClusterInput {
 	s.EncryptionConfig = v
+	return s
+}
+
+// SetKubernetesNetworkConfig sets the KubernetesNetworkConfig field's value.
+func (s *CreateClusterInput) SetKubernetesNetworkConfig(v *KubernetesNetworkConfigRequest) *CreateClusterInput {
+	s.KubernetesNetworkConfig = v
 	return s
 }
 
@@ -3075,14 +4822,17 @@ type CreateNodegroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The AMI type for your node group. GPU instance types should use the AL2_x86_64_GPU
-	// AMI type, which uses the Amazon EKS-optimized Linux AMI with GPU support.
-	// Non-GPU instances should use the AL2_x86_64 AMI type, which uses the Amazon
-	// EKS-optimized Linux AMI. If you specify launchTemplate, and your launch template
+	// AMI type. Non-GPU instances should use the AL2_x86_64 AMI type. Arm instances
+	// should use the AL2_ARM_64 AMI type. All types use the Amazon EKS optimized
+	// Amazon Linux 2 AMI. If you specify launchTemplate, and your launch template
 	// uses a custom AMI, then don't specify amiType, or the node group deployment
 	// will fail. For more information about using launch templates with Amazon
 	// EKS, see Launch template support (https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html)
 	// in the Amazon EKS User Guide.
 	AmiType *string `locationName:"amiType" type:"string" enum:"AMITypes"`
+
+	// The capacity type for your node group.
+	CapacityType *string `locationName:"capacityType" type:"string" enum:"CapacityTypes"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
@@ -3100,13 +4850,17 @@ type CreateNodegroupInput struct {
 	// in the Amazon EKS User Guide.
 	DiskSize *int64 `locationName:"diskSize" type:"integer"`
 
-	// The instance type to use for your node group. You can specify a single instance
-	// type for a node group. The default value for instanceTypes is t3.medium.
-	// If you choose a GPU instance type, be sure to specify AL2_x86_64_GPU with
-	// the amiType parameter. If you specify launchTemplate, then don't specify
-	// instanceTypes, or the node group deployment will fail. For more information
-	// about using launch templates with Amazon EKS, see Launch template support
-	// (https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html)
+	// Specify the instance types for a node group. If you specify a GPU instance
+	// type, be sure to specify AL2_x86_64_GPU with the amiType parameter. If you
+	// specify launchTemplate, then you can specify zero or one instance type in
+	// your launch template or you can specify 0-20 instance types for instanceTypes.
+	// If however, you specify an instance type in your launch template and specify
+	// any instanceTypes, the node group deployment will fail. If you don't specify
+	// an instance type in a launch template or for instanceTypes, then t3.medium
+	// is used, by default. If you specify Spot for capacityType, then we recommend
+	// specifying multiple values for instanceTypes. For more information, see Managed
+	// node group capacity types (https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html#managed-node-group-capacity-types)
+	// and Launch template support (https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html)
 	// in the Amazon EKS User Guide.
 	InstanceTypes []*string `locationName:"instanceTypes" type:"list"`
 
@@ -3115,17 +4869,17 @@ type CreateNodegroupInput struct {
 	Labels map[string]*string `locationName:"labels" type:"map"`
 
 	// An object representing a node group's launch template specification. If specified,
-	// then do not specify instanceTypes, diskSize, or remoteAccess. If specified,
-	// make sure that the launch template meets the requirements in launchTemplateSpecification.
+	// then do not specify instanceTypes, diskSize, or remoteAccess and make sure
+	// that the launch template meets the requirements in launchTemplateSpecification.
 	LaunchTemplate *LaunchTemplateSpecification `locationName:"launchTemplate" type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the IAM role to associate with your node
 	// group. The Amazon EKS worker node kubelet daemon makes calls to AWS APIs
-	// on your behalf. Worker nodes receive permissions for these API calls through
-	// an IAM instance profile and associated policies. Before you can launch worker
-	// nodes and register them into a cluster, you must create an IAM role for those
-	// worker nodes to use when they are launched. For more information, see Amazon
-	// EKS Worker Node IAM Role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
+	// on your behalf. Nodes receive permissions for these API calls through an
+	// IAM instance profile and associated policies. Before you can launch nodes
+	// and register them into a cluster, you must create an IAM role for those nodes
+	// to use when they are launched. For more information, see Amazon EKS node
+	// IAM role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
 	// in the Amazon EKS User Guide . If you specify launchTemplate, then don't
 	// specify IamInstanceProfile (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html)
 	// in your launch template, or the node group deployment will fail. For more
@@ -3141,10 +4895,10 @@ type CreateNodegroupInput struct {
 	// NodegroupName is a required field
 	NodegroupName *string `locationName:"nodegroupName" type:"string" required:"true"`
 
-	// The AMI version of the Amazon EKS-optimized AMI to use with your node group.
+	// The AMI version of the Amazon EKS optimized AMI to use with your node group.
 	// By default, the latest available AMI version for the node group's current
-	// Kubernetes version is used. For more information, see Amazon EKS-Optimized
-	// Linux AMI Versions (https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html)
+	// Kubernetes version is used. For more information, see Amazon EKS optimized
+	// Amazon Linux 2 AMI versions (https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html)
 	// in the Amazon EKS User Guide. If you specify launchTemplate, and your launch
 	// template uses a custom AMI, then don't specify releaseVersion, or the node
 	// group deployment will fail. For more information about using launch templates
@@ -3237,6 +4991,12 @@ func (s *CreateNodegroupInput) Validate() error {
 // SetAmiType sets the AmiType field's value.
 func (s *CreateNodegroupInput) SetAmiType(v string) *CreateNodegroupInput {
 	s.AmiType = &v
+	return s
+}
+
+// SetCapacityType sets the CapacityType field's value.
+func (s *CreateNodegroupInput) SetCapacityType(v string) *CreateNodegroupInput {
+	s.CapacityType = &v
 	return s
 }
 
@@ -3344,6 +5104,88 @@ func (s CreateNodegroupOutput) GoString() string {
 // SetNodegroup sets the Nodegroup field's value.
 func (s *CreateNodegroupOutput) SetNodegroup(v *Nodegroup) *CreateNodegroupOutput {
 	s.Nodegroup = v
+	return s
+}
+
+type DeleteAddonInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the add-on. The name must match one of the names returned by
+	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	//
+	// AddonName is a required field
+	AddonName *string `location:"uri" locationName:"addonName" type:"string" required:"true"`
+
+	// The name of the cluster to delete the add-on from.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteAddonInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAddonInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteAddonInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteAddonInput"}
+	if s.AddonName == nil {
+		invalidParams.Add(request.NewErrParamRequired("AddonName"))
+	}
+	if s.AddonName != nil && len(*s.AddonName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AddonName", 1))
+	}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *DeleteAddonInput) SetAddonName(v string) *DeleteAddonInput {
+	s.AddonName = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *DeleteAddonInput) SetClusterName(v string) *DeleteAddonInput {
+	s.ClusterName = &v
+	return s
+}
+
+type DeleteAddonOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An Amazon EKS add-on.
+	Addon *Addon `locationName:"addon" type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAddonOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAddonOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddon sets the Addon field's value.
+func (s *DeleteAddonOutput) SetAddon(v *Addon) *DeleteAddonOutput {
+	s.Addon = v
 	return s
 }
 
@@ -3574,6 +5416,196 @@ func (s *DeleteNodegroupOutput) SetNodegroup(v *Nodegroup) *DeleteNodegroupOutpu
 	return s
 }
 
+type DescribeAddonInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the add-on. The name must match one of the names returned by
+	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	//
+	// AddonName is a required field
+	AddonName *string `location:"uri" locationName:"addonName" type:"string" required:"true"`
+
+	// The name of the cluster.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeAddonInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAddonInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAddonInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAddonInput"}
+	if s.AddonName == nil {
+		invalidParams.Add(request.NewErrParamRequired("AddonName"))
+	}
+	if s.AddonName != nil && len(*s.AddonName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AddonName", 1))
+	}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *DescribeAddonInput) SetAddonName(v string) *DescribeAddonInput {
+	s.AddonName = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *DescribeAddonInput) SetClusterName(v string) *DescribeAddonInput {
+	s.ClusterName = &v
+	return s
+}
+
+type DescribeAddonOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An Amazon EKS add-on.
+	Addon *Addon `locationName:"addon" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeAddonOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAddonOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddon sets the Addon field's value.
+func (s *DescribeAddonOutput) SetAddon(v *Addon) *DescribeAddonOutput {
+	s.Addon = v
+	return s
+}
+
+type DescribeAddonVersionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the add-on. The name must match one of the names returned by
+	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	AddonName *string `location:"querystring" locationName:"addonName" type:"string"`
+
+	// The Kubernetes versions that the add-on can be used with.
+	KubernetesVersion *string `location:"querystring" locationName:"kubernetesVersion" type:"string"`
+
+	// The maximum number of results to return.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The nextToken value returned from a previous paginated DescribeAddonVersionsRequest
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	//
+	// This token should be treated as an opaque identifier that is used only to
+	// retrieve the next items in a list and not for other programmatic purposes.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAddonVersionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAddonVersionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAddonVersionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAddonVersionsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *DescribeAddonVersionsInput) SetAddonName(v string) *DescribeAddonVersionsInput {
+	s.AddonName = &v
+	return s
+}
+
+// SetKubernetesVersion sets the KubernetesVersion field's value.
+func (s *DescribeAddonVersionsInput) SetKubernetesVersion(v string) *DescribeAddonVersionsInput {
+	s.KubernetesVersion = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeAddonVersionsInput) SetMaxResults(v int64) *DescribeAddonVersionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeAddonVersionsInput) SetNextToken(v string) *DescribeAddonVersionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeAddonVersionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of available versions with Kubernetes version compatibility.
+	Addons []*AddonInfo `locationName:"addons" type:"list"`
+
+	// The nextToken value returned from a previous paginated DescribeAddonVersionsResponse
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	//
+	// This token should be treated as an opaque identifier that is used only to
+	// retrieve the next items in a list and not for other programmatic purposes.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAddonVersionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAddonVersionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddons sets the Addons field's value.
+func (s *DescribeAddonVersionsOutput) SetAddons(v []*AddonInfo) *DescribeAddonVersionsOutput {
+	s.Addons = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeAddonVersionsOutput) SetNextToken(v string) *DescribeAddonVersionsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type DescribeClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3719,6 +5751,89 @@ func (s *DescribeFargateProfileOutput) SetFargateProfile(v *FargateProfile) *Des
 	return s
 }
 
+type DescribeIdentityProviderConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster name that the identity provider configuration is associated to.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// An object that represents an identity provider configuration.
+	//
+	// IdentityProviderConfig is a required field
+	IdentityProviderConfig *IdentityProviderConfig `locationName:"identityProviderConfig" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeIdentityProviderConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeIdentityProviderConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeIdentityProviderConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeIdentityProviderConfigInput"}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.IdentityProviderConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityProviderConfig"))
+	}
+	if s.IdentityProviderConfig != nil {
+		if err := s.IdentityProviderConfig.Validate(); err != nil {
+			invalidParams.AddNested("IdentityProviderConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *DescribeIdentityProviderConfigInput) SetClusterName(v string) *DescribeIdentityProviderConfigInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetIdentityProviderConfig sets the IdentityProviderConfig field's value.
+func (s *DescribeIdentityProviderConfigInput) SetIdentityProviderConfig(v *IdentityProviderConfig) *DescribeIdentityProviderConfigInput {
+	s.IdentityProviderConfig = v
+	return s
+}
+
+type DescribeIdentityProviderConfigOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The object that represents an OpenID Connect (OIDC) identity provider configuration.
+	IdentityProviderConfig *IdentityProviderConfigResponse `locationName:"identityProviderConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeIdentityProviderConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeIdentityProviderConfigOutput) GoString() string {
+	return s.String()
+}
+
+// SetIdentityProviderConfig sets the IdentityProviderConfig field's value.
+func (s *DescribeIdentityProviderConfigOutput) SetIdentityProviderConfig(v *IdentityProviderConfigResponse) *DescribeIdentityProviderConfigOutput {
+	s.IdentityProviderConfig = v
+	return s
+}
+
 type DescribeNodegroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3803,6 +5918,10 @@ func (s *DescribeNodegroupOutput) SetNodegroup(v *Nodegroup) *DescribeNodegroupO
 type DescribeUpdateInput struct {
 	_ struct{} `type:"structure"`
 
+	// The name of the add-on. The name must match one of the names returned by
+	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	AddonName *string `location:"querystring" locationName:"addonName" type:"string"`
+
 	// The name of the Amazon EKS cluster associated with the update.
 	//
 	// Name is a required field
@@ -3849,6 +5968,12 @@ func (s *DescribeUpdateInput) Validate() error {
 	return nil
 }
 
+// SetAddonName sets the AddonName field's value.
+func (s *DescribeUpdateInput) SetAddonName(v string) *DescribeUpdateInput {
+	s.AddonName = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DescribeUpdateInput) SetName(v string) *DescribeUpdateInput {
 	s.Name = &v
@@ -3886,6 +6011,99 @@ func (s DescribeUpdateOutput) GoString() string {
 
 // SetUpdate sets the Update field's value.
 func (s *DescribeUpdateOutput) SetUpdate(v *Update) *DescribeUpdateOutput {
+	s.Update = v
+	return s
+}
+
+type DisassociateIdentityProviderConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// The name of the cluster to disassociate an identity provider from.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// An object that represents an identity provider configuration.
+	//
+	// IdentityProviderConfig is a required field
+	IdentityProviderConfig *IdentityProviderConfig `locationName:"identityProviderConfig" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s DisassociateIdentityProviderConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateIdentityProviderConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateIdentityProviderConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateIdentityProviderConfigInput"}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.IdentityProviderConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityProviderConfig"))
+	}
+	if s.IdentityProviderConfig != nil {
+		if err := s.IdentityProviderConfig.Validate(); err != nil {
+			invalidParams.AddNested("IdentityProviderConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DisassociateIdentityProviderConfigInput) SetClientRequestToken(v string) *DisassociateIdentityProviderConfigInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *DisassociateIdentityProviderConfigInput) SetClusterName(v string) *DisassociateIdentityProviderConfigInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetIdentityProviderConfig sets the IdentityProviderConfig field's value.
+func (s *DisassociateIdentityProviderConfigInput) SetIdentityProviderConfig(v *IdentityProviderConfig) *DisassociateIdentityProviderConfigInput {
+	s.IdentityProviderConfig = v
+	return s
+}
+
+type DisassociateIdentityProviderConfigOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object representing an asynchronous update.
+	Update *Update `locationName:"update" type:"structure"`
+}
+
+// String returns the string representation
+func (s DisassociateIdentityProviderConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateIdentityProviderConfigOutput) GoString() string {
+	return s.String()
+}
+
+// SetUpdate sets the Update field's value.
+func (s *DisassociateIdentityProviderConfigOutput) SetUpdate(v *Update) *DisassociateIdentityProviderConfigOutput {
 	s.Update = v
 	return s
 }
@@ -4123,12 +6341,12 @@ func (s *FargateProfileSelector) SetNamespace(v string) *FargateProfileSelector 
 	return s
 }
 
-// An object representing an identity provider for authentication credentials.
+// An object representing an identity provider.
 type Identity struct {
 	_ struct{} `type:"structure"`
 
-	// The OpenID Connect (https://openid.net/connect/) identity provider information
-	// for the cluster.
+	// An object representing the OpenID Connect (https://openid.net/connect/) identity
+	// provider information.
 	Oidc *OIDC `locationName:"oidc" type:"structure"`
 }
 
@@ -4148,11 +6366,90 @@ func (s *Identity) SetOidc(v *OIDC) *Identity {
 	return s
 }
 
+// An object representing an identity provider configuration.
+type IdentityProviderConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the identity provider configuration.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The type of the identity provider configuration.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s IdentityProviderConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IdentityProviderConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IdentityProviderConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IdentityProviderConfig"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *IdentityProviderConfig) SetName(v string) *IdentityProviderConfig {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *IdentityProviderConfig) SetType(v string) *IdentityProviderConfig {
+	s.Type = &v
+	return s
+}
+
+// An object that represents an identity configuration.
+type IdentityProviderConfigResponse struct {
+	_ struct{} `type:"structure"`
+
+	// An object that represents an OpenID Connect (OIDC) identity provider configuration.
+	Oidc *OidcIdentityProviderConfig `locationName:"oidc" type:"structure"`
+}
+
+// String returns the string representation
+func (s IdentityProviderConfigResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IdentityProviderConfigResponse) GoString() string {
+	return s.String()
+}
+
+// SetOidc sets the Oidc field's value.
+func (s *IdentityProviderConfigResponse) SetOidc(v *OidcIdentityProviderConfig) *IdentityProviderConfigResponse {
+	s.Oidc = v
+	return s
+}
+
 // The specified parameter is invalid. Review the available parameters for the
 // API request.
 type InvalidParameterException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	AddonName *string `locationName:"addonName" type:"string"`
 
 	// The Amazon EKS cluster associated with the exception.
 	ClusterName *string `locationName:"clusterName" type:"string"`
@@ -4220,6 +6517,8 @@ type InvalidRequestException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
+	AddonName *string `locationName:"addonName" type:"string"`
+
 	// The Amazon EKS cluster associated with the exception.
 	ClusterName *string `locationName:"clusterName" type:"string"`
 
@@ -4283,16 +6582,20 @@ type Issue struct {
 
 	// A brief description of the error.
 	//
+	//    * AccessDenied: Amazon EKS or one or more of your managed nodes is failing
+	//    to authenticate or authorize with your Kubernetes cluster API server.
+	//
+	//    * AsgInstanceLaunchFailures: Your Auto Scaling group is experiencing failures
+	//    while attempting to launch instances.
+	//
 	//    * AutoScalingGroupNotFound: We couldn't find the Auto Scaling group associated
 	//    with the managed node group. You may be able to recreate an Auto Scaling
 	//    group with the same settings to recover.
 	//
-	//    * Ec2SecurityGroupNotFound: We couldn't find the cluster security group
-	//    for the cluster. You must recreate your cluster.
-	//
-	//    * Ec2SecurityGroupDeletionFailure: We could not delete the remote access
-	//    security group for your managed node group. Remove any dependencies from
-	//    the security group.
+	//    * ClusterUnreachable: Amazon EKS or one or more of your managed nodes
+	//    is unable to to communicate with your Kubernetes cluster API server. This
+	//    can happen if there are network disruptions or if API servers are timing
+	//    out processing requests.
 	//
 	//    * Ec2LaunchTemplateNotFound: We couldn't find the Amazon EC2 launch template
 	//    for your managed node group. You may be able to recreate a launch template
@@ -4302,6 +6605,13 @@ type Issue struct {
 	//    for your managed node group does not match the version that Amazon EKS
 	//    created. You may be able to revert to the version that Amazon EKS created
 	//    to recover.
+	//
+	//    * Ec2SecurityGroupDeletionFailure: We could not delete the remote access
+	//    security group for your managed node group. Remove any dependencies from
+	//    the security group.
+	//
+	//    * Ec2SecurityGroupNotFound: We couldn't find the cluster security group
+	//    for the cluster. You must recreate your cluster.
 	//
 	//    * Ec2SubnetInvalidConfiguration: One or more Amazon EC2 subnets specified
 	//    for a node group do not automatically assign public IP addresses to instances
@@ -4319,14 +6629,6 @@ type Issue struct {
 	//    node group. You may be able to recreate an IAM role with the same settings
 	//    to recover.
 	//
-	//    * AsgInstanceLaunchFailures: Your Auto Scaling group is experiencing failures
-	//    while attempting to launch instances.
-	//
-	//    * NodeCreationFailure: Your launched instances are unable to register
-	//    with your Amazon EKS cluster. Common causes of this failure are insufficient
-	//    worker node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
-	//    permissions or lack of outbound internet access for the nodes.
-	//
 	//    * InstanceLimitExceeded: Your AWS account is unable to launch any more
 	//    instances of the specified instance type. You may be able to request an
 	//    Amazon EC2 instance limit increase to recover.
@@ -4335,11 +6637,13 @@ type Issue struct {
 	//    your managed node group does not have enough available IP addresses for
 	//    new nodes.
 	//
-	//    * AccessDenied: Amazon EKS or one or more of your managed nodes is unable
-	//    to communicate with your cluster API server.
-	//
 	//    * InternalFailure: These errors are usually caused by an Amazon EKS server-side
 	//    issue.
+	//
+	//    * NodeCreationFailure: Your launched instances are unable to register
+	//    with your Amazon EKS cluster. Common causes of this failure are insufficient
+	//    node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
+	//    permissions or lack of outbound internet access for the nodes.
 	Code *string `locationName:"code" type:"string" enum:"NodegroupIssueCode"`
 
 	// The error message associated with the issue.
@@ -4374,6 +6678,73 @@ func (s *Issue) SetMessage(v string) *Issue {
 // SetResourceIds sets the ResourceIds field's value.
 func (s *Issue) SetResourceIds(v []*string) *Issue {
 	s.ResourceIds = v
+	return s
+}
+
+// The Kubernetes network configuration for the cluster.
+type KubernetesNetworkConfigRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The CIDR block to assign Kubernetes service IP addresses from. If you don't
+	// specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16
+	// or 172.20.0.0/16 CIDR blocks. We recommend that you specify a block that
+	// does not overlap with resources in other networks that are peered or connected
+	// to your VPC. The block must meet the following requirements:
+	//
+	//    * Within one of the following private IP address blocks: 10.0.0.0/8, 172.16.0.0.0/12,
+	//    or 192.168.0.0/16.
+	//
+	//    * Doesn't overlap with any CIDR block assigned to the VPC that you selected
+	//    for VPC.
+	//
+	//    * Between /24 and /12.
+	//
+	// You can only specify a custom CIDR block when you create a cluster and can't
+	// change this value once the cluster is created.
+	ServiceIpv4Cidr *string `locationName:"serviceIpv4Cidr" type:"string"`
+}
+
+// String returns the string representation
+func (s KubernetesNetworkConfigRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s KubernetesNetworkConfigRequest) GoString() string {
+	return s.String()
+}
+
+// SetServiceIpv4Cidr sets the ServiceIpv4Cidr field's value.
+func (s *KubernetesNetworkConfigRequest) SetServiceIpv4Cidr(v string) *KubernetesNetworkConfigRequest {
+	s.ServiceIpv4Cidr = &v
+	return s
+}
+
+// The Kubernetes network configuration for the cluster.
+type KubernetesNetworkConfigResponse struct {
+	_ struct{} `type:"structure"`
+
+	// The CIDR block that Kubernetes service IP addresses are assigned from. If
+	// you didn't specify a CIDR block when you created the cluster, then Kubernetes
+	// assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks.
+	// If this was specified, then it was specified when the cluster was created
+	// and it cannot be changed.
+	ServiceIpv4Cidr *string `locationName:"serviceIpv4Cidr" type:"string"`
+}
+
+// String returns the string representation
+func (s KubernetesNetworkConfigResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s KubernetesNetworkConfigResponse) GoString() string {
+	return s.String()
+}
+
+// SetServiceIpv4Cidr sets the ServiceIpv4Cidr field's value.
+func (s *KubernetesNetworkConfigResponse) SetServiceIpv4Cidr(v string) *KubernetesNetworkConfigResponse {
+	s.ServiceIpv4Cidr = &v
 	return s
 }
 
@@ -4429,6 +6800,118 @@ func (s *LaunchTemplateSpecification) SetName(v string) *LaunchTemplateSpecifica
 // SetVersion sets the Version field's value.
 func (s *LaunchTemplateSpecification) SetVersion(v string) *LaunchTemplateSpecification {
 	s.Version = &v
+	return s
+}
+
+type ListAddonsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the cluster.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The maximum number of add-on results returned by ListAddonsRequest in paginated
+	// output. When you use this parameter, ListAddonsRequest returns only maxResults
+	// results in a single page along with a nextToken response element. You can
+	// see the remaining results of the initial request by sending another ListAddonsRequest
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If you don't use this parameter, ListAddonsRequest returns up to 100
+	// results and a nextToken value, if applicable.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The nextToken value returned from a previous paginated ListAddonsRequest
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	//
+	// This token should be treated as an opaque identifier that is used only to
+	// retrieve the next items in a list and not for other programmatic purposes.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAddonsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAddonsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAddonsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAddonsInput"}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *ListAddonsInput) SetClusterName(v string) *ListAddonsInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAddonsInput) SetMaxResults(v int64) *ListAddonsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAddonsInput) SetNextToken(v string) *ListAddonsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAddonsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of available add-ons.
+	Addons []*string `locationName:"addons" type:"list"`
+
+	// The nextToken value returned from a previous paginated ListAddonsResponse
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	//
+	// This token should be treated as an opaque identifier that is used only to
+	// retrieve the next items in a list and not for other programmatic purposes.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAddonsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAddonsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAddons sets the Addons field's value.
+func (s *ListAddonsOutput) SetAddons(v []*string) *ListAddonsOutput {
+	s.Addons = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAddonsOutput) SetNextToken(v string) *ListAddonsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -4631,6 +7114,112 @@ func (s *ListFargateProfilesOutput) SetNextToken(v string) *ListFargateProfilesO
 	return s
 }
 
+type ListIdentityProviderConfigsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster name that you want to list identity provider configurations for.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The maximum number of identity provider configurations returned by ListIdentityProviderConfigs
+	// in paginated output. When you use this parameter, ListIdentityProviderConfigs
+	// returns only maxResults results in a single page along with a nextToken response
+	// element. You can see the remaining results of the initial request by sending
+	// another ListIdentityProviderConfigs request with the returned nextToken value.
+	// This value can be between 1 and 100. If you don't use this parameter, ListIdentityProviderConfigs
+	// returns up to 100 results and a nextToken value, if applicable.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The nextToken value returned from a previous paginated IdentityProviderConfigsRequest
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListIdentityProviderConfigsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListIdentityProviderConfigsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListIdentityProviderConfigsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListIdentityProviderConfigsInput"}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *ListIdentityProviderConfigsInput) SetClusterName(v string) *ListIdentityProviderConfigsInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListIdentityProviderConfigsInput) SetMaxResults(v int64) *ListIdentityProviderConfigsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListIdentityProviderConfigsInput) SetNextToken(v string) *ListIdentityProviderConfigsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListIdentityProviderConfigsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The identity provider configurations for the cluster.
+	IdentityProviderConfigs []*IdentityProviderConfig `locationName:"identityProviderConfigs" type:"list"`
+
+	// The nextToken value returned from a previous paginated ListIdentityProviderConfigsResponse
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListIdentityProviderConfigsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListIdentityProviderConfigsOutput) GoString() string {
+	return s.String()
+}
+
+// SetIdentityProviderConfigs sets the IdentityProviderConfigs field's value.
+func (s *ListIdentityProviderConfigsOutput) SetIdentityProviderConfigs(v []*IdentityProviderConfig) *ListIdentityProviderConfigsOutput {
+	s.IdentityProviderConfigs = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListIdentityProviderConfigsOutput) SetNextToken(v string) *ListIdentityProviderConfigsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListNodegroupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4807,6 +7396,9 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 type ListUpdatesInput struct {
 	_ struct{} `type:"structure"`
 
+	// The names of the installed add-ons that have available updates.
+	AddonName *string `location:"querystring" locationName:"addonName" type:"string"`
+
 	// The maximum number of update results returned by ListUpdates in paginated
 	// output. When you use this parameter, ListUpdates returns only maxResults
 	// results in a single page along with a nextToken response element. You can
@@ -4858,6 +7450,12 @@ func (s *ListUpdatesInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *ListUpdatesInput) SetAddonName(v string) *ListUpdatesInput {
+	s.AddonName = &v
+	return s
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -4989,6 +7587,9 @@ type Nodegroup struct {
 	// template, this is the AMI type that was specified in the node group configuration.
 	AmiType *string `locationName:"amiType" type:"string" enum:"AMITypes"`
 
+	// The capacity type of your managed node group.
+	CapacityType *string `locationName:"capacityType" type:"string" enum:"CapacityTypes"`
+
 	// The name of the cluster that the managed node group resides in.
 	ClusterName *string `locationName:"clusterName" type:"string"`
 
@@ -4997,7 +7598,7 @@ type Nodegroup struct {
 
 	// If the node group wasn't deployed with a launch template, then this is the
 	// disk size in the node group configuration. If the node group was deployed
-	// with a launch template, then diskSize is null.
+	// with a launch template, then this is null.
 	DiskSize *int64 `locationName:"diskSize" type:"integer"`
 
 	// The health status of the node group. If there are issues with your node group's
@@ -5006,7 +7607,7 @@ type Nodegroup struct {
 
 	// If the node group wasn't deployed with a launch template, then this is the
 	// instance type that is associated with the node group. If the node group was
-	// deployed with a launch template, then instanceTypes is null.
+	// deployed with a launch template, then this is null.
 	InstanceTypes []*string `locationName:"instanceTypes" type:"list"`
 
 	// The Kubernetes labels applied to the nodes in the node group.
@@ -5023,10 +7624,9 @@ type Nodegroup struct {
 	// modified.
 	ModifiedAt *time.Time `locationName:"modifiedAt" type:"timestamp"`
 
-	// The IAM role associated with your node group. The Amazon EKS worker node
-	// kubelet daemon makes calls to AWS APIs on your behalf. Worker nodes receive
-	// permissions for these API calls through an IAM instance profile and associated
-	// policies.
+	// The IAM role associated with your node group. The Amazon EKS node kubelet
+	// daemon makes calls to AWS APIs on your behalf. Nodes receive permissions
+	// for these API calls through an IAM instance profile and associated policies.
 	NodeRole *string `locationName:"nodeRole" type:"string"`
 
 	// The Amazon Resource Name (ARN) associated with the managed node group.
@@ -5038,12 +7638,12 @@ type Nodegroup struct {
 	// If the node group was deployed using a launch template with a custom AMI,
 	// then this is the AMI ID that was specified in the launch template. For node
 	// groups that weren't deployed using a launch template, this is the version
-	// of the Amazon EKS-optimized AMI that the node group was deployed with.
+	// of the Amazon EKS optimized AMI that the node group was deployed with.
 	ReleaseVersion *string `locationName:"releaseVersion" type:"string"`
 
 	// If the node group wasn't deployed with a launch template, then this is the
 	// remote access configuration that is associated with the node group. If the
-	// node group was deployed with a launch template, then remoteAccess is null.
+	// node group was deployed with a launch template, then this is null.
 	RemoteAccess *RemoteAccessConfig `locationName:"remoteAccess" type:"structure"`
 
 	// The resources associated with the node group, such as Auto Scaling groups
@@ -5084,6 +7684,12 @@ func (s Nodegroup) GoString() string {
 // SetAmiType sets the AmiType field's value.
 func (s *Nodegroup) SetAmiType(v string) *Nodegroup {
 	s.AmiType = &v
+	return s
+}
+
+// SetCapacityType sets the CapacityType field's value.
+func (s *Nodegroup) SetCapacityType(v string) *Nodegroup {
+	s.CapacityType = &v
 	return s
 }
 
@@ -5234,7 +7840,7 @@ type NodegroupResources struct {
 	AutoScalingGroups []*AutoScalingGroup `locationName:"autoScalingGroups" type:"list"`
 
 	// The remote access security group associated with the node group. This security
-	// group controls SSH access to the worker nodes.
+	// group controls SSH access to the nodes.
 	RemoteAccessSecurityGroup *string `locationName:"remoteAccessSecurityGroup" type:"string"`
 }
 
@@ -5266,15 +7872,17 @@ func (s *NodegroupResources) SetRemoteAccessSecurityGroup(v string) *NodegroupRe
 type NodegroupScalingConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The current number of worker nodes that the managed node group should maintain.
+	// The current number of nodes that the managed node group should maintain.
 	DesiredSize *int64 `locationName:"desiredSize" min:"1" type:"integer"`
 
-	// The maximum number of worker nodes that the managed node group can scale
-	// out to. Managed node groups can support up to 100 nodes by default.
+	// The maximum number of nodes that the managed node group can scale out to.
+	// For information about the maximum number that you can specify, see Amazon
+	// EKS service quotas (https://docs.aws.amazon.com/eks/latest/userguide/service-quotas.html)
+	// in the Amazon EKS User Guide.
 	MaxSize *int64 `locationName:"maxSize" min:"1" type:"integer"`
 
-	// The minimum number of worker nodes that the managed node group can scale
-	// in to. This number must be greater than zero.
+	// The minimum number of nodes that the managed node group can scale in to.
+	// This number must be greater than zero.
 	MinSize *int64 `locationName:"minSize" min:"1" type:"integer"`
 }
 
@@ -5382,12 +7990,12 @@ func (s *NotFoundException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
-// An object representing the OpenID Connect (https://openid.net/connect/) identity
-// provider information for the cluster.
+// An object representing the OpenID Connect (https://openid.net/connect/) (OIDC)
+// identity provider information for the cluster.
 type OIDC struct {
 	_ struct{} `type:"structure"`
 
-	// The issuer URL for the OpenID Connect identity provider.
+	// The issuer URL for the OIDC identity provider.
 	Issuer *string `locationName:"issuer" type:"string"`
 }
 
@@ -5404,6 +8012,274 @@ func (s OIDC) GoString() string {
 // SetIssuer sets the Issuer field's value.
 func (s *OIDC) SetIssuer(v string) *OIDC {
 	s.Issuer = &v
+	return s
+}
+
+// An object that represents the configuration for an OpenID Connect (OIDC)
+// identity provider.
+type OidcIdentityProviderConfig struct {
+	_ struct{} `type:"structure"`
+
+	// This is also known as audience. The ID of the client application that makes
+	// authentication requests to the OIDC identity provider.
+	ClientId *string `locationName:"clientId" type:"string"`
+
+	// The cluster that the configuration is associated to.
+	ClusterName *string `locationName:"clusterName" type:"string"`
+
+	// The JSON web token (JWT) claim that the provider uses to return your groups.
+	GroupsClaim *string `locationName:"groupsClaim" type:"string"`
+
+	// The prefix that is prepended to group claims to prevent clashes with existing
+	// names (such as system: groups). For example, the valueoidc: creates group
+	// names like oidc:engineering and oidc:infra. The prefix can't contain system:
+	GroupsPrefix *string `locationName:"groupsPrefix" type:"string"`
+
+	// The ARN of the configuration.
+	IdentityProviderConfigArn *string `locationName:"identityProviderConfigArn" type:"string"`
+
+	// The name of the configuration.
+	IdentityProviderConfigName *string `locationName:"identityProviderConfigName" type:"string"`
+
+	// The URL of the OIDC identity provider that allows the API server to discover
+	// public signing keys for verifying tokens.
+	IssuerUrl *string `locationName:"issuerUrl" type:"string"`
+
+	// The key-value pairs that describe required claims in the identity token.
+	// If set, each claim is verified to be present in the token with a matching
+	// value.
+	RequiredClaims map[string]*string `locationName:"requiredClaims" type:"map"`
+
+	// The status of the OIDC identity provider.
+	Status *string `locationName:"status" type:"string" enum:"ConfigStatus"`
+
+	// The metadata to apply to the provider configuration to assist with categorization
+	// and organization. Each tag consists of a key and an optional value, both
+	// of which you defined.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+
+	// The JSON Web token (JWT) claim that is used as the username.
+	UsernameClaim *string `locationName:"usernameClaim" type:"string"`
+
+	// The prefix that is prepended to username claims to prevent clashes with existing
+	// names. The prefix can't contain system:
+	UsernamePrefix *string `locationName:"usernamePrefix" type:"string"`
+}
+
+// String returns the string representation
+func (s OidcIdentityProviderConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OidcIdentityProviderConfig) GoString() string {
+	return s.String()
+}
+
+// SetClientId sets the ClientId field's value.
+func (s *OidcIdentityProviderConfig) SetClientId(v string) *OidcIdentityProviderConfig {
+	s.ClientId = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *OidcIdentityProviderConfig) SetClusterName(v string) *OidcIdentityProviderConfig {
+	s.ClusterName = &v
+	return s
+}
+
+// SetGroupsClaim sets the GroupsClaim field's value.
+func (s *OidcIdentityProviderConfig) SetGroupsClaim(v string) *OidcIdentityProviderConfig {
+	s.GroupsClaim = &v
+	return s
+}
+
+// SetGroupsPrefix sets the GroupsPrefix field's value.
+func (s *OidcIdentityProviderConfig) SetGroupsPrefix(v string) *OidcIdentityProviderConfig {
+	s.GroupsPrefix = &v
+	return s
+}
+
+// SetIdentityProviderConfigArn sets the IdentityProviderConfigArn field's value.
+func (s *OidcIdentityProviderConfig) SetIdentityProviderConfigArn(v string) *OidcIdentityProviderConfig {
+	s.IdentityProviderConfigArn = &v
+	return s
+}
+
+// SetIdentityProviderConfigName sets the IdentityProviderConfigName field's value.
+func (s *OidcIdentityProviderConfig) SetIdentityProviderConfigName(v string) *OidcIdentityProviderConfig {
+	s.IdentityProviderConfigName = &v
+	return s
+}
+
+// SetIssuerUrl sets the IssuerUrl field's value.
+func (s *OidcIdentityProviderConfig) SetIssuerUrl(v string) *OidcIdentityProviderConfig {
+	s.IssuerUrl = &v
+	return s
+}
+
+// SetRequiredClaims sets the RequiredClaims field's value.
+func (s *OidcIdentityProviderConfig) SetRequiredClaims(v map[string]*string) *OidcIdentityProviderConfig {
+	s.RequiredClaims = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *OidcIdentityProviderConfig) SetStatus(v string) *OidcIdentityProviderConfig {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *OidcIdentityProviderConfig) SetTags(v map[string]*string) *OidcIdentityProviderConfig {
+	s.Tags = v
+	return s
+}
+
+// SetUsernameClaim sets the UsernameClaim field's value.
+func (s *OidcIdentityProviderConfig) SetUsernameClaim(v string) *OidcIdentityProviderConfig {
+	s.UsernameClaim = &v
+	return s
+}
+
+// SetUsernamePrefix sets the UsernamePrefix field's value.
+func (s *OidcIdentityProviderConfig) SetUsernamePrefix(v string) *OidcIdentityProviderConfig {
+	s.UsernamePrefix = &v
+	return s
+}
+
+// An object representing an OpenID Connect (OIDC) configuration. Before associating
+// an OIDC identity provider to your cluster, review the considerations in Authenticating
+// users for your cluster from an OpenID Connect identity provider (https://docs.aws.amazon.com/eks/latest/userguide/authenticate-oidc-identity-provider.html)
+// in the Amazon EKS User Guide.
+type OidcIdentityProviderConfigRequest struct {
+	_ struct{} `type:"structure"`
+
+	// This is also known as audience. The ID for the client application that makes
+	// authentication requests to the OpenID identity provider.
+	//
+	// ClientId is a required field
+	ClientId *string `locationName:"clientId" type:"string" required:"true"`
+
+	// The JWT claim that the provider uses to return your groups.
+	GroupsClaim *string `locationName:"groupsClaim" type:"string"`
+
+	// The prefix that is prepended to group claims to prevent clashes with existing
+	// names (such as system: groups). For example, the valueoidc: will create group
+	// names like oidc:engineering and oidc:infra.
+	GroupsPrefix *string `locationName:"groupsPrefix" type:"string"`
+
+	// The name of the OIDC provider configuration.
+	//
+	// IdentityProviderConfigName is a required field
+	IdentityProviderConfigName *string `locationName:"identityProviderConfigName" type:"string" required:"true"`
+
+	// The URL of the OpenID identity provider that allows the API server to discover
+	// public signing keys for verifying tokens. The URL must begin with https://
+	// and should correspond to the iss claim in the provider's OIDC ID tokens.
+	// Per the OIDC standard, path components are allowed but query parameters are
+	// not. Typically the URL consists of only a hostname, like https://server.example.org
+	// or https://example.com. This URL should point to the level below .well-known/openid-configuration
+	// and must be publicly accessible over the internet.
+	//
+	// IssuerUrl is a required field
+	IssuerUrl *string `locationName:"issuerUrl" type:"string" required:"true"`
+
+	// The key value pairs that describe required claims in the identity token.
+	// If set, each claim is verified to be present in the token with a matching
+	// value. For the maximum number of claims that you can require, see Amazon
+	// EKS service quotas (https://docs.aws.amazon.com/eks/latest/userguide/service-quotas.html)
+	// in the Amazon EKS User Guide.
+	RequiredClaims map[string]*string `locationName:"requiredClaims" type:"map"`
+
+	// The JSON Web Token (JWT) claim to use as the username. The default is sub,
+	// which is expected to be a unique identifier of the end user. You can choose
+	// other claims, such as email or name, depending on the OpenID identity provider.
+	// Claims other than email are prefixed with the issuer URL to prevent naming
+	// clashes with other plug-ins.
+	UsernameClaim *string `locationName:"usernameClaim" type:"string"`
+
+	// The prefix that is prepended to username claims to prevent clashes with existing
+	// names. If you do not provide this field, and username is a value other than
+	// email, the prefix defaults to issuerurl#. You can use the value - to disable
+	// all prefixing.
+	UsernamePrefix *string `locationName:"usernamePrefix" type:"string"`
+}
+
+// String returns the string representation
+func (s OidcIdentityProviderConfigRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OidcIdentityProviderConfigRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OidcIdentityProviderConfigRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OidcIdentityProviderConfigRequest"}
+	if s.ClientId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientId"))
+	}
+	if s.IdentityProviderConfigName == nil {
+		invalidParams.Add(request.NewErrParamRequired("IdentityProviderConfigName"))
+	}
+	if s.IssuerUrl == nil {
+		invalidParams.Add(request.NewErrParamRequired("IssuerUrl"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientId sets the ClientId field's value.
+func (s *OidcIdentityProviderConfigRequest) SetClientId(v string) *OidcIdentityProviderConfigRequest {
+	s.ClientId = &v
+	return s
+}
+
+// SetGroupsClaim sets the GroupsClaim field's value.
+func (s *OidcIdentityProviderConfigRequest) SetGroupsClaim(v string) *OidcIdentityProviderConfigRequest {
+	s.GroupsClaim = &v
+	return s
+}
+
+// SetGroupsPrefix sets the GroupsPrefix field's value.
+func (s *OidcIdentityProviderConfigRequest) SetGroupsPrefix(v string) *OidcIdentityProviderConfigRequest {
+	s.GroupsPrefix = &v
+	return s
+}
+
+// SetIdentityProviderConfigName sets the IdentityProviderConfigName field's value.
+func (s *OidcIdentityProviderConfigRequest) SetIdentityProviderConfigName(v string) *OidcIdentityProviderConfigRequest {
+	s.IdentityProviderConfigName = &v
+	return s
+}
+
+// SetIssuerUrl sets the IssuerUrl field's value.
+func (s *OidcIdentityProviderConfigRequest) SetIssuerUrl(v string) *OidcIdentityProviderConfigRequest {
+	s.IssuerUrl = &v
+	return s
+}
+
+// SetRequiredClaims sets the RequiredClaims field's value.
+func (s *OidcIdentityProviderConfigRequest) SetRequiredClaims(v map[string]*string) *OidcIdentityProviderConfigRequest {
+	s.RequiredClaims = v
+	return s
+}
+
+// SetUsernameClaim sets the UsernameClaim field's value.
+func (s *OidcIdentityProviderConfigRequest) SetUsernameClaim(v string) *OidcIdentityProviderConfigRequest {
+	s.UsernameClaim = &v
+	return s
+}
+
+// SetUsernamePrefix sets the UsernamePrefix field's value.
+func (s *OidcIdentityProviderConfigRequest) SetUsernamePrefix(v string) *OidcIdentityProviderConfigRequest {
+	s.UsernamePrefix = &v
 	return s
 }
 
@@ -5443,16 +8319,16 @@ type RemoteAccessConfig struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon EC2 SSH key that provides access for SSH communication with the
-	// worker nodes in the managed node group. For more information, see Amazon
-	// EC2 Key Pairs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
+	// nodes in the managed node group. For more information, see Amazon EC2 Key
+	// Pairs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
 	// in the Amazon Elastic Compute Cloud User Guide for Linux Instances.
 	Ec2SshKey *string `locationName:"ec2SshKey" type:"string"`
 
-	// The security groups that are allowed SSH access (port 22) to the worker nodes.
-	// If you specify an Amazon EC2 SSH key but do not specify a source security
-	// group when you create a managed node group, then port 22 on the worker nodes
-	// is opened to the internet (0.0.0.0/0). For more information, see Security
-	// Groups for Your VPC (https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)
+	// The security groups that are allowed SSH access (port 22) to the nodes. If
+	// you specify an Amazon EC2 SSH key but do not specify a source security group
+	// when you create a managed node group, then port 22 on the nodes is opened
+	// to the internet (0.0.0.0/0). For more information, see Security Groups for
+	// Your VPC (https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)
 	// in the Amazon Virtual Private Cloud User Guide.
 	SourceSecurityGroups []*string `locationName:"sourceSecurityGroups" type:"list"`
 }
@@ -5483,6 +8359,8 @@ func (s *RemoteAccessConfig) SetSourceSecurityGroups(v []*string) *RemoteAccessC
 type ResourceInUseException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	AddonName *string `locationName:"addonName" type:"string"`
 
 	// The Amazon EKS cluster associated with the exception.
 	ClusterName *string `locationName:"clusterName" type:"string"`
@@ -5610,6 +8488,8 @@ type ResourceNotFoundException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
 
+	AddonName *string `locationName:"addonName" type:"string"`
+
 	// The Amazon EKS cluster associated with the exception.
 	ClusterName *string `locationName:"clusterName" type:"string"`
 
@@ -5674,6 +8554,8 @@ func (s *ResourceNotFoundException) RequestID() string {
 type ServerException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	AddonName *string `locationName:"addonName" type:"string"`
 
 	// The Amazon EKS cluster associated with the exception.
 	ClusterName *string `locationName:"clusterName" type:"string"`
@@ -6073,6 +8955,140 @@ func (s *Update) SetType(v string) *Update {
 	return s
 }
 
+type UpdateAddonInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the add-on. The name must match one of the names returned by
+	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
+	//
+	// AddonName is a required field
+	AddonName *string `location:"uri" locationName:"addonName" type:"string" required:"true"`
+
+	// The version of the add-on. The version must match one of the versions returned
+	// by DescribeAddonVersions (https://docs.aws.amazon.com/eks/latest/APIReference/API_DescribeAddonVersions.html).
+	AddonVersion *string `locationName:"addonVersion" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// The name of the cluster.
+	//
+	// ClusterName is a required field
+	ClusterName *string `location:"uri" locationName:"name" min:"1" type:"string" required:"true"`
+
+	// How to resolve parameter value conflicts when applying the new version of
+	// the add-on to the cluster.
+	ResolveConflicts *string `locationName:"resolveConflicts" type:"string" enum:"ResolveConflicts"`
+
+	// The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on's
+	// service account. The role must be assigned the IAM permissions required by
+	// the add-on. If you don't specify an existing IAM role, then the add-on uses
+	// the permissions assigned to the node IAM role. For more information, see
+	// Amazon EKS node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)
+	// in the Amazon EKS User Guide.
+	//
+	// To specify an existing IAM role, you must have an IAM OpenID Connect (OIDC)
+	// provider created for your cluster. For more information, see Enabling IAM
+	// roles for service accounts on your cluster (https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html)
+	// in the Amazon EKS User Guide.
+	ServiceAccountRoleArn *string `locationName:"serviceAccountRoleArn" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateAddonInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAddonInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateAddonInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateAddonInput"}
+	if s.AddonName == nil {
+		invalidParams.Add(request.NewErrParamRequired("AddonName"))
+	}
+	if s.AddonName != nil && len(*s.AddonName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AddonName", 1))
+	}
+	if s.ClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClusterName"))
+	}
+	if s.ClusterName != nil && len(*s.ClusterName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClusterName", 1))
+	}
+	if s.ServiceAccountRoleArn != nil && len(*s.ServiceAccountRoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceAccountRoleArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAddonName sets the AddonName field's value.
+func (s *UpdateAddonInput) SetAddonName(v string) *UpdateAddonInput {
+	s.AddonName = &v
+	return s
+}
+
+// SetAddonVersion sets the AddonVersion field's value.
+func (s *UpdateAddonInput) SetAddonVersion(v string) *UpdateAddonInput {
+	s.AddonVersion = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *UpdateAddonInput) SetClientRequestToken(v string) *UpdateAddonInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetClusterName sets the ClusterName field's value.
+func (s *UpdateAddonInput) SetClusterName(v string) *UpdateAddonInput {
+	s.ClusterName = &v
+	return s
+}
+
+// SetResolveConflicts sets the ResolveConflicts field's value.
+func (s *UpdateAddonInput) SetResolveConflicts(v string) *UpdateAddonInput {
+	s.ResolveConflicts = &v
+	return s
+}
+
+// SetServiceAccountRoleArn sets the ServiceAccountRoleArn field's value.
+func (s *UpdateAddonInput) SetServiceAccountRoleArn(v string) *UpdateAddonInput {
+	s.ServiceAccountRoleArn = &v
+	return s
+}
+
+type UpdateAddonOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object representing an asynchronous update.
+	Update *Update `locationName:"update" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateAddonOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAddonOutput) GoString() string {
+	return s.String()
+}
+
+// SetUpdate sets the Update field's value.
+func (s *UpdateAddonOutput) SetUpdate(v *Update) *UpdateAddonOutput {
+	s.Update = v
+	return s
+}
+
 type UpdateClusterConfigInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6438,10 +9454,10 @@ type UpdateNodegroupVersionInput struct {
 	// NodegroupName is a required field
 	NodegroupName *string `location:"uri" locationName:"nodegroupName" type:"string" required:"true"`
 
-	// The AMI version of the Amazon EKS-optimized AMI to use for the update. By
+	// The AMI version of the Amazon EKS optimized AMI to use for the update. By
 	// default, the latest available AMI version for the node group's Kubernetes
-	// version is used. For more information, see Amazon EKS-Optimized Linux AMI
-	// Versions (https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html)
+	// version is used. For more information, see Amazon EKS optimized Amazon Linux
+	// 2 AMI versions (https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html)
 	// in the Amazon EKS User Guide. If you specify launchTemplate, and your launch
 	// template uses a custom AMI, then don't specify releaseVersion, or the node
 	// group update will fail. For more information about using launch templates
@@ -6598,11 +9614,10 @@ type VpcConfigRequest struct {
 	// API server endpoint. If you enable private access, Kubernetes API requests
 	// from within your cluster's VPC use the private VPC endpoint. The default
 	// value for this parameter is false, which disables private access for your
-	// Kubernetes API server. If you disable private access and you have worker
-	// nodes or AWS Fargate pods in the cluster, then ensure that publicAccessCidrs
-	// includes the necessary CIDR blocks for communication with the worker nodes
-	// or Fargate pods. For more information, see Amazon EKS Cluster Endpoint Access
-	// Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+	// Kubernetes API server. If you disable private access and you have nodes or
+	// AWS Fargate pods in the cluster, then ensure that publicAccessCidrs includes
+	// the necessary CIDR blocks for communication with the nodes or Fargate pods.
+	// For more information, see Amazon EKS Cluster Endpoint Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
 	// in the Amazon EKS User Guide .
 	EndpointPrivateAccess *bool `locationName:"endpointPrivateAccess" type:"boolean"`
 
@@ -6618,22 +9633,29 @@ type VpcConfigRequest struct {
 	// The CIDR blocks that are allowed access to your cluster's public Kubernetes
 	// API server endpoint. Communication to the endpoint from addresses outside
 	// of the CIDR blocks that you specify is denied. The default value is 0.0.0.0/0.
-	// If you've disabled private endpoint access and you have worker nodes or AWS
-	// Fargate pods in the cluster, then ensure that you specify the necessary CIDR
-	// blocks. For more information, see Amazon EKS Cluster Endpoint Access Control
-	// (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+	// If you've disabled private endpoint access and you have nodes or AWS Fargate
+	// pods in the cluster, then ensure that you specify the necessary CIDR blocks.
+	// For more information, see Amazon EKS Cluster Endpoint Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
 	// in the Amazon EKS User Guide .
 	PublicAccessCidrs []*string `locationName:"publicAccessCidrs" type:"list"`
 
 	// Specify one or more security groups for the cross-account elastic network
 	// interfaces that Amazon EKS creates to use to allow communication between
-	// your worker nodes and the Kubernetes control plane. If you don't specify
-	// a security group, the default security group for your VPC is used.
+	// your nodes and the Kubernetes control plane. If you don't specify any security
+	// groups, then familiarize yourself with the difference between Amazon EKS
+	// defaults for clusters deployed with Kubernetes:
+	//
+	//    * 1.14 Amazon EKS platform version eks.2 and earlier
+	//
+	//    * 1.14 Amazon EKS platform version eks.3 and later
+	//
+	// For more information, see Amazon EKS security group considerations (https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
+	// in the Amazon EKS User Guide .
 	SecurityGroupIds []*string `locationName:"securityGroupIds" type:"list"`
 
-	// Specify subnets for your Amazon EKS worker nodes. Amazon EKS creates cross-account
+	// Specify subnets for your Amazon EKS nodes. Amazon EKS creates cross-account
 	// elastic network interfaces in these subnets to allow communication between
-	// your worker nodes and the Kubernetes control plane.
+	// your nodes and the Kubernetes control plane.
 	SubnetIds []*string `locationName:"subnetIds" type:"list"`
 }
 
@@ -6690,10 +9712,10 @@ type VpcConfigResponse struct {
 	// is enabled. If the Amazon EKS private API server endpoint is enabled, Kubernetes
 	// API requests that originate from within your cluster's VPC use the private
 	// VPC endpoint instead of traversing the internet. If this value is disabled
-	// and you have worker nodes or AWS Fargate pods in the cluster, then ensure
-	// that publicAccessCidrs includes the necessary CIDR blocks for communication
-	// with the worker nodes or Fargate pods. For more information, see Amazon EKS
-	// Cluster Endpoint Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+	// and you have nodes or AWS Fargate pods in the cluster, then ensure that publicAccessCidrs
+	// includes the necessary CIDR blocks for communication with the nodes or Fargate
+	// pods. For more information, see Amazon EKS Cluster Endpoint Access Control
+	// (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
 	// in the Amazon EKS User Guide .
 	EndpointPrivateAccess *bool `locationName:"endpointPrivateAccess" type:"boolean"`
 
@@ -6706,14 +9728,14 @@ type VpcConfigResponse struct {
 	// The CIDR blocks that are allowed access to your cluster's public Kubernetes
 	// API server endpoint. Communication to the endpoint from addresses outside
 	// of the listed CIDR blocks is denied. The default value is 0.0.0.0/0. If you've
-	// disabled private endpoint access and you have worker nodes or AWS Fargate
-	// pods in the cluster, then ensure that the necessary CIDR blocks are listed.
-	// For more information, see Amazon EKS Cluster Endpoint Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+	// disabled private endpoint access and you have nodes or AWS Fargate pods in
+	// the cluster, then ensure that the necessary CIDR blocks are listed. For more
+	// information, see Amazon EKS Cluster Endpoint Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
 	// in the Amazon EKS User Guide .
 	PublicAccessCidrs []*string `locationName:"publicAccessCidrs" type:"list"`
 
 	// The security groups associated with the cross-account elastic network interfaces
-	// that are used to allow communication between your worker nodes and the Kubernetes
+	// that are used to allow communication between your nodes and the Kubernetes
 	// control plane.
 	SecurityGroupIds []*string `locationName:"securityGroupIds" type:"list"`
 
@@ -6797,6 +9819,86 @@ func AMITypes_Values() []string {
 }
 
 const (
+	// AddonIssueCodeAccessDenied is a AddonIssueCode enum value
+	AddonIssueCodeAccessDenied = "AccessDenied"
+
+	// AddonIssueCodeInternalFailure is a AddonIssueCode enum value
+	AddonIssueCodeInternalFailure = "InternalFailure"
+
+	// AddonIssueCodeClusterUnreachable is a AddonIssueCode enum value
+	AddonIssueCodeClusterUnreachable = "ClusterUnreachable"
+
+	// AddonIssueCodeInsufficientNumberOfReplicas is a AddonIssueCode enum value
+	AddonIssueCodeInsufficientNumberOfReplicas = "InsufficientNumberOfReplicas"
+
+	// AddonIssueCodeConfigurationConflict is a AddonIssueCode enum value
+	AddonIssueCodeConfigurationConflict = "ConfigurationConflict"
+)
+
+// AddonIssueCode_Values returns all elements of the AddonIssueCode enum
+func AddonIssueCode_Values() []string {
+	return []string{
+		AddonIssueCodeAccessDenied,
+		AddonIssueCodeInternalFailure,
+		AddonIssueCodeClusterUnreachable,
+		AddonIssueCodeInsufficientNumberOfReplicas,
+		AddonIssueCodeConfigurationConflict,
+	}
+}
+
+const (
+	// AddonStatusCreating is a AddonStatus enum value
+	AddonStatusCreating = "CREATING"
+
+	// AddonStatusActive is a AddonStatus enum value
+	AddonStatusActive = "ACTIVE"
+
+	// AddonStatusCreateFailed is a AddonStatus enum value
+	AddonStatusCreateFailed = "CREATE_FAILED"
+
+	// AddonStatusUpdating is a AddonStatus enum value
+	AddonStatusUpdating = "UPDATING"
+
+	// AddonStatusDeleting is a AddonStatus enum value
+	AddonStatusDeleting = "DELETING"
+
+	// AddonStatusDeleteFailed is a AddonStatus enum value
+	AddonStatusDeleteFailed = "DELETE_FAILED"
+
+	// AddonStatusDegraded is a AddonStatus enum value
+	AddonStatusDegraded = "DEGRADED"
+)
+
+// AddonStatus_Values returns all elements of the AddonStatus enum
+func AddonStatus_Values() []string {
+	return []string{
+		AddonStatusCreating,
+		AddonStatusActive,
+		AddonStatusCreateFailed,
+		AddonStatusUpdating,
+		AddonStatusDeleting,
+		AddonStatusDeleteFailed,
+		AddonStatusDegraded,
+	}
+}
+
+const (
+	// CapacityTypesOnDemand is a CapacityTypes enum value
+	CapacityTypesOnDemand = "ON_DEMAND"
+
+	// CapacityTypesSpot is a CapacityTypes enum value
+	CapacityTypesSpot = "SPOT"
+)
+
+// CapacityTypes_Values returns all elements of the CapacityTypes enum
+func CapacityTypes_Values() []string {
+	return []string{
+		CapacityTypesOnDemand,
+		CapacityTypesSpot,
+	}
+}
+
+const (
 	// ClusterStatusCreating is a ClusterStatus enum value
 	ClusterStatusCreating = "CREATING"
 
@@ -6821,6 +9923,26 @@ func ClusterStatus_Values() []string {
 		ClusterStatusDeleting,
 		ClusterStatusFailed,
 		ClusterStatusUpdating,
+	}
+}
+
+const (
+	// ConfigStatusCreating is a ConfigStatus enum value
+	ConfigStatusCreating = "CREATING"
+
+	// ConfigStatusDeleting is a ConfigStatus enum value
+	ConfigStatusDeleting = "DELETING"
+
+	// ConfigStatusActive is a ConfigStatus enum value
+	ConfigStatusActive = "ACTIVE"
+)
+
+// ConfigStatus_Values returns all elements of the ConfigStatus enum
+func ConfigStatus_Values() []string {
+	return []string{
+		ConfigStatusCreating,
+		ConfigStatusDeleting,
+		ConfigStatusActive,
 	}
 }
 
@@ -6857,6 +9979,15 @@ const (
 
 	// ErrorCodeInsufficientFreeAddresses is a ErrorCode enum value
 	ErrorCodeInsufficientFreeAddresses = "InsufficientFreeAddresses"
+
+	// ErrorCodeClusterUnreachable is a ErrorCode enum value
+	ErrorCodeClusterUnreachable = "ClusterUnreachable"
+
+	// ErrorCodeInsufficientNumberOfReplicas is a ErrorCode enum value
+	ErrorCodeInsufficientNumberOfReplicas = "InsufficientNumberOfReplicas"
+
+	// ErrorCodeConfigurationConflict is a ErrorCode enum value
+	ErrorCodeConfigurationConflict = "ConfigurationConflict"
 )
 
 // ErrorCode_Values returns all elements of the ErrorCode enum
@@ -6873,6 +10004,9 @@ func ErrorCode_Values() []string {
 		ErrorCodeNodeCreationFailure,
 		ErrorCodePodEvictionFailure,
 		ErrorCodeInsufficientFreeAddresses,
+		ErrorCodeClusterUnreachable,
+		ErrorCodeInsufficientNumberOfReplicas,
+		ErrorCodeConfigurationConflict,
 	}
 }
 
@@ -6983,6 +10117,9 @@ const (
 
 	// NodegroupIssueCodeInternalFailure is a NodegroupIssueCode enum value
 	NodegroupIssueCodeInternalFailure = "InternalFailure"
+
+	// NodegroupIssueCodeClusterUnreachable is a NodegroupIssueCode enum value
+	NodegroupIssueCodeClusterUnreachable = "ClusterUnreachable"
 )
 
 // NodegroupIssueCode_Values returns all elements of the NodegroupIssueCode enum
@@ -7005,6 +10142,7 @@ func NodegroupIssueCode_Values() []string {
 		NodegroupIssueCodeInsufficientFreeAddresses,
 		NodegroupIssueCodeAccessDenied,
 		NodegroupIssueCodeInternalFailure,
+		NodegroupIssueCodeClusterUnreachable,
 	}
 }
 
@@ -7045,6 +10183,22 @@ func NodegroupStatus_Values() []string {
 }
 
 const (
+	// ResolveConflictsOverwrite is a ResolveConflicts enum value
+	ResolveConflictsOverwrite = "OVERWRITE"
+
+	// ResolveConflictsNone is a ResolveConflicts enum value
+	ResolveConflictsNone = "NONE"
+)
+
+// ResolveConflicts_Values returns all elements of the ResolveConflicts enum
+func ResolveConflicts_Values() []string {
+	return []string{
+		ResolveConflictsOverwrite,
+		ResolveConflictsNone,
+	}
+}
+
+const (
 	// UpdateParamTypeVersion is a UpdateParamType enum value
 	UpdateParamTypeVersion = "Version"
 
@@ -7080,6 +10234,18 @@ const (
 
 	// UpdateParamTypePublicAccessCidrs is a UpdateParamType enum value
 	UpdateParamTypePublicAccessCidrs = "PublicAccessCidrs"
+
+	// UpdateParamTypeIdentityProviderConfig is a UpdateParamType enum value
+	UpdateParamTypeIdentityProviderConfig = "IdentityProviderConfig"
+
+	// UpdateParamTypeAddonVersion is a UpdateParamType enum value
+	UpdateParamTypeAddonVersion = "AddonVersion"
+
+	// UpdateParamTypeServiceAccountRoleArn is a UpdateParamType enum value
+	UpdateParamTypeServiceAccountRoleArn = "ServiceAccountRoleArn"
+
+	// UpdateParamTypeResolveConflicts is a UpdateParamType enum value
+	UpdateParamTypeResolveConflicts = "ResolveConflicts"
 )
 
 // UpdateParamType_Values returns all elements of the UpdateParamType enum
@@ -7097,6 +10263,10 @@ func UpdateParamType_Values() []string {
 		UpdateParamTypeMinSize,
 		UpdateParamTypeReleaseVersion,
 		UpdateParamTypePublicAccessCidrs,
+		UpdateParamTypeIdentityProviderConfig,
+		UpdateParamTypeAddonVersion,
+		UpdateParamTypeServiceAccountRoleArn,
+		UpdateParamTypeResolveConflicts,
 	}
 }
 
@@ -7136,6 +10306,15 @@ const (
 
 	// UpdateTypeConfigUpdate is a UpdateType enum value
 	UpdateTypeConfigUpdate = "ConfigUpdate"
+
+	// UpdateTypeAssociateIdentityProviderConfig is a UpdateType enum value
+	UpdateTypeAssociateIdentityProviderConfig = "AssociateIdentityProviderConfig"
+
+	// UpdateTypeDisassociateIdentityProviderConfig is a UpdateType enum value
+	UpdateTypeDisassociateIdentityProviderConfig = "DisassociateIdentityProviderConfig"
+
+	// UpdateTypeAddonUpdate is a UpdateType enum value
+	UpdateTypeAddonUpdate = "AddonUpdate"
 )
 
 // UpdateType_Values returns all elements of the UpdateType enum
@@ -7145,5 +10324,8 @@ func UpdateType_Values() []string {
 		UpdateTypeEndpointAccessUpdate,
 		UpdateTypeLoggingUpdate,
 		UpdateTypeConfigUpdate,
+		UpdateTypeAssociateIdentityProviderConfig,
+		UpdateTypeDisassociateIdentityProviderConfig,
+		UpdateTypeAddonUpdate,
 	}
 }

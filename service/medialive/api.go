@@ -14,6 +14,102 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opAcceptInputDeviceTransfer = "AcceptInputDeviceTransfer"
+
+// AcceptInputDeviceTransferRequest generates a "aws/request.Request" representing the
+// client's request for the AcceptInputDeviceTransfer operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AcceptInputDeviceTransfer for more information on using the AcceptInputDeviceTransfer
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AcceptInputDeviceTransferRequest method.
+//    req, resp := client.AcceptInputDeviceTransferRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/AcceptInputDeviceTransfer
+func (c *MediaLive) AcceptInputDeviceTransferRequest(input *AcceptInputDeviceTransferInput) (req *request.Request, output *AcceptInputDeviceTransferOutput) {
+	op := &request.Operation{
+		Name:       opAcceptInputDeviceTransfer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/accept",
+	}
+
+	if input == nil {
+		input = &AcceptInputDeviceTransferInput{}
+	}
+
+	output = &AcceptInputDeviceTransferOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AcceptInputDeviceTransfer API operation for AWS Elemental MediaLive.
+//
+// Accept an incoming input device transfer. The ownership of the device will
+// transfer to your AWS account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation AcceptInputDeviceTransfer for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * NotFoundException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+//   * ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/AcceptInputDeviceTransfer
+func (c *MediaLive) AcceptInputDeviceTransfer(input *AcceptInputDeviceTransferInput) (*AcceptInputDeviceTransferOutput, error) {
+	req, out := c.AcceptInputDeviceTransferRequest(input)
+	return out, req.Send()
+}
+
+// AcceptInputDeviceTransferWithContext is the same as AcceptInputDeviceTransfer with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AcceptInputDeviceTransfer for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) AcceptInputDeviceTransferWithContext(ctx aws.Context, input *AcceptInputDeviceTransferInput, opts ...request.Option) (*AcceptInputDeviceTransferOutput, error) {
+	req, out := c.AcceptInputDeviceTransferRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchDelete = "BatchDelete"
 
 // BatchDeleteRequest generates a "aws/request.Request" representing the
@@ -377,6 +473,101 @@ func (c *MediaLive) BatchUpdateSchedule(input *BatchUpdateScheduleInput) (*Batch
 // for more information on using Contexts.
 func (c *MediaLive) BatchUpdateScheduleWithContext(ctx aws.Context, input *BatchUpdateScheduleInput, opts ...request.Option) (*BatchUpdateScheduleOutput, error) {
 	req, out := c.BatchUpdateScheduleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelInputDeviceTransfer = "CancelInputDeviceTransfer"
+
+// CancelInputDeviceTransferRequest generates a "aws/request.Request" representing the
+// client's request for the CancelInputDeviceTransfer operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelInputDeviceTransfer for more information on using the CancelInputDeviceTransfer
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelInputDeviceTransferRequest method.
+//    req, resp := client.CancelInputDeviceTransferRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CancelInputDeviceTransfer
+func (c *MediaLive) CancelInputDeviceTransferRequest(input *CancelInputDeviceTransferInput) (req *request.Request, output *CancelInputDeviceTransferOutput) {
+	op := &request.Operation{
+		Name:       opCancelInputDeviceTransfer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/cancel",
+	}
+
+	if input == nil {
+		input = &CancelInputDeviceTransferInput{}
+	}
+
+	output = &CancelInputDeviceTransferOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelInputDeviceTransfer API operation for AWS Elemental MediaLive.
+//
+// Cancel an input device transfer that you have requested.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CancelInputDeviceTransfer for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * NotFoundException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+//   * ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CancelInputDeviceTransfer
+func (c *MediaLive) CancelInputDeviceTransfer(input *CancelInputDeviceTransferInput) (*CancelInputDeviceTransferOutput, error) {
+	req, out := c.CancelInputDeviceTransferRequest(input)
+	return out, req.Send()
+}
+
+// CancelInputDeviceTransferWithContext is the same as CancelInputDeviceTransfer with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelInputDeviceTransfer for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CancelInputDeviceTransferWithContext(ctx aws.Context, input *CancelInputDeviceTransferInput, opts ...request.Option) (*CancelInputDeviceTransferOutput, error) {
+	req, out := c.CancelInputDeviceTransferRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -829,6 +1020,94 @@ func (c *MediaLive) CreateMultiplexProgram(input *CreateMultiplexProgramInput) (
 // for more information on using Contexts.
 func (c *MediaLive) CreateMultiplexProgramWithContext(ctx aws.Context, input *CreateMultiplexProgramInput, opts ...request.Option) (*CreateMultiplexProgramOutput, error) {
 	req, out := c.CreateMultiplexProgramRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreatePartnerInput = "CreatePartnerInput"
+
+// CreatePartnerInputRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePartnerInput operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePartnerInput for more information on using the CreatePartnerInput
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreatePartnerInputRequest method.
+//    req, resp := client.CreatePartnerInputRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreatePartnerInput
+func (c *MediaLive) CreatePartnerInputRequest(input *CreatePartnerInputInput) (req *request.Request, output *CreatePartnerInputOutput) {
+	op := &request.Operation{
+		Name:       opCreatePartnerInput,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputs/{inputId}/partners",
+	}
+
+	if input == nil {
+		input = &CreatePartnerInputInput{}
+	}
+
+	output = &CreatePartnerInputOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreatePartnerInput API operation for AWS Elemental MediaLive.
+//
+// Create a partner input
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation CreatePartnerInput for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/CreatePartnerInput
+func (c *MediaLive) CreatePartnerInput(input *CreatePartnerInputInput) (*CreatePartnerInputOutput, error) {
+	req, out := c.CreatePartnerInputRequest(input)
+	return out, req.Send()
+}
+
+// CreatePartnerInputWithContext is the same as CreatePartnerInput with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePartnerInput for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) CreatePartnerInputWithContext(ctx aws.Context, input *CreatePartnerInputInput, opts ...request.Option) (*CreatePartnerInputOutput, error) {
+	req, out := c.CreatePartnerInputRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2751,6 +3030,156 @@ func (c *MediaLive) ListChannelsPagesWithContext(ctx aws.Context, input *ListCha
 	return p.Err()
 }
 
+const opListInputDeviceTransfers = "ListInputDeviceTransfers"
+
+// ListInputDeviceTransfersRequest generates a "aws/request.Request" representing the
+// client's request for the ListInputDeviceTransfers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListInputDeviceTransfers for more information on using the ListInputDeviceTransfers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListInputDeviceTransfersRequest method.
+//    req, resp := client.ListInputDeviceTransfersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputDeviceTransfers
+func (c *MediaLive) ListInputDeviceTransfersRequest(input *ListInputDeviceTransfersInput) (req *request.Request, output *ListInputDeviceTransfersOutput) {
+	op := &request.Operation{
+		Name:       opListInputDeviceTransfers,
+		HTTPMethod: "GET",
+		HTTPPath:   "/prod/inputDeviceTransfers",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListInputDeviceTransfersInput{}
+	}
+
+	output = &ListInputDeviceTransfersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListInputDeviceTransfers API operation for AWS Elemental MediaLive.
+//
+// List input devices that are currently being transferred. List input devices
+// that you are transferring from your AWS account or input devices that another
+// AWS account is transferring to you.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation ListInputDeviceTransfers for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/ListInputDeviceTransfers
+func (c *MediaLive) ListInputDeviceTransfers(input *ListInputDeviceTransfersInput) (*ListInputDeviceTransfersOutput, error) {
+	req, out := c.ListInputDeviceTransfersRequest(input)
+	return out, req.Send()
+}
+
+// ListInputDeviceTransfersWithContext is the same as ListInputDeviceTransfers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListInputDeviceTransfers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListInputDeviceTransfersWithContext(ctx aws.Context, input *ListInputDeviceTransfersInput, opts ...request.Option) (*ListInputDeviceTransfersOutput, error) {
+	req, out := c.ListInputDeviceTransfersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListInputDeviceTransfersPages iterates over the pages of a ListInputDeviceTransfers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListInputDeviceTransfers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListInputDeviceTransfers operation.
+//    pageNum := 0
+//    err := client.ListInputDeviceTransfersPages(params,
+//        func(page *medialive.ListInputDeviceTransfersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MediaLive) ListInputDeviceTransfersPages(input *ListInputDeviceTransfersInput, fn func(*ListInputDeviceTransfersOutput, bool) bool) error {
+	return c.ListInputDeviceTransfersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListInputDeviceTransfersPagesWithContext same as ListInputDeviceTransfersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) ListInputDeviceTransfersPagesWithContext(ctx aws.Context, input *ListInputDeviceTransfersInput, fn func(*ListInputDeviceTransfersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListInputDeviceTransfersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListInputDeviceTransfersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListInputDeviceTransfersOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListInputDevices = "ListInputDevices"
 
 // ListInputDevicesRequest generates a "aws/request.Request" representing the
@@ -3951,6 +4380,101 @@ func (c *MediaLive) PurchaseOfferingWithContext(ctx aws.Context, input *Purchase
 	return out, req.Send()
 }
 
+const opRejectInputDeviceTransfer = "RejectInputDeviceTransfer"
+
+// RejectInputDeviceTransferRequest generates a "aws/request.Request" representing the
+// client's request for the RejectInputDeviceTransfer operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RejectInputDeviceTransfer for more information on using the RejectInputDeviceTransfer
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RejectInputDeviceTransferRequest method.
+//    req, resp := client.RejectInputDeviceTransferRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RejectInputDeviceTransfer
+func (c *MediaLive) RejectInputDeviceTransferRequest(input *RejectInputDeviceTransferInput) (req *request.Request, output *RejectInputDeviceTransferOutput) {
+	op := &request.Operation{
+		Name:       opRejectInputDeviceTransfer,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/reject",
+	}
+
+	if input == nil {
+		input = &RejectInputDeviceTransferInput{}
+	}
+
+	output = &RejectInputDeviceTransferOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// RejectInputDeviceTransfer API operation for AWS Elemental MediaLive.
+//
+// Reject the transfer of the specified input device to your AWS account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation RejectInputDeviceTransfer for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * NotFoundException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+//   * ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/RejectInputDeviceTransfer
+func (c *MediaLive) RejectInputDeviceTransfer(input *RejectInputDeviceTransferInput) (*RejectInputDeviceTransferOutput, error) {
+	req, out := c.RejectInputDeviceTransferRequest(input)
+	return out, req.Send()
+}
+
+// RejectInputDeviceTransferWithContext is the same as RejectInputDeviceTransfer with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RejectInputDeviceTransfer for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) RejectInputDeviceTransferWithContext(ctx aws.Context, input *RejectInputDeviceTransferInput, opts ...request.Option) (*RejectInputDeviceTransferOutput, error) {
+	req, out := c.RejectInputDeviceTransferRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartChannel = "StartChannel"
 
 // StartChannelRequest generates a "aws/request.Request" representing the
@@ -4316,6 +4840,102 @@ func (c *MediaLive) StopMultiplex(input *StopMultiplexInput) (*StopMultiplexOutp
 // for more information on using Contexts.
 func (c *MediaLive) StopMultiplexWithContext(ctx aws.Context, input *StopMultiplexInput, opts ...request.Option) (*StopMultiplexOutput, error) {
 	req, out := c.StopMultiplexRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTransferInputDevice = "TransferInputDevice"
+
+// TransferInputDeviceRequest generates a "aws/request.Request" representing the
+// client's request for the TransferInputDevice operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TransferInputDevice for more information on using the TransferInputDevice
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TransferInputDeviceRequest method.
+//    req, resp := client.TransferInputDeviceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/TransferInputDevice
+func (c *MediaLive) TransferInputDeviceRequest(input *TransferInputDeviceInput) (req *request.Request, output *TransferInputDeviceOutput) {
+	op := &request.Operation{
+		Name:       opTransferInputDevice,
+		HTTPMethod: "POST",
+		HTTPPath:   "/prod/inputDevices/{inputDeviceId}/transfer",
+	}
+
+	if input == nil {
+		input = &TransferInputDeviceInput{}
+	}
+
+	output = &TransferInputDeviceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TransferInputDevice API operation for AWS Elemental MediaLive.
+//
+// Start an input device transfer to another AWS account. After you make the
+// request, the other account must accept or reject the transfer.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaLive's
+// API operation TransferInputDevice for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * BadGatewayException
+//
+//   * NotFoundException
+//
+//   * GatewayTimeoutException
+//
+//   * TooManyRequestsException
+//
+//   * ConflictException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/medialive-2017-10-14/TransferInputDevice
+func (c *MediaLive) TransferInputDevice(input *TransferInputDeviceInput) (*TransferInputDeviceOutput, error) {
+	req, out := c.TransferInputDeviceRequest(input)
+	return out, req.Send()
+}
+
+// TransferInputDeviceWithContext is the same as TransferInputDevice with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TransferInputDevice for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaLive) TransferInputDeviceWithContext(ctx aws.Context, input *TransferInputDeviceInput, opts ...request.Option) (*TransferInputDeviceOutput, error) {
+	req, out := c.TransferInputDeviceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5258,12 +5878,110 @@ func (s *Ac3Settings) SetMetadataControl(v string) *Ac3Settings {
 	return s
 }
 
+type AcceptInputDeviceTransferInput struct {
+	_ struct{} `type:"structure"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AcceptInputDeviceTransferInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AcceptInputDeviceTransferInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AcceptInputDeviceTransferInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AcceptInputDeviceTransferInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *AcceptInputDeviceTransferInput) SetInputDeviceId(v string) *AcceptInputDeviceTransferInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+type AcceptInputDeviceTransferOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AcceptInputDeviceTransferOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AcceptInputDeviceTransferOutput) GoString() string {
+	return s.String()
+}
+
+// Ancillary Source Settings
+type AncillarySourceSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the number (1 to 4) of the captions channel you want to extract
+	// from the ancillary captions. If you plan to convert the ancillary captions
+	// to another format, complete this field. If you plan to choose Embedded as
+	// the captions destination in the output (to pass through all the channels
+	// in the ancillary captions), leave this field blank because MediaLive ignores
+	// the field.
+	SourceAncillaryChannelNumber *int64 `locationName:"sourceAncillaryChannelNumber" min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s AncillarySourceSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AncillarySourceSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AncillarySourceSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AncillarySourceSettings"}
+	if s.SourceAncillaryChannelNumber != nil && *s.SourceAncillaryChannelNumber < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("SourceAncillaryChannelNumber", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSourceAncillaryChannelNumber sets the SourceAncillaryChannelNumber field's value.
+func (s *AncillarySourceSettings) SetSourceAncillaryChannelNumber(v int64) *AncillarySourceSettings {
+	s.SourceAncillaryChannelNumber = &v
+	return s
+}
+
 // Archive Container Settings
 type ArchiveContainerSettings struct {
 	_ struct{} `type:"structure"`
 
 	// M2ts Settings
 	M2tsSettings *M2tsSettings `locationName:"m2tsSettings" type:"structure"`
+
+	// Raw Settings
+	RawSettings *RawSettings `locationName:"rawSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -5294,6 +6012,12 @@ func (s *ArchiveContainerSettings) Validate() error {
 // SetM2tsSettings sets the M2tsSettings field's value.
 func (s *ArchiveContainerSettings) SetM2tsSettings(v *M2tsSettings) *ArchiveContainerSettings {
 	s.M2tsSettings = v
+	return s
+}
+
+// SetRawSettings sets the RawSettings field's value.
+func (s *ArchiveContainerSettings) SetRawSettings(v *RawSettings) *ArchiveContainerSettings {
+	s.RawSettings = v
 	return s
 }
 
@@ -5525,6 +6249,9 @@ type AudioCodecSettings struct {
 
 	// Pass Through Settings
 	PassThroughSettings *PassThroughSettings `locationName:"passThroughSettings" type:"structure"`
+
+	// Wav Settings
+	WavSettings *WavSettings `locationName:"wavSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -5584,6 +6311,12 @@ func (s *AudioCodecSettings) SetMp2Settings(v *Mp2Settings) *AudioCodecSettings 
 // SetPassThroughSettings sets the PassThroughSettings field's value.
 func (s *AudioCodecSettings) SetPassThroughSettings(v *PassThroughSettings) *AudioCodecSettings {
 	s.PassThroughSettings = v
+	return s
+}
+
+// SetWavSettings sets the WavSettings field's value.
+func (s *AudioCodecSettings) SetWavSettings(v *WavSettings) *AudioCodecSettings {
+	s.WavSettings = v
 	return s
 }
 
@@ -6083,6 +6816,60 @@ func (s *AudioSelectorSettings) SetAudioTrackSelection(v *AudioTrackSelection) *
 	return s
 }
 
+type AudioSilenceFailoverSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the audio selector in the input that MediaLive should monitor
+	// to detect silence. Select your most important rendition. If you didn't create
+	// an audio selector in this input, leave blank.
+	//
+	// AudioSelectorName is a required field
+	AudioSelectorName *string `locationName:"audioSelectorName" type:"string" required:"true"`
+
+	// The amount of time (in milliseconds) that the active input must be silent
+	// before automatic input failover occurs. Silence is defined as audio loss
+	// or audio quieter than -50 dBFS.
+	AudioSilenceThresholdMsec *int64 `locationName:"audioSilenceThresholdMsec" min:"1000" type:"integer"`
+}
+
+// String returns the string representation
+func (s AudioSilenceFailoverSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AudioSilenceFailoverSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AudioSilenceFailoverSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AudioSilenceFailoverSettings"}
+	if s.AudioSelectorName == nil {
+		invalidParams.Add(request.NewErrParamRequired("AudioSelectorName"))
+	}
+	if s.AudioSilenceThresholdMsec != nil && *s.AudioSilenceThresholdMsec < 1000 {
+		invalidParams.Add(request.NewErrParamMinValue("AudioSilenceThresholdMsec", 1000))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAudioSelectorName sets the AudioSelectorName field's value.
+func (s *AudioSilenceFailoverSettings) SetAudioSelectorName(v string) *AudioSilenceFailoverSettings {
+	s.AudioSelectorName = &v
+	return s
+}
+
+// SetAudioSilenceThresholdMsec sets the AudioSilenceThresholdMsec field's value.
+func (s *AudioSilenceFailoverSettings) SetAudioSilenceThresholdMsec(v int64) *AudioSilenceFailoverSettings {
+	s.AudioSilenceThresholdMsec = &v
+	return s
+}
+
 // Audio Track
 type AudioTrack struct {
 	_ struct{} `type:"structure"`
@@ -6178,6 +6965,17 @@ func (s *AudioTrackSelection) SetTracks(v []*AudioTrack) *AudioTrackSelection {
 type AutomaticInputFailoverSettings struct {
 	_ struct{} `type:"structure"`
 
+	// This clear time defines the requirement a recovered input must meet to be
+	// considered healthy. The input must have no failover conditions for this length
+	// of time. Enter a time in milliseconds. This value is particularly important
+	// if the input_preference for the failover pair is set to PRIMARY_INPUT_PREFERRED,
+	// because after this time, MediaLive will switch back to the primary input.
+	ErrorClearTimeMsec *int64 `locationName:"errorClearTimeMsec" min:"1" type:"integer"`
+
+	// A list of failover conditions. If any of these conditions occur, MediaLive
+	// will perform a failover to the other input.
+	FailoverConditions []*FailoverCondition `locationName:"failoverConditions" type:"list"`
+
 	// Input preference when deciding which input to make active when a previously
 	// failed input has recovered.
 	InputPreference *string `locationName:"inputPreference" type:"string" enum:"InputPreference"`
@@ -6201,14 +6999,39 @@ func (s AutomaticInputFailoverSettings) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *AutomaticInputFailoverSettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AutomaticInputFailoverSettings"}
+	if s.ErrorClearTimeMsec != nil && *s.ErrorClearTimeMsec < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("ErrorClearTimeMsec", 1))
+	}
 	if s.SecondaryInputId == nil {
 		invalidParams.Add(request.NewErrParamRequired("SecondaryInputId"))
+	}
+	if s.FailoverConditions != nil {
+		for i, v := range s.FailoverConditions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "FailoverConditions", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetErrorClearTimeMsec sets the ErrorClearTimeMsec field's value.
+func (s *AutomaticInputFailoverSettings) SetErrorClearTimeMsec(v int64) *AutomaticInputFailoverSettings {
+	s.ErrorClearTimeMsec = &v
+	return s
+}
+
+// SetFailoverConditions sets the FailoverConditions field's value.
+func (s *AutomaticInputFailoverSettings) SetFailoverConditions(v []*FailoverCondition) *AutomaticInputFailoverSettings {
+	s.FailoverConditions = v
+	return s
 }
 
 // SetInputPreference sets the InputPreference field's value.
@@ -7325,6 +8148,59 @@ func (s *BurnInDestinationSettings) SetYPosition(v int64) *BurnInDestinationSett
 	return s
 }
 
+type CancelInputDeviceTransferInput struct {
+	_ struct{} `type:"structure"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelInputDeviceTransferInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelInputDeviceTransferInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelInputDeviceTransferInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelInputDeviceTransferInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *CancelInputDeviceTransferInput) SetInputDeviceId(v string) *CancelInputDeviceTransferInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+type CancelInputDeviceTransferOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelInputDeviceTransferOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelInputDeviceTransferOutput) GoString() string {
+	return s.String()
+}
+
 // Caption Description
 type CaptionDescription struct {
 	_ struct{} `type:"structure"`
@@ -7717,6 +8593,9 @@ func (s *CaptionSelector) SetSelectorSettings(v *CaptionSelectorSettings) *Capti
 type CaptionSelectorSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Ancillary Source Settings
+	AncillarySourceSettings *AncillarySourceSettings `locationName:"ancillarySourceSettings" type:"structure"`
+
 	// Arib Source Settings
 	AribSourceSettings *AribSourceSettings `locationName:"aribSourceSettings" type:"structure"`
 
@@ -7749,6 +8628,11 @@ func (s CaptionSelectorSettings) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CaptionSelectorSettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CaptionSelectorSettings"}
+	if s.AncillarySourceSettings != nil {
+		if err := s.AncillarySourceSettings.Validate(); err != nil {
+			invalidParams.AddNested("AncillarySourceSettings", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.DvbSubSourceSettings != nil {
 		if err := s.DvbSubSourceSettings.Validate(); err != nil {
 			invalidParams.AddNested("DvbSubSourceSettings", err.(request.ErrInvalidParams))
@@ -7774,6 +8658,12 @@ func (s *CaptionSelectorSettings) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAncillarySourceSettings sets the AncillarySourceSettings field's value.
+func (s *CaptionSelectorSettings) SetAncillarySourceSettings(v *AncillarySourceSettings) *CaptionSelectorSettings {
+	s.AncillarySourceSettings = v
+	return s
 }
 
 // SetAribSourceSettings sets the AribSourceSettings field's value.
@@ -7812,11 +8702,37 @@ func (s *CaptionSelectorSettings) SetTeletextSourceSettings(v *TeletextSourceSet
 	return s
 }
 
+type CdiInputSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// Maximum CDI input resolution
+	Resolution *string `locationName:"resolution" type:"string" enum:"CdiInputResolution"`
+}
+
+// String returns the string representation
+func (s CdiInputSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CdiInputSpecification) GoString() string {
+	return s.String()
+}
+
+// SetResolution sets the Resolution field's value.
+func (s *CdiInputSpecification) SetResolution(v string) *CdiInputSpecification {
+	s.Resolution = &v
+	return s
+}
+
 type Channel struct {
 	_ struct{} `type:"structure"`
 
 	// The unique arn of the channel.
 	Arn *string `locationName:"arn" type:"string"`
+
+	// Specification of CDI inputs for this channel
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
 
 	// The class for this channel. STANDARD for a channel with two pipelines or
 	// SINGLE_PIPELINE for a channel with one pipeline.
@@ -7839,6 +8755,7 @@ type Channel struct {
 	// List of input attachments for channel.
 	InputAttachments []*InputAttachment `locationName:"inputAttachments" type:"list"`
 
+	// Specification of network and file inputs for this channel
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
 	// The log level being written to CloudWatch Logs.
@@ -7860,6 +8777,9 @@ type Channel struct {
 
 	// A collection of key-value pairs.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// Settings for VPC output
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -7875,6 +8795,12 @@ func (s Channel) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *Channel) SetArn(v string) *Channel {
 	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *Channel) SetCdiInputSpecification(v *CdiInputSpecification) *Channel {
+	s.CdiInputSpecification = v
 	return s
 }
 
@@ -7962,6 +8888,12 @@ func (s *Channel) SetTags(v map[string]*string) *Channel {
 	return s
 }
 
+// SetVpc sets the Vpc field's value.
+func (s *Channel) SetVpc(v *VpcOutputSettings) *Channel {
+	s.Vpc = v
+	return s
+}
+
 type ChannelEgressEndpoint struct {
 	_ struct{} `type:"structure"`
 
@@ -7991,6 +8923,9 @@ type ChannelSummary struct {
 	// The unique arn of the channel.
 	Arn *string `locationName:"arn" type:"string"`
 
+	// Specification of CDI inputs for this channel
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// The class for this channel. STANDARD for a channel with two pipelines or
 	// SINGLE_PIPELINE for a channel with one pipeline.
 	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
@@ -8009,6 +8944,7 @@ type ChannelSummary struct {
 	// List of input attachments for channel.
 	InputAttachments []*InputAttachment `locationName:"inputAttachments" type:"list"`
 
+	// Specification of network and file inputs for this channel
 	InputSpecification *InputSpecification `locationName:"inputSpecification" type:"structure"`
 
 	// The log level being written to CloudWatch Logs.
@@ -8027,6 +8963,9 @@ type ChannelSummary struct {
 
 	// A collection of key-value pairs.
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// Settings for VPC output
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -8042,6 +8981,12 @@ func (s ChannelSummary) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *ChannelSummary) SetArn(v string) *ChannelSummary {
 	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *ChannelSummary) SetCdiInputSpecification(v *CdiInputSpecification) *ChannelSummary {
+	s.CdiInputSpecification = v
 	return s
 }
 
@@ -8114,6 +9059,12 @@ func (s *ChannelSummary) SetState(v string) *ChannelSummary {
 // SetTags sets the Tags field's value.
 func (s *ChannelSummary) SetTags(v map[string]*string) *ChannelSummary {
 	s.Tags = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *ChannelSummary) SetVpc(v *VpcOutputSettings) *ChannelSummary {
+	s.Vpc = v
 	return s
 }
 
@@ -8190,6 +9141,8 @@ func (s *ConflictException) RequestID() string {
 type CreateChannelInput struct {
 	_ struct{} `type:"structure"`
 
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// A standard channel has two encoding pipelines and a single pipeline channel
 	// only has one.
 	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
@@ -8215,6 +9168,10 @@ type CreateChannelInput struct {
 	RoleArn *string `locationName:"roleArn" type:"string"`
 
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The properties for a private VPC OutputWhen this property is specified, the
+	// output egress addresses will be created in a user specified VPC
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -8255,11 +9212,22 @@ func (s *CreateChannelInput) Validate() error {
 			}
 		}
 	}
+	if s.Vpc != nil {
+		if err := s.Vpc.Validate(); err != nil {
+			invalidParams.AddNested("Vpc", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *CreateChannelInput) SetCdiInputSpecification(v *CdiInputSpecification) *CreateChannelInput {
+	s.CdiInputSpecification = v
+	return s
 }
 
 // SetChannelClass sets the ChannelClass field's value.
@@ -8325,6 +9293,12 @@ func (s *CreateChannelInput) SetRoleArn(v string) *CreateChannelInput {
 // SetTags sets the Tags field's value.
 func (s *CreateChannelInput) SetTags(v map[string]*string) *CreateChannelInput {
 	s.Tags = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *CreateChannelInput) SetVpc(v *VpcOutputSettings) *CreateChannelInput {
+	s.Vpc = v
 	return s
 }
 
@@ -8753,6 +9727,83 @@ func (s *CreateMultiplexProgramOutput) SetMultiplexProgram(v *MultiplexProgram) 
 	return s
 }
 
+type CreatePartnerInputInput struct {
+	_ struct{} `type:"structure"`
+
+	// InputId is a required field
+	InputId *string `location:"uri" locationName:"inputId" type:"string" required:"true"`
+
+	RequestId *string `locationName:"requestId" type:"string" idempotencyToken:"true"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s CreatePartnerInputInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePartnerInputInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePartnerInputInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePartnerInputInput"}
+	if s.InputId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputId"))
+	}
+	if s.InputId != nil && len(*s.InputId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputId sets the InputId field's value.
+func (s *CreatePartnerInputInput) SetInputId(v string) *CreatePartnerInputInput {
+	s.InputId = &v
+	return s
+}
+
+// SetRequestId sets the RequestId field's value.
+func (s *CreatePartnerInputInput) SetRequestId(v string) *CreatePartnerInputInput {
+	s.RequestId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreatePartnerInputInput) SetTags(v map[string]*string) *CreatePartnerInputInput {
+	s.Tags = v
+	return s
+}
+
+type CreatePartnerInputOutput struct {
+	_ struct{} `type:"structure"`
+
+	Input *Input `locationName:"input" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreatePartnerInputOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePartnerInputOutput) GoString() string {
+	return s.String()
+}
+
+// SetInput sets the Input field's value.
+func (s *CreatePartnerInputOutput) SetInput(v *Input) *CreatePartnerInputOutput {
+	s.Input = v
+	return s
+}
+
 type CreateTagsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8858,6 +9909,8 @@ type DeleteChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// A standard channel has two encoding pipelines and a single pipeline channel
 	// only has one.
 	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
@@ -8889,6 +9942,10 @@ type DeleteChannelOutput struct {
 	State *string `locationName:"state" type:"string" enum:"ChannelState"`
 
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The properties for a private VPC OutputWhen this property is specified, the
+	// output egress addresses will be created in a user specified VPC
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -8904,6 +9961,12 @@ func (s DeleteChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DeleteChannelOutput) SetArn(v string) *DeleteChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *DeleteChannelOutput) SetCdiInputSpecification(v *CdiInputSpecification) *DeleteChannelOutput {
+	s.CdiInputSpecification = v
 	return s
 }
 
@@ -8988,6 +10051,12 @@ func (s *DeleteChannelOutput) SetState(v string) *DeleteChannelOutput {
 // SetTags sets the Tags field's value.
 func (s *DeleteChannelOutput) SetTags(v map[string]*string) *DeleteChannelOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *DeleteChannelOutput) SetVpc(v *VpcOutputSettings) *DeleteChannelOutput {
+	s.Vpc = v
 	return s
 }
 
@@ -9297,6 +10366,8 @@ type DeleteMultiplexProgramOutput struct {
 	// Packet identifiers map for a given Multiplex program.
 	PacketIdentifiersMap *MultiplexProgramPacketIdentifiersMap `locationName:"packetIdentifiersMap" type:"structure"`
 
+	PipelineDetails []*MultiplexProgramPipelineDetail `locationName:"pipelineDetails" type:"list"`
+
 	ProgramName *string `locationName:"programName" type:"string"`
 }
 
@@ -9325,6 +10396,12 @@ func (s *DeleteMultiplexProgramOutput) SetMultiplexProgramSettings(v *MultiplexP
 // SetPacketIdentifiersMap sets the PacketIdentifiersMap field's value.
 func (s *DeleteMultiplexProgramOutput) SetPacketIdentifiersMap(v *MultiplexProgramPacketIdentifiersMap) *DeleteMultiplexProgramOutput {
 	s.PacketIdentifiersMap = v
+	return s
+}
+
+// SetPipelineDetails sets the PipelineDetails field's value.
+func (s *DeleteMultiplexProgramOutput) SetPipelineDetails(v []*MultiplexProgramPipelineDetail) *DeleteMultiplexProgramOutput {
+	s.PipelineDetails = v
 	return s
 }
 
@@ -9697,6 +10774,8 @@ type DescribeChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// A standard channel has two encoding pipelines and a single pipeline channel
 	// only has one.
 	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
@@ -9728,6 +10807,10 @@ type DescribeChannelOutput struct {
 	State *string `locationName:"state" type:"string" enum:"ChannelState"`
 
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The properties for a private VPC OutputWhen this property is specified, the
+	// output egress addresses will be created in a user specified VPC
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -9743,6 +10826,12 @@ func (s DescribeChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeChannelOutput) SetArn(v string) *DescribeChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *DescribeChannelOutput) SetCdiInputSpecification(v *CdiInputSpecification) *DescribeChannelOutput {
+	s.CdiInputSpecification = v
 	return s
 }
 
@@ -9830,6 +10919,12 @@ func (s *DescribeChannelOutput) SetTags(v map[string]*string) *DescribeChannelOu
 	return s
 }
 
+// SetVpc sets the Vpc field's value.
+func (s *DescribeChannelOutput) SetVpc(v *VpcOutputSettings) *DescribeChannelOutput {
+	s.Vpc = v
+	return s
+}
+
 type DescribeInputDeviceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9884,6 +10979,9 @@ type DescribeInputDeviceOutput struct {
 	// means that it has not updated its configuration.
 	DeviceSettingsSyncState *string `locationName:"deviceSettingsSyncState" type:"string" enum:"DeviceSettingsSyncState"`
 
+	// The status of software on the input device.
+	DeviceUpdateStatus *string `locationName:"deviceUpdateStatus" type:"string" enum:"DeviceUpdateStatus"`
+
 	// Settings that describe the active source from the input device, and the video
 	// characteristics of that source.
 	HdDeviceSettings *InputDeviceHdSettings `locationName:"hdDeviceSettings" type:"structure"`
@@ -9902,6 +11000,10 @@ type DescribeInputDeviceOutput struct {
 	// The type of the input device. For an AWS Elemental Link device that outputs
 	// resolutions up to 1080, choose "HD".
 	Type *string `locationName:"type" type:"string" enum:"InputDeviceType"`
+
+	// Settings that describe the active source from the input device, and the video
+	// characteristics of that source.
+	UhdDeviceSettings *InputDeviceUhdSettings `locationName:"uhdDeviceSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -9929,6 +11031,12 @@ func (s *DescribeInputDeviceOutput) SetConnectionState(v string) *DescribeInputD
 // SetDeviceSettingsSyncState sets the DeviceSettingsSyncState field's value.
 func (s *DescribeInputDeviceOutput) SetDeviceSettingsSyncState(v string) *DescribeInputDeviceOutput {
 	s.DeviceSettingsSyncState = &v
+	return s
+}
+
+// SetDeviceUpdateStatus sets the DeviceUpdateStatus field's value.
+func (s *DescribeInputDeviceOutput) SetDeviceUpdateStatus(v string) *DescribeInputDeviceOutput {
+	s.DeviceUpdateStatus = &v
 	return s
 }
 
@@ -9971,6 +11079,12 @@ func (s *DescribeInputDeviceOutput) SetSerialNumber(v string) *DescribeInputDevi
 // SetType sets the Type field's value.
 func (s *DescribeInputDeviceOutput) SetType(v string) *DescribeInputDeviceOutput {
 	s.Type = &v
+	return s
+}
+
+// SetUhdDeviceSettings sets the UhdDeviceSettings field's value.
+func (s *DescribeInputDeviceOutput) SetUhdDeviceSettings(v *InputDeviceUhdSettings) *DescribeInputDeviceOutput {
+	s.UhdDeviceSettings = v
 	return s
 }
 
@@ -10134,6 +11248,8 @@ type DescribeInputOutput struct {
 
 	InputDevices []*InputDeviceSettings `locationName:"inputDevices" type:"list"`
 
+	InputPartnerIds []*string `locationName:"inputPartnerIds" type:"list"`
+
 	// There are two types of input sources, static and dynamic. If an input source
 	// is dynamic you canchange the source url of the input dynamically using an
 	// input switch action. However, the only input typeto support a dynamic url
@@ -10200,6 +11316,12 @@ func (s *DescribeInputOutput) SetInputClass(v string) *DescribeInputOutput {
 // SetInputDevices sets the InputDevices field's value.
 func (s *DescribeInputOutput) SetInputDevices(v []*InputDeviceSettings) *DescribeInputOutput {
 	s.InputDevices = v
+	return s
+}
+
+// SetInputPartnerIds sets the InputPartnerIds field's value.
+func (s *DescribeInputOutput) SetInputPartnerIds(v []*string) *DescribeInputOutput {
+	s.InputPartnerIds = v
 	return s
 }
 
@@ -10558,6 +11680,8 @@ type DescribeMultiplexProgramOutput struct {
 	// Packet identifiers map for a given Multiplex program.
 	PacketIdentifiersMap *MultiplexProgramPacketIdentifiersMap `locationName:"packetIdentifiersMap" type:"structure"`
 
+	PipelineDetails []*MultiplexProgramPipelineDetail `locationName:"pipelineDetails" type:"list"`
+
 	ProgramName *string `locationName:"programName" type:"string"`
 }
 
@@ -10586,6 +11710,12 @@ func (s *DescribeMultiplexProgramOutput) SetMultiplexProgramSettings(v *Multiple
 // SetPacketIdentifiersMap sets the PacketIdentifiersMap field's value.
 func (s *DescribeMultiplexProgramOutput) SetPacketIdentifiersMap(v *MultiplexProgramPacketIdentifiersMap) *DescribeMultiplexProgramOutput {
 	s.PacketIdentifiersMap = v
+	return s
+}
+
+// SetPipelineDetails sets the PipelineDetails field's value.
+func (s *DescribeMultiplexProgramOutput) SetPipelineDetails(v []*MultiplexProgramPipelineDetail) *DescribeMultiplexProgramOutput {
+	s.PipelineDetails = v
 	return s
 }
 
@@ -12072,6 +13202,116 @@ func (s *EncoderSettings) SetVideoDescriptions(v []*VideoDescription) *EncoderSe
 	return s
 }
 
+// Failover Condition settings. There can be multiple failover conditions inside
+// AutomaticInputFailoverSettings.
+type FailoverCondition struct {
+	_ struct{} `type:"structure"`
+
+	// Failover condition type-specific settings.
+	FailoverConditionSettings *FailoverConditionSettings `locationName:"failoverConditionSettings" type:"structure"`
+}
+
+// String returns the string representation
+func (s FailoverCondition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailoverCondition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FailoverCondition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FailoverCondition"}
+	if s.FailoverConditionSettings != nil {
+		if err := s.FailoverConditionSettings.Validate(); err != nil {
+			invalidParams.AddNested("FailoverConditionSettings", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailoverConditionSettings sets the FailoverConditionSettings field's value.
+func (s *FailoverCondition) SetFailoverConditionSettings(v *FailoverConditionSettings) *FailoverCondition {
+	s.FailoverConditionSettings = v
+	return s
+}
+
+// Settings for one failover condition.
+type FailoverConditionSettings struct {
+	_ struct{} `type:"structure"`
+
+	// MediaLive will perform a failover if the specified audio selector is silent
+	// for the specified period.
+	AudioSilenceSettings *AudioSilenceFailoverSettings `locationName:"audioSilenceSettings" type:"structure"`
+
+	// MediaLive will perform a failover if content is not detected in this input
+	// for the specified period.
+	InputLossSettings *InputLossFailoverSettings `locationName:"inputLossSettings" type:"structure"`
+
+	// MediaLive will perform a failover if content is considered black for the
+	// specified period.
+	VideoBlackSettings *VideoBlackFailoverSettings `locationName:"videoBlackSettings" type:"structure"`
+}
+
+// String returns the string representation
+func (s FailoverConditionSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailoverConditionSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FailoverConditionSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FailoverConditionSettings"}
+	if s.AudioSilenceSettings != nil {
+		if err := s.AudioSilenceSettings.Validate(); err != nil {
+			invalidParams.AddNested("AudioSilenceSettings", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.InputLossSettings != nil {
+		if err := s.InputLossSettings.Validate(); err != nil {
+			invalidParams.AddNested("InputLossSettings", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VideoBlackSettings != nil {
+		if err := s.VideoBlackSettings.Validate(); err != nil {
+			invalidParams.AddNested("VideoBlackSettings", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAudioSilenceSettings sets the AudioSilenceSettings field's value.
+func (s *FailoverConditionSettings) SetAudioSilenceSettings(v *AudioSilenceFailoverSettings) *FailoverConditionSettings {
+	s.AudioSilenceSettings = v
+	return s
+}
+
+// SetInputLossSettings sets the InputLossSettings field's value.
+func (s *FailoverConditionSettings) SetInputLossSettings(v *InputLossFailoverSettings) *FailoverConditionSettings {
+	s.InputLossSettings = v
+	return s
+}
+
+// SetVideoBlackSettings sets the VideoBlackSettings field's value.
+func (s *FailoverConditionSettings) SetVideoBlackSettings(v *VideoBlackFailoverSettings) *FailoverConditionSettings {
+	s.VideoBlackSettings = v
+	return s
+}
+
 // Feature Activations
 type FeatureActivations struct {
 	_ struct{} `type:"structure"`
@@ -12406,6 +13646,21 @@ func (s *FrameCaptureGroupSettings) SetDestination(v *OutputLocationRef) *FrameC
 	return s
 }
 
+// Frame Capture Hls Settings
+type FrameCaptureHlsSettings struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s FrameCaptureHlsSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FrameCaptureHlsSettings) GoString() string {
+	return s.String()
+}
+
 // Frame Capture Output Settings
 type FrameCaptureOutputSettings struct {
 	_ struct{} `type:"structure"`
@@ -12437,9 +13692,7 @@ type FrameCaptureSettings struct {
 
 	// The frequency at which to capture frames for inclusion in the output. May
 	// be specified in either seconds or milliseconds, as specified by captureIntervalUnits.
-	//
-	// CaptureInterval is a required field
-	CaptureInterval *int64 `locationName:"captureInterval" min:"1" type:"integer" required:"true"`
+	CaptureInterval *int64 `locationName:"captureInterval" min:"1" type:"integer"`
 
 	// Unit for the frame capture interval.
 	CaptureIntervalUnits *string `locationName:"captureIntervalUnits" type:"string" enum:"FrameCaptureIntervalUnit"`
@@ -12458,9 +13711,6 @@ func (s FrameCaptureSettings) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *FrameCaptureSettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "FrameCaptureSettings"}
-	if s.CaptureInterval == nil {
-		invalidParams.Add(request.NewErrParamRequired("CaptureInterval"))
-	}
 	if s.CaptureInterval != nil && *s.CaptureInterval < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("CaptureInterval", 1))
 	}
@@ -13926,6 +15176,14 @@ type HlsGroupSettings struct {
 	// Place segments in subdirectories.
 	DirectoryStructure *string `locationName:"directoryStructure" type:"string" enum:"HlsDirectoryStructure"`
 
+	// Specifies whether to insert EXT-X-DISCONTINUITY tags in the HLS child manifests
+	// for this output group.Typically, choose Insert because these tags are required
+	// in the manifest (according to the HLS specification) and serve an important
+	// purpose.Choose Never Insert only if the downstream system is doing real-time
+	// failover (without using the MediaLive automatic failover feature) and only
+	// if that downstream system has advised you to exclude the tags.
+	DiscontinuityTags *string `locationName:"discontinuityTags" type:"string" enum:"HlsDiscontinuityTags"`
+
 	// Encrypts the segments with the given encryption scheme. Exclude this parameter
 	// if no encryption is desired.
 	EncryptionType *string `locationName:"encryptionType" type:"string" enum:"HlsEncryptionType"`
@@ -13944,6 +15202,14 @@ type HlsGroupSettings struct {
 	// and one or more #EXT-X-BYTERANGE entries identifying the I-frame position.
 	// For example, #EXT-X-BYTERANGE:160364@1461888"
 	IFrameOnlyPlaylists *string `locationName:"iFrameOnlyPlaylists" type:"string" enum:"IFrameOnlyPlaylistType"`
+
+	// Specifies whether to include the final (incomplete) segment in the media
+	// output when the pipeline stops producing output because of a channel stop,
+	// a channel pause or a loss of input to the pipeline.Auto means that MediaLive
+	// decides whether to include the final segment, depending on the channel class
+	// and the types of output groups.Suppress means to never include the incomplete
+	// segment. We recommend you choose Auto and let MediaLive control the behavior.
+	IncompleteSegmentBehavior *string `locationName:"incompleteSegmentBehavior" type:"string" enum:"HlsIncompleteSegmentBehavior"`
 
 	// Applies only if Mode field is LIVE.Specifies the maximum number of segments
 	// in the media manifest file. After this maximum, older segments are removed
@@ -14197,6 +15463,12 @@ func (s *HlsGroupSettings) SetDirectoryStructure(v string) *HlsGroupSettings {
 	return s
 }
 
+// SetDiscontinuityTags sets the DiscontinuityTags field's value.
+func (s *HlsGroupSettings) SetDiscontinuityTags(v string) *HlsGroupSettings {
+	s.DiscontinuityTags = &v
+	return s
+}
+
 // SetEncryptionType sets the EncryptionType field's value.
 func (s *HlsGroupSettings) SetEncryptionType(v string) *HlsGroupSettings {
 	s.EncryptionType = &v
@@ -14218,6 +15490,12 @@ func (s *HlsGroupSettings) SetHlsId3SegmentTagging(v string) *HlsGroupSettings {
 // SetIFrameOnlyPlaylists sets the IFrameOnlyPlaylists field's value.
 func (s *HlsGroupSettings) SetIFrameOnlyPlaylists(v string) *HlsGroupSettings {
 	s.IFrameOnlyPlaylists = &v
+	return s
+}
+
+// SetIncompleteSegmentBehavior sets the IncompleteSegmentBehavior field's value.
+func (s *HlsGroupSettings) SetIncompleteSegmentBehavior(v string) *HlsGroupSettings {
+	s.IncompleteSegmentBehavior = &v
 	return s
 }
 
@@ -14615,6 +15893,9 @@ type HlsSettings struct {
 	// Fmp4 Hls Settings
 	Fmp4HlsSettings *Fmp4HlsSettings `locationName:"fmp4HlsSettings" type:"structure"`
 
+	// Frame Capture Hls Settings
+	FrameCaptureHlsSettings *FrameCaptureHlsSettings `locationName:"frameCaptureHlsSettings" type:"structure"`
+
 	// Standard Hls Settings
 	StandardHlsSettings *StandardHlsSettings `locationName:"standardHlsSettings" type:"structure"`
 }
@@ -14658,6 +15939,12 @@ func (s *HlsSettings) SetAudioOnlyHlsSettings(v *AudioOnlyHlsSettings) *HlsSetti
 // SetFmp4HlsSettings sets the Fmp4HlsSettings field's value.
 func (s *HlsSettings) SetFmp4HlsSettings(v *Fmp4HlsSettings) *HlsSettings {
 	s.Fmp4HlsSettings = v
+	return s
+}
+
+// SetFrameCaptureHlsSettings sets the FrameCaptureHlsSettings field's value.
+func (s *HlsSettings) SetFrameCaptureHlsSettings(v *FrameCaptureHlsSettings) *HlsSettings {
+	s.FrameCaptureHlsSettings = v
 	return s
 }
 
@@ -14812,6 +16099,9 @@ type Input struct {
 	// Settings for the input devices.
 	InputDevices []*InputDeviceSettings `locationName:"inputDevices" type:"list"`
 
+	// A list of IDs for all Inputs which are partners of this one.
+	InputPartnerIds []*string `locationName:"inputPartnerIds" type:"list"`
+
 	// Certain pull input sources can be dynamic, meaning that they can have their
 	// URL's dynamically changesduring input switch actions. Presently, this functionality
 	// only works with MP4_FILE inputs.
@@ -14884,6 +16174,12 @@ func (s *Input) SetInputClass(v string) *Input {
 // SetInputDevices sets the InputDevices field's value.
 func (s *Input) SetInputDevices(v []*InputDeviceSettings) *Input {
 	s.InputDevices = v
+	return s
+}
+
+// SetInputPartnerIds sets the InputPartnerIds field's value.
+func (s *Input) SetInputPartnerIds(v []*string) *Input {
+	s.InputPartnerIds = v
 	return s
 }
 
@@ -15491,6 +16787,9 @@ type InputDeviceSummary struct {
 	// means that it has not updated its configuration.
 	DeviceSettingsSyncState *string `locationName:"deviceSettingsSyncState" type:"string" enum:"DeviceSettingsSyncState"`
 
+	// The status of software on the input device.
+	DeviceUpdateStatus *string `locationName:"deviceUpdateStatus" type:"string" enum:"DeviceUpdateStatus"`
+
 	// Settings that describe an input device that is type HD.
 	HdDeviceSettings *InputDeviceHdSettings `locationName:"hdDeviceSettings" type:"structure"`
 
@@ -15511,6 +16810,9 @@ type InputDeviceSummary struct {
 
 	// The type of the input device.
 	Type *string `locationName:"type" type:"string" enum:"InputDeviceType"`
+
+	// Settings that describe an input device that is type UHD.
+	UhdDeviceSettings *InputDeviceUhdSettings `locationName:"uhdDeviceSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -15538,6 +16840,12 @@ func (s *InputDeviceSummary) SetConnectionState(v string) *InputDeviceSummary {
 // SetDeviceSettingsSyncState sets the DeviceSettingsSyncState field's value.
 func (s *InputDeviceSummary) SetDeviceSettingsSyncState(v string) *InputDeviceSummary {
 	s.DeviceSettingsSyncState = &v
+	return s
+}
+
+// SetDeviceUpdateStatus sets the DeviceUpdateStatus field's value.
+func (s *InputDeviceSummary) SetDeviceUpdateStatus(v string) *InputDeviceSummary {
+	s.DeviceUpdateStatus = &v
 	return s
 }
 
@@ -15580,6 +16888,103 @@ func (s *InputDeviceSummary) SetSerialNumber(v string) *InputDeviceSummary {
 // SetType sets the Type field's value.
 func (s *InputDeviceSummary) SetType(v string) *InputDeviceSummary {
 	s.Type = &v
+	return s
+}
+
+// SetUhdDeviceSettings sets the UhdDeviceSettings field's value.
+func (s *InputDeviceSummary) SetUhdDeviceSettings(v *InputDeviceUhdSettings) *InputDeviceSummary {
+	s.UhdDeviceSettings = v
+	return s
+}
+
+// Settings that describe the active source from the input device, and the video
+// characteristics of that source.
+type InputDeviceUhdSettings struct {
+	_ struct{} `type:"structure"`
+
+	// If you specified Auto as the configured input, specifies which of the sources
+	// is currently active (SDI or HDMI).
+	ActiveInput *string `locationName:"activeInput" type:"string" enum:"InputDeviceActiveInput"`
+
+	// The source at the input device that is currently active. You can specify
+	// this source.
+	ConfiguredInput *string `locationName:"configuredInput" type:"string" enum:"InputDeviceConfiguredInput"`
+
+	// The state of the input device.
+	DeviceState *string `locationName:"deviceState" type:"string" enum:"InputDeviceState"`
+
+	// The frame rate of the video source.
+	Framerate *float64 `locationName:"framerate" type:"double"`
+
+	// The height of the video source, in pixels.
+	Height *int64 `locationName:"height" type:"integer"`
+
+	// The current maximum bitrate for ingesting this source, in bits per second.
+	// You can specify this maximum.
+	MaxBitrate *int64 `locationName:"maxBitrate" type:"integer"`
+
+	// The scan type of the video source.
+	ScanType *string `locationName:"scanType" type:"string" enum:"InputDeviceScanType"`
+
+	// The width of the video source, in pixels.
+	Width *int64 `locationName:"width" type:"integer"`
+}
+
+// String returns the string representation
+func (s InputDeviceUhdSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputDeviceUhdSettings) GoString() string {
+	return s.String()
+}
+
+// SetActiveInput sets the ActiveInput field's value.
+func (s *InputDeviceUhdSettings) SetActiveInput(v string) *InputDeviceUhdSettings {
+	s.ActiveInput = &v
+	return s
+}
+
+// SetConfiguredInput sets the ConfiguredInput field's value.
+func (s *InputDeviceUhdSettings) SetConfiguredInput(v string) *InputDeviceUhdSettings {
+	s.ConfiguredInput = &v
+	return s
+}
+
+// SetDeviceState sets the DeviceState field's value.
+func (s *InputDeviceUhdSettings) SetDeviceState(v string) *InputDeviceUhdSettings {
+	s.DeviceState = &v
+	return s
+}
+
+// SetFramerate sets the Framerate field's value.
+func (s *InputDeviceUhdSettings) SetFramerate(v float64) *InputDeviceUhdSettings {
+	s.Framerate = &v
+	return s
+}
+
+// SetHeight sets the Height field's value.
+func (s *InputDeviceUhdSettings) SetHeight(v int64) *InputDeviceUhdSettings {
+	s.Height = &v
+	return s
+}
+
+// SetMaxBitrate sets the MaxBitrate field's value.
+func (s *InputDeviceUhdSettings) SetMaxBitrate(v int64) *InputDeviceUhdSettings {
+	s.MaxBitrate = &v
+	return s
+}
+
+// SetScanType sets the ScanType field's value.
+func (s *InputDeviceUhdSettings) SetScanType(v string) *InputDeviceUhdSettings {
+	s.ScanType = &v
+	return s
+}
+
+// SetWidth sets the Width field's value.
+func (s *InputDeviceUhdSettings) SetWidth(v int64) *InputDeviceUhdSettings {
+	s.Width = &v
 	return s
 }
 
@@ -15728,6 +17133,45 @@ func (s *InputLossBehavior) SetInputLossImageType(v string) *InputLossBehavior {
 // SetRepeatFrameMsec sets the RepeatFrameMsec field's value.
 func (s *InputLossBehavior) SetRepeatFrameMsec(v int64) *InputLossBehavior {
 	s.RepeatFrameMsec = &v
+	return s
+}
+
+// MediaLive will perform a failover if content is not detected in this input
+// for the specified period.
+type InputLossFailoverSettings struct {
+	_ struct{} `type:"structure"`
+
+	// The amount of time (in milliseconds) that no input is detected. After that
+	// time, an input failover will occur.
+	InputLossThresholdMsec *int64 `locationName:"inputLossThresholdMsec" min:"100" type:"integer"`
+}
+
+// String returns the string representation
+func (s InputLossFailoverSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InputLossFailoverSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InputLossFailoverSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InputLossFailoverSettings"}
+	if s.InputLossThresholdMsec != nil && *s.InputLossThresholdMsec < 100 {
+		invalidParams.Add(request.NewErrParamMinValue("InputLossThresholdMsec", 100))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputLossThresholdMsec sets the InputLossThresholdMsec field's value.
+func (s *InputLossFailoverSettings) SetInputLossThresholdMsec(v int64) *InputLossFailoverSettings {
+	s.InputLossThresholdMsec = &v
 	return s
 }
 
@@ -16468,6 +17912,91 @@ func (s *ListChannelsOutput) SetChannels(v []*ChannelSummary) *ListChannelsOutpu
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListChannelsOutput) SetNextToken(v string) *ListChannelsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListInputDeviceTransfersInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// TransferType is a required field
+	TransferType *string `location:"querystring" locationName:"transferType" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListInputDeviceTransfersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInputDeviceTransfersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListInputDeviceTransfersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListInputDeviceTransfersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.TransferType == nil {
+		invalidParams.Add(request.NewErrParamRequired("TransferType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListInputDeviceTransfersInput) SetMaxResults(v int64) *ListInputDeviceTransfersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListInputDeviceTransfersInput) SetNextToken(v string) *ListInputDeviceTransfersInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTransferType sets the TransferType field's value.
+func (s *ListInputDeviceTransfersInput) SetTransferType(v string) *ListInputDeviceTransfersInput {
+	s.TransferType = &v
+	return s
+}
+
+type ListInputDeviceTransfersOutput struct {
+	_ struct{} `type:"structure"`
+
+	InputDeviceTransfers []*TransferringInputDeviceSummary `locationName:"inputDeviceTransfers" type:"list"`
+
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListInputDeviceTransfersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListInputDeviceTransfersOutput) GoString() string {
+	return s.String()
+}
+
+// SetInputDeviceTransfers sets the InputDeviceTransfers field's value.
+func (s *ListInputDeviceTransfersOutput) SetInputDeviceTransfers(v []*TransferringInputDeviceSummary) *ListInputDeviceTransfersOutput {
+	s.InputDeviceTransfers = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListInputDeviceTransfersOutput) SetNextToken(v string) *ListInputDeviceTransfersOutput {
 	s.NextToken = &v
 	return s
 }
@@ -18124,6 +19653,256 @@ func (s *Mp2Settings) SetSampleRate(v float64) *Mp2Settings {
 	return s
 }
 
+// Mpeg2 Filter Settings
+type Mpeg2FilterSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Temporal Filter Settings
+	TemporalFilterSettings *TemporalFilterSettings `locationName:"temporalFilterSettings" type:"structure"`
+}
+
+// String returns the string representation
+func (s Mpeg2FilterSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Mpeg2FilterSettings) GoString() string {
+	return s.String()
+}
+
+// SetTemporalFilterSettings sets the TemporalFilterSettings field's value.
+func (s *Mpeg2FilterSettings) SetTemporalFilterSettings(v *TemporalFilterSettings) *Mpeg2FilterSettings {
+	s.TemporalFilterSettings = v
+	return s
+}
+
+// Mpeg2 Settings
+type Mpeg2Settings struct {
+	_ struct{} `type:"structure"`
+
+	// Choose Off to disable adaptive quantization. Or choose another value to enable
+	// the quantizer and set its strength. The strengths are: Auto, Off, Low, Medium,
+	// High. When you enable this field, MediaLive allows intra-frame quantizers
+	// to vary, which might improve visual quality.
+	AdaptiveQuantization *string `locationName:"adaptiveQuantization" type:"string" enum:"Mpeg2AdaptiveQuantization"`
+
+	// Indicates the AFD values that MediaLive will write into the video encode.
+	// If you do not know what AFD signaling is, or if your downstream system has
+	// not given you guidance, choose AUTO.AUTO: MediaLive will try to preserve
+	// the input AFD value (in cases where multiple AFD values are valid).FIXED:
+	// MediaLive will use the value you specify in fixedAFD.
+	AfdSignaling *string `locationName:"afdSignaling" type:"string" enum:"AfdSignaling"`
+
+	// Specifies whether to include the color space metadata. The metadata describes
+	// the color space that applies to the video (the colorSpace field). We recommend
+	// that you insert the metadata.
+	ColorMetadata *string `locationName:"colorMetadata" type:"string" enum:"Mpeg2ColorMetadata"`
+
+	// Choose the type of color space conversion to apply to the output. For detailed
+	// information on setting up both the input and the output to obtain the desired
+	// color space in the output, see the section on \"MediaLive Features - Video
+	// - color space\" in the MediaLive User Guide.PASSTHROUGH: Keep the color space
+	// of the input content - do not convert it.AUTO:Convert all content that is
+	// SD to rec 601, and convert all content that is HD to rec 709.
+	ColorSpace *string `locationName:"colorSpace" type:"string" enum:"Mpeg2ColorSpace"`
+
+	// Sets the pixel aspect ratio for the encode.
+	DisplayAspectRatio *string `locationName:"displayAspectRatio" type:"string" enum:"Mpeg2DisplayRatio"`
+
+	// Optionally specify a noise reduction filter, which can improve quality of
+	// compressed content. If you do not choose a filter, no filter will be applied.TEMPORAL:
+	// This filter is useful for both source content that is noisy (when it has
+	// excessive digital artifacts) and source content that is clean.When the content
+	// is noisy, the filter cleans up the source content before the encoding phase,
+	// with these two effects: First, it improves the output video quality because
+	// the content has been cleaned up. Secondly, it decreases the bandwidth because
+	// MediaLive does not waste bits on encoding noise.When the content is reasonably
+	// clean, the filter tends to decrease the bitrate.
+	FilterSettings *Mpeg2FilterSettings `locationName:"filterSettings" type:"structure"`
+
+	// Complete this field only when afdSignaling is set to FIXED. Enter the AFD
+	// value (4 bits) to write on all frames of the video encode.
+	FixedAfd *string `locationName:"fixedAfd" type:"string" enum:"FixedAfd"`
+
+	// description": "The framerate denominator. For example, 1001. The framerate
+	// is the numerator divided by the denominator. For example, 24000 / 1001 =
+	// 23.976 FPS.
+	//
+	// FramerateDenominator is a required field
+	FramerateDenominator *int64 `locationName:"framerateDenominator" min:"1" type:"integer" required:"true"`
+
+	// The framerate numerator. For example, 24000. The framerate is the numerator
+	// divided by the denominator. For example, 24000 / 1001 = 23.976 FPS.
+	//
+	// FramerateNumerator is a required field
+	FramerateNumerator *int64 `locationName:"framerateNumerator" min:"1" type:"integer" required:"true"`
+
+	// MPEG2: default is open GOP.
+	GopClosedCadence *int64 `locationName:"gopClosedCadence" type:"integer"`
+
+	// Relates to the GOP structure. The number of B-frames between reference frames.
+	// If you do not know what a B-frame is, use the default.
+	GopNumBFrames *int64 `locationName:"gopNumBFrames" type:"integer"`
+
+	// Relates to the GOP structure. The GOP size (keyframe interval) in the units
+	// specified in gopSizeUnits. If you do not know what GOP is, use the default.If
+	// gopSizeUnits is frames, then the gopSize must be an integer and must be greater
+	// than or equal to 1.If gopSizeUnits is seconds, the gopSize must be greater
+	// than 0, but does not need to be an integer.
+	GopSize *float64 `locationName:"gopSize" type:"double"`
+
+	// Relates to the GOP structure. Specifies whether the gopSize is specified
+	// in frames or seconds. If you do not plan to change the default gopSize, leave
+	// the default. If you specify SECONDS, MediaLive will internally convert the
+	// gop size to a frame count.
+	GopSizeUnits *string `locationName:"gopSizeUnits" type:"string" enum:"Mpeg2GopSizeUnits"`
+
+	// Set the scan type of the output to PROGRESSIVE or INTERLACED (top field first).
+	ScanType *string `locationName:"scanType" type:"string" enum:"Mpeg2ScanType"`
+
+	// Relates to the GOP structure. If you do not know what GOP is, use the default.FIXED:
+	// Set the number of B-frames in each sub-GOP to the value in gopNumBFrames.DYNAMIC:
+	// Let MediaLive optimize the number of B-frames in each sub-GOP, to improve
+	// visual quality.
+	SubgopLength *string `locationName:"subgopLength" type:"string" enum:"Mpeg2SubGopLength"`
+
+	// Determines how MediaLive inserts timecodes in the output video. For detailed
+	// information about setting up the input and the output for a timecode, see
+	// the section on \"MediaLive Features - Timecode configuration\" in the MediaLive
+	// User Guide.DISABLED: do not include timecodes.GOP_TIMECODE: Include timecode
+	// metadata in the GOP header.
+	TimecodeInsertion *string `locationName:"timecodeInsertion" type:"string" enum:"Mpeg2TimecodeInsertionBehavior"`
+}
+
+// String returns the string representation
+func (s Mpeg2Settings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Mpeg2Settings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Mpeg2Settings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Mpeg2Settings"}
+	if s.FramerateDenominator == nil {
+		invalidParams.Add(request.NewErrParamRequired("FramerateDenominator"))
+	}
+	if s.FramerateDenominator != nil && *s.FramerateDenominator < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("FramerateDenominator", 1))
+	}
+	if s.FramerateNumerator == nil {
+		invalidParams.Add(request.NewErrParamRequired("FramerateNumerator"))
+	}
+	if s.FramerateNumerator != nil && *s.FramerateNumerator < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("FramerateNumerator", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdaptiveQuantization sets the AdaptiveQuantization field's value.
+func (s *Mpeg2Settings) SetAdaptiveQuantization(v string) *Mpeg2Settings {
+	s.AdaptiveQuantization = &v
+	return s
+}
+
+// SetAfdSignaling sets the AfdSignaling field's value.
+func (s *Mpeg2Settings) SetAfdSignaling(v string) *Mpeg2Settings {
+	s.AfdSignaling = &v
+	return s
+}
+
+// SetColorMetadata sets the ColorMetadata field's value.
+func (s *Mpeg2Settings) SetColorMetadata(v string) *Mpeg2Settings {
+	s.ColorMetadata = &v
+	return s
+}
+
+// SetColorSpace sets the ColorSpace field's value.
+func (s *Mpeg2Settings) SetColorSpace(v string) *Mpeg2Settings {
+	s.ColorSpace = &v
+	return s
+}
+
+// SetDisplayAspectRatio sets the DisplayAspectRatio field's value.
+func (s *Mpeg2Settings) SetDisplayAspectRatio(v string) *Mpeg2Settings {
+	s.DisplayAspectRatio = &v
+	return s
+}
+
+// SetFilterSettings sets the FilterSettings field's value.
+func (s *Mpeg2Settings) SetFilterSettings(v *Mpeg2FilterSettings) *Mpeg2Settings {
+	s.FilterSettings = v
+	return s
+}
+
+// SetFixedAfd sets the FixedAfd field's value.
+func (s *Mpeg2Settings) SetFixedAfd(v string) *Mpeg2Settings {
+	s.FixedAfd = &v
+	return s
+}
+
+// SetFramerateDenominator sets the FramerateDenominator field's value.
+func (s *Mpeg2Settings) SetFramerateDenominator(v int64) *Mpeg2Settings {
+	s.FramerateDenominator = &v
+	return s
+}
+
+// SetFramerateNumerator sets the FramerateNumerator field's value.
+func (s *Mpeg2Settings) SetFramerateNumerator(v int64) *Mpeg2Settings {
+	s.FramerateNumerator = &v
+	return s
+}
+
+// SetGopClosedCadence sets the GopClosedCadence field's value.
+func (s *Mpeg2Settings) SetGopClosedCadence(v int64) *Mpeg2Settings {
+	s.GopClosedCadence = &v
+	return s
+}
+
+// SetGopNumBFrames sets the GopNumBFrames field's value.
+func (s *Mpeg2Settings) SetGopNumBFrames(v int64) *Mpeg2Settings {
+	s.GopNumBFrames = &v
+	return s
+}
+
+// SetGopSize sets the GopSize field's value.
+func (s *Mpeg2Settings) SetGopSize(v float64) *Mpeg2Settings {
+	s.GopSize = &v
+	return s
+}
+
+// SetGopSizeUnits sets the GopSizeUnits field's value.
+func (s *Mpeg2Settings) SetGopSizeUnits(v string) *Mpeg2Settings {
+	s.GopSizeUnits = &v
+	return s
+}
+
+// SetScanType sets the ScanType field's value.
+func (s *Mpeg2Settings) SetScanType(v string) *Mpeg2Settings {
+	s.ScanType = &v
+	return s
+}
+
+// SetSubgopLength sets the SubgopLength field's value.
+func (s *Mpeg2Settings) SetSubgopLength(v string) *Mpeg2Settings {
+	s.SubgopLength = &v
+	return s
+}
+
+// SetTimecodeInsertion sets the TimecodeInsertion field's value.
+func (s *Mpeg2Settings) SetTimecodeInsertion(v string) *Mpeg2Settings {
+	s.TimecodeInsertion = &v
+	return s
+}
+
 // Ms Smooth Group Settings
 type MsSmoothGroupSettings struct {
 	_ struct{} `type:"structure"`
@@ -18609,6 +20388,12 @@ type MultiplexProgram struct {
 	// The packet identifier map for this multiplex program.
 	PacketIdentifiersMap *MultiplexProgramPacketIdentifiersMap `locationName:"packetIdentifiersMap" type:"structure"`
 
+	// Contains information about the current sources for the specified program
+	// in the specified multiplex. Keep in mind that each multiplex pipeline connects
+	// to both pipelines in a given source channel (the channel identified by the
+	// program). But only one of those channel pipelines is ever active at one time.
+	PipelineDetails []*MultiplexProgramPipelineDetail `locationName:"pipelineDetails" type:"list"`
+
 	// The name of the multiplex program.
 	ProgramName *string `locationName:"programName" type:"string"`
 }
@@ -18638,6 +20423,12 @@ func (s *MultiplexProgram) SetMultiplexProgramSettings(v *MultiplexProgramSettin
 // SetPacketIdentifiersMap sets the PacketIdentifiersMap field's value.
 func (s *MultiplexProgram) SetPacketIdentifiersMap(v *MultiplexProgramPacketIdentifiersMap) *MultiplexProgram {
 	s.PacketIdentifiersMap = v
+	return s
+}
+
+// SetPipelineDetails sets the PipelineDetails field's value.
+func (s *MultiplexProgram) SetPipelineDetails(v []*MultiplexProgramPipelineDetail) *MultiplexProgram {
+	s.PipelineDetails = v
 	return s
 }
 
@@ -18820,6 +20611,40 @@ func (s *MultiplexProgramPacketIdentifiersMap) SetVideoPid(v int64) *MultiplexPr
 	return s
 }
 
+// The current source for one of the pipelines in the multiplex.
+type MultiplexProgramPipelineDetail struct {
+	_ struct{} `type:"structure"`
+
+	// Identifies the channel pipeline that is currently active for the pipeline
+	// (identified by PipelineId) in the multiplex.
+	ActiveChannelPipeline *string `locationName:"activeChannelPipeline" type:"string"`
+
+	// Identifies a specific pipeline in the multiplex.
+	PipelineId *string `locationName:"pipelineId" type:"string"`
+}
+
+// String returns the string representation
+func (s MultiplexProgramPipelineDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MultiplexProgramPipelineDetail) GoString() string {
+	return s.String()
+}
+
+// SetActiveChannelPipeline sets the ActiveChannelPipeline field's value.
+func (s *MultiplexProgramPipelineDetail) SetActiveChannelPipeline(v string) *MultiplexProgramPipelineDetail {
+	s.ActiveChannelPipeline = &v
+	return s
+}
+
+// SetPipelineId sets the PipelineId field's value.
+func (s *MultiplexProgramPipelineDetail) SetPipelineId(v string) *MultiplexProgramPipelineDetail {
+	s.PipelineId = &v
+	return s
+}
+
 // Transport stream service descriptor configuration for the Multiplex program.
 type MultiplexProgramServiceDescriptor struct {
 	_ struct{} `type:"structure"`
@@ -18986,7 +20811,7 @@ type MultiplexSettings struct {
 	_ struct{} `type:"structure"`
 
 	// Maximum video buffer delay in milliseconds.
-	MaximumVideoBufferDelayMilliseconds *int64 `locationName:"maximumVideoBufferDelayMilliseconds" min:"1000" type:"integer"`
+	MaximumVideoBufferDelayMilliseconds *int64 `locationName:"maximumVideoBufferDelayMilliseconds" min:"800" type:"integer"`
 
 	// Transport stream bit rate.
 	//
@@ -19015,8 +20840,8 @@ func (s MultiplexSettings) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *MultiplexSettings) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "MultiplexSettings"}
-	if s.MaximumVideoBufferDelayMilliseconds != nil && *s.MaximumVideoBufferDelayMilliseconds < 1000 {
-		invalidParams.Add(request.NewErrParamMinValue("MaximumVideoBufferDelayMilliseconds", 1000))
+	if s.MaximumVideoBufferDelayMilliseconds != nil && *s.MaximumVideoBufferDelayMilliseconds < 800 {
+		invalidParams.Add(request.NewErrParamMinValue("MaximumVideoBufferDelayMilliseconds", 800))
 	}
 	if s.TransportStreamBitrate == nil {
 		invalidParams.Add(request.NewErrParamRequired("TransportStreamBitrate"))
@@ -19091,6 +20916,13 @@ type MultiplexStatmuxVideoSettings struct {
 
 	// Minimum statmux bitrate.
 	MinimumBitrate *int64 `locationName:"minimumBitrate" min:"100000" type:"integer"`
+
+	// The purpose of the priority is to use a combination of the\nmultiplex rate
+	// control algorithm and the QVBR capability of the\nencoder to prioritize the
+	// video quality of some channels in a\nmultiplex over others. Channels that
+	// have a higher priority will\nget higher video quality at the expense of the
+	// video quality of\nother channels in the multiplex with lower priority.
+	Priority *int64 `locationName:"priority" type:"integer"`
 }
 
 // String returns the string representation
@@ -19112,6 +20944,9 @@ func (s *MultiplexStatmuxVideoSettings) Validate() error {
 	if s.MinimumBitrate != nil && *s.MinimumBitrate < 100000 {
 		invalidParams.Add(request.NewErrParamMinValue("MinimumBitrate", 100000))
 	}
+	if s.Priority != nil && *s.Priority < -5 {
+		invalidParams.Add(request.NewErrParamMinValue("Priority", -5))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -19128,6 +20963,12 @@ func (s *MultiplexStatmuxVideoSettings) SetMaximumBitrate(v int64) *MultiplexSta
 // SetMinimumBitrate sets the MinimumBitrate field's value.
 func (s *MultiplexStatmuxVideoSettings) SetMinimumBitrate(v int64) *MultiplexStatmuxVideoSettings {
 	s.MinimumBitrate = &v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *MultiplexStatmuxVideoSettings) SetPriority(v int64) *MultiplexStatmuxVideoSettings {
+	s.Priority = &v
 	return s
 }
 
@@ -20331,6 +22172,21 @@ func (s *PurchaseOfferingOutput) SetReservation(v *Reservation) *PurchaseOfferin
 	return s
 }
 
+// Raw Settings
+type RawSettings struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RawSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RawSettings) GoString() string {
+	return s.String()
+}
+
 // Rec601 Settings
 type Rec601Settings struct {
 	_ struct{} `type:"structure"`
@@ -20358,6 +22214,59 @@ func (s Rec709Settings) String() string {
 
 // GoString returns the string representation
 func (s Rec709Settings) GoString() string {
+	return s.String()
+}
+
+type RejectInputDeviceTransferInput struct {
+	_ struct{} `type:"structure"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RejectInputDeviceTransferInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RejectInputDeviceTransferInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RejectInputDeviceTransferInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RejectInputDeviceTransferInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *RejectInputDeviceTransferInput) SetInputDeviceId(v string) *RejectInputDeviceTransferInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+type RejectInputDeviceTransferOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RejectInputDeviceTransferOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RejectInputDeviceTransferOutput) GoString() string {
 	return s.String()
 }
 
@@ -20718,6 +22627,11 @@ func (s RtmpCaptionInfoDestinationSettings) GoString() string {
 type RtmpGroupSettings struct {
 	_ struct{} `type:"structure"`
 
+	// Choose the ad marker type for this output group. MediaLive will create a
+	// message based on the content of each SCTE-35 message, format it for that
+	// marker type, and insert it in the datastream.
+	AdMarkers []*string `locationName:"adMarkers" type:"list"`
+
 	// Authentication scheme to use when connecting with CDN
 	AuthenticationScheme *string `locationName:"authenticationScheme" type:"string" enum:"AuthenticationScheme"`
 
@@ -20771,6 +22685,12 @@ func (s *RtmpGroupSettings) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAdMarkers sets the AdMarkers field's value.
+func (s *RtmpGroupSettings) SetAdMarkers(v []*string) *RtmpGroupSettings {
+	s.AdMarkers = v
+	return s
 }
 
 // SetAuthenticationScheme sets the AuthenticationScheme field's value.
@@ -22005,6 +23925,8 @@ type StartChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// A standard channel has two encoding pipelines and a single pipeline channel
 	// only has one.
 	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
@@ -22036,6 +23958,10 @@ type StartChannelOutput struct {
 	State *string `locationName:"state" type:"string" enum:"ChannelState"`
 
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The properties for a private VPC OutputWhen this property is specified, the
+	// output egress addresses will be created in a user specified VPC
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -22051,6 +23977,12 @@ func (s StartChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *StartChannelOutput) SetArn(v string) *StartChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *StartChannelOutput) SetCdiInputSpecification(v *CdiInputSpecification) *StartChannelOutput {
+	s.CdiInputSpecification = v
 	return s
 }
 
@@ -22135,6 +24067,12 @@ func (s *StartChannelOutput) SetState(v string) *StartChannelOutput {
 // SetTags sets the Tags field's value.
 func (s *StartChannelOutput) SetTags(v map[string]*string) *StartChannelOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *StartChannelOutput) SetVpc(v *VpcOutputSettings) *StartChannelOutput {
+	s.Vpc = v
 	return s
 }
 
@@ -22584,6 +24522,8 @@ type StopChannelOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// A standard channel has two encoding pipelines and a single pipeline channel
 	// only has one.
 	ChannelClass *string `locationName:"channelClass" type:"string" enum:"ChannelClass"`
@@ -22615,6 +24555,10 @@ type StopChannelOutput struct {
 	State *string `locationName:"state" type:"string" enum:"ChannelState"`
 
 	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The properties for a private VPC OutputWhen this property is specified, the
+	// output egress addresses will be created in a user specified VPC
+	Vpc *VpcOutputSettings `locationName:"vpc" type:"structure"`
 }
 
 // String returns the string representation
@@ -22630,6 +24574,12 @@ func (s StopChannelOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *StopChannelOutput) SetArn(v string) *StopChannelOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *StopChannelOutput) SetCdiInputSpecification(v *CdiInputSpecification) *StopChannelOutput {
+	s.CdiInputSpecification = v
 	return s
 }
 
@@ -22714,6 +24664,12 @@ func (s *StopChannelOutput) SetState(v string) *StopChannelOutput {
 // SetTags sets the Tags field's value.
 func (s *StopChannelOutput) SetTags(v map[string]*string) *StopChannelOutput {
 	s.Tags = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *StopChannelOutput) SetVpc(v *VpcOutputSettings) *StopChannelOutput {
+	s.Vpc = v
 	return s
 }
 
@@ -23081,6 +25037,126 @@ func (s *TooManyRequestsException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+type TransferInputDeviceInput struct {
+	_ struct{} `type:"structure"`
+
+	// InputDeviceId is a required field
+	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
+
+	TargetCustomerId *string `locationName:"targetCustomerId" type:"string"`
+
+	TransferMessage *string `locationName:"transferMessage" type:"string"`
+}
+
+// String returns the string representation
+func (s TransferInputDeviceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TransferInputDeviceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TransferInputDeviceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TransferInputDeviceInput"}
+	if s.InputDeviceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InputDeviceId"))
+	}
+	if s.InputDeviceId != nil && len(*s.InputDeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputDeviceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInputDeviceId sets the InputDeviceId field's value.
+func (s *TransferInputDeviceInput) SetInputDeviceId(v string) *TransferInputDeviceInput {
+	s.InputDeviceId = &v
+	return s
+}
+
+// SetTargetCustomerId sets the TargetCustomerId field's value.
+func (s *TransferInputDeviceInput) SetTargetCustomerId(v string) *TransferInputDeviceInput {
+	s.TargetCustomerId = &v
+	return s
+}
+
+// SetTransferMessage sets the TransferMessage field's value.
+func (s *TransferInputDeviceInput) SetTransferMessage(v string) *TransferInputDeviceInput {
+	s.TransferMessage = &v
+	return s
+}
+
+type TransferInputDeviceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TransferInputDeviceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TransferInputDeviceOutput) GoString() string {
+	return s.String()
+}
+
+// Details about the input device that is being transferred.
+type TransferringInputDeviceSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The unique ID of the input device.
+	Id *string `locationName:"id" type:"string"`
+
+	// The optional message that the sender has attached to the transfer.
+	Message *string `locationName:"message" type:"string"`
+
+	// The AWS account ID for the recipient of the input device transfer.
+	TargetCustomerId *string `locationName:"targetCustomerId" type:"string"`
+
+	// The type (direction) of the input device transfer.
+	TransferType *string `locationName:"transferType" type:"string" enum:"InputDeviceTransferType"`
+}
+
+// String returns the string representation
+func (s TransferringInputDeviceSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TransferringInputDeviceSummary) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *TransferringInputDeviceSummary) SetId(v string) *TransferringInputDeviceSummary {
+	s.Id = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *TransferringInputDeviceSummary) SetMessage(v string) *TransferringInputDeviceSummary {
+	s.Message = &v
+	return s
+}
+
+// SetTargetCustomerId sets the TargetCustomerId field's value.
+func (s *TransferringInputDeviceSummary) SetTargetCustomerId(v string) *TransferringInputDeviceSummary {
+	s.TargetCustomerId = &v
+	return s
+}
+
+// SetTransferType sets the TransferType field's value.
+func (s *TransferringInputDeviceSummary) SetTransferType(v string) *TransferringInputDeviceSummary {
+	s.TransferType = &v
+	return s
+}
+
 // Ttml Destination Settings
 type TtmlDestinationSettings struct {
 	_ struct{} `type:"structure"`
@@ -23433,6 +25509,8 @@ func (s *UpdateChannelClassOutput) SetChannel(v *Channel) *UpdateChannelClassOut
 type UpdateChannelInput struct {
 	_ struct{} `type:"structure"`
 
+	CdiInputSpecification *CdiInputSpecification `locationName:"cdiInputSpecification" type:"structure"`
+
 	// ChannelId is a required field
 	ChannelId *string `location:"uri" locationName:"channelId" type:"string" required:"true"`
 
@@ -23502,6 +25580,12 @@ func (s *UpdateChannelInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCdiInputSpecification sets the CdiInputSpecification field's value.
+func (s *UpdateChannelInput) SetCdiInputSpecification(v *CdiInputSpecification) *UpdateChannelInput {
+	s.CdiInputSpecification = v
+	return s
 }
 
 // SetChannelId sets the ChannelId field's value.
@@ -23584,6 +25668,9 @@ type UpdateInputDeviceInput struct {
 	InputDeviceId *string `location:"uri" locationName:"inputDeviceId" type:"string" required:"true"`
 
 	Name *string `locationName:"name" type:"string"`
+
+	// Configurable settings for the input device.
+	UhdDeviceSettings *InputDeviceConfigurableSettings `locationName:"uhdDeviceSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -23630,6 +25717,12 @@ func (s *UpdateInputDeviceInput) SetName(v string) *UpdateInputDeviceInput {
 	return s
 }
 
+// SetUhdDeviceSettings sets the UhdDeviceSettings field's value.
+func (s *UpdateInputDeviceInput) SetUhdDeviceSettings(v *InputDeviceConfigurableSettings) *UpdateInputDeviceInput {
+	s.UhdDeviceSettings = v
+	return s
+}
+
 type UpdateInputDeviceOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -23644,6 +25737,9 @@ type UpdateInputDeviceOutput struct {
 	// immediately. SYNCED means the device has updated its configuration. SYNCING
 	// means that it has not updated its configuration.
 	DeviceSettingsSyncState *string `locationName:"deviceSettingsSyncState" type:"string" enum:"DeviceSettingsSyncState"`
+
+	// The status of software on the input device.
+	DeviceUpdateStatus *string `locationName:"deviceUpdateStatus" type:"string" enum:"DeviceUpdateStatus"`
 
 	// Settings that describe the active source from the input device, and the video
 	// characteristics of that source.
@@ -23663,6 +25759,10 @@ type UpdateInputDeviceOutput struct {
 	// The type of the input device. For an AWS Elemental Link device that outputs
 	// resolutions up to 1080, choose "HD".
 	Type *string `locationName:"type" type:"string" enum:"InputDeviceType"`
+
+	// Settings that describe the active source from the input device, and the video
+	// characteristics of that source.
+	UhdDeviceSettings *InputDeviceUhdSettings `locationName:"uhdDeviceSettings" type:"structure"`
 }
 
 // String returns the string representation
@@ -23690,6 +25790,12 @@ func (s *UpdateInputDeviceOutput) SetConnectionState(v string) *UpdateInputDevic
 // SetDeviceSettingsSyncState sets the DeviceSettingsSyncState field's value.
 func (s *UpdateInputDeviceOutput) SetDeviceSettingsSyncState(v string) *UpdateInputDeviceOutput {
 	s.DeviceSettingsSyncState = &v
+	return s
+}
+
+// SetDeviceUpdateStatus sets the DeviceUpdateStatus field's value.
+func (s *UpdateInputDeviceOutput) SetDeviceUpdateStatus(v string) *UpdateInputDeviceOutput {
+	s.DeviceUpdateStatus = &v
 	return s
 }
 
@@ -23732,6 +25838,12 @@ func (s *UpdateInputDeviceOutput) SetSerialNumber(v string) *UpdateInputDeviceOu
 // SetType sets the Type field's value.
 func (s *UpdateInputDeviceOutput) SetType(v string) *UpdateInputDeviceOutput {
 	s.Type = &v
+	return s
+}
+
+// SetUhdDeviceSettings sets the UhdDeviceSettings field's value.
+func (s *UpdateInputDeviceOutput) SetUhdDeviceSettings(v *InputDeviceUhdSettings) *UpdateInputDeviceOutput {
+	s.UhdDeviceSettings = v
 	return s
 }
 
@@ -24207,6 +26319,60 @@ func (s *ValidationError) SetErrorMessage(v string) *ValidationError {
 	return s
 }
 
+type VideoBlackFailoverSettings struct {
+	_ struct{} `type:"structure"`
+
+	// A value used in calculating the threshold below which MediaLive considers
+	// a pixel to be 'black'. For the input to be considered black, every pixel
+	// in a frame must be below this threshold. The threshold is calculated as a
+	// percentage (expressed as a decimal) of white. Therefore .1 means 10% white
+	// (or 90% black). Note how the formula works for any color depth. For example,
+	// if you set this field to 0.1 in 10-bit color depth: (1023*0.1=102.3), which
+	// means a pixel value of 102 or less is 'black'. If you set this field to .1
+	// in an 8-bit color depth: (255*0.1=25.5), which means a pixel value of 25
+	// or less is 'black'. The range is 0.0 to 1.0, with any number of decimal places.
+	BlackDetectThreshold *float64 `locationName:"blackDetectThreshold" type:"double"`
+
+	// The amount of time (in milliseconds) that the active input must be black
+	// before automatic input failover occurs.
+	VideoBlackThresholdMsec *int64 `locationName:"videoBlackThresholdMsec" min:"1000" type:"integer"`
+}
+
+// String returns the string representation
+func (s VideoBlackFailoverSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VideoBlackFailoverSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VideoBlackFailoverSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VideoBlackFailoverSettings"}
+	if s.VideoBlackThresholdMsec != nil && *s.VideoBlackThresholdMsec < 1000 {
+		invalidParams.Add(request.NewErrParamMinValue("VideoBlackThresholdMsec", 1000))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBlackDetectThreshold sets the BlackDetectThreshold field's value.
+func (s *VideoBlackFailoverSettings) SetBlackDetectThreshold(v float64) *VideoBlackFailoverSettings {
+	s.BlackDetectThreshold = &v
+	return s
+}
+
+// SetVideoBlackThresholdMsec sets the VideoBlackThresholdMsec field's value.
+func (s *VideoBlackFailoverSettings) SetVideoBlackThresholdMsec(v int64) *VideoBlackFailoverSettings {
+	s.VideoBlackThresholdMsec = &v
+	return s
+}
+
 // Video Codec Settings
 type VideoCodecSettings struct {
 	_ struct{} `type:"structure"`
@@ -24219,6 +26385,9 @@ type VideoCodecSettings struct {
 
 	// H265 Settings
 	H265Settings *H265Settings `locationName:"h265Settings" type:"structure"`
+
+	// Mpeg2 Settings
+	Mpeg2Settings *Mpeg2Settings `locationName:"mpeg2Settings" type:"structure"`
 }
 
 // String returns the string representation
@@ -24249,6 +26418,11 @@ func (s *VideoCodecSettings) Validate() error {
 			invalidParams.AddNested("H265Settings", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Mpeg2Settings != nil {
+		if err := s.Mpeg2Settings.Validate(); err != nil {
+			invalidParams.AddNested("Mpeg2Settings", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -24271,6 +26445,12 @@ func (s *VideoCodecSettings) SetH264Settings(v *H264Settings) *VideoCodecSetting
 // SetH265Settings sets the H265Settings field's value.
 func (s *VideoCodecSettings) SetH265Settings(v *H265Settings) *VideoCodecSettings {
 	s.H265Settings = v
+	return s
+}
+
+// SetMpeg2Settings sets the Mpeg2Settings field's value.
+func (s *VideoCodecSettings) SetMpeg2Settings(v *Mpeg2Settings) *VideoCodecSettings {
+	s.Mpeg2Settings = v
 	return s
 }
 
@@ -24526,6 +26706,112 @@ func (s *VideoSelectorSettings) SetVideoSelectorPid(v *VideoSelectorPid) *VideoS
 // SetVideoSelectorProgramId sets the VideoSelectorProgramId field's value.
 func (s *VideoSelectorSettings) SetVideoSelectorProgramId(v *VideoSelectorProgramId) *VideoSelectorSettings {
 	s.VideoSelectorProgramId = v
+	return s
+}
+
+// The properties for a private VPC OutputWhen this property is specified, the
+// output egress addresses will be created in a user specified VPC
+type VpcOutputSettings struct {
+	_ struct{} `type:"structure"`
+
+	// List of public address allocation ids to associate with ENIs that will be
+	// created in Output VPC.Must specify one for SINGLE_PIPELINE, two for STANDARD
+	// channels
+	PublicAddressAllocationIds []*string `locationName:"publicAddressAllocationIds" type:"list"`
+
+	// A list of up to 5 EC2 VPC security group IDs to attach to the Output VPC
+	// network interfaces.If none are specified then the VPC default security group
+	// will be used
+	SecurityGroupIds []*string `locationName:"securityGroupIds" type:"list"`
+
+	// A list of VPC subnet IDs from the same VPC.If STANDARD channel, subnet IDs
+	// must be mapped to two unique availability zones (AZ).
+	//
+	// SubnetIds is a required field
+	SubnetIds []*string `locationName:"subnetIds" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s VpcOutputSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcOutputSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VpcOutputSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VpcOutputSettings"}
+	if s.SubnetIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubnetIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPublicAddressAllocationIds sets the PublicAddressAllocationIds field's value.
+func (s *VpcOutputSettings) SetPublicAddressAllocationIds(v []*string) *VpcOutputSettings {
+	s.PublicAddressAllocationIds = v
+	return s
+}
+
+// SetSecurityGroupIds sets the SecurityGroupIds field's value.
+func (s *VpcOutputSettings) SetSecurityGroupIds(v []*string) *VpcOutputSettings {
+	s.SecurityGroupIds = v
+	return s
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *VpcOutputSettings) SetSubnetIds(v []*string) *VpcOutputSettings {
+	s.SubnetIds = v
+	return s
+}
+
+// Wav Settings
+type WavSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Bits per sample.
+	BitDepth *float64 `locationName:"bitDepth" type:"double"`
+
+	// The audio coding mode for the WAV audio. The mode determines the number of
+	// channels in the audio.
+	CodingMode *string `locationName:"codingMode" type:"string" enum:"WavCodingMode"`
+
+	// Sample rate in Hz.
+	SampleRate *float64 `locationName:"sampleRate" type:"double"`
+}
+
+// String returns the string representation
+func (s WavSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WavSettings) GoString() string {
+	return s.String()
+}
+
+// SetBitDepth sets the BitDepth field's value.
+func (s *WavSettings) SetBitDepth(v float64) *WavSettings {
+	s.BitDepth = &v
+	return s
+}
+
+// SetCodingMode sets the CodingMode field's value.
+func (s *WavSettings) SetCodingMode(v string) *WavSettings {
+	s.CodingMode = &v
+	return s
+}
+
+// SetSampleRate sets the SampleRate field's value.
+func (s *WavSettings) SetSampleRate(v float64) *WavSettings {
+	s.SampleRate = &v
 	return s
 }
 
@@ -25199,6 +27485,33 @@ func BurnInTeletextGridControl_Values() []string {
 	}
 }
 
+// Maximum CDI input resolution; SD is 480i and 576i up to 30 frames-per-second
+// (fps), HD is 720p up to 60 fps / 1080i up to 30 fps, FHD is 1080p up to 60
+// fps, UHD is 2160p up to 60 fps
+const (
+	// CdiInputResolutionSd is a CdiInputResolution enum value
+	CdiInputResolutionSd = "SD"
+
+	// CdiInputResolutionHd is a CdiInputResolution enum value
+	CdiInputResolutionHd = "HD"
+
+	// CdiInputResolutionFhd is a CdiInputResolution enum value
+	CdiInputResolutionFhd = "FHD"
+
+	// CdiInputResolutionUhd is a CdiInputResolution enum value
+	CdiInputResolutionUhd = "UHD"
+)
+
+// CdiInputResolution_Values returns all elements of the CdiInputResolution enum
+func CdiInputResolution_Values() []string {
+	return []string{
+		CdiInputResolutionSd,
+		CdiInputResolutionHd,
+		CdiInputResolutionFhd,
+		CdiInputResolutionUhd,
+	}
+}
+
 // A standard channel has two encoding pipelines and a single pipeline channel
 // only has one.
 const (
@@ -25299,6 +27612,23 @@ func DeviceSettingsSyncState_Values() []string {
 	return []string{
 		DeviceSettingsSyncStateSynced,
 		DeviceSettingsSyncStateSyncing,
+	}
+}
+
+// The status of software on the input device.
+const (
+	// DeviceUpdateStatusUpToDate is a DeviceUpdateStatus enum value
+	DeviceUpdateStatusUpToDate = "UP_TO_DATE"
+
+	// DeviceUpdateStatusNotUpToDate is a DeviceUpdateStatus enum value
+	DeviceUpdateStatusNotUpToDate = "NOT_UP_TO_DATE"
+)
+
+// DeviceUpdateStatus_Values returns all elements of the DeviceUpdateStatus enum
+func DeviceUpdateStatus_Values() []string {
+	return []string{
+		DeviceUpdateStatusUpToDate,
+		DeviceUpdateStatusNotUpToDate,
 	}
 }
 
@@ -26930,6 +29260,23 @@ func HlsDirectoryStructure_Values() []string {
 	}
 }
 
+// Hls Discontinuity Tags
+const (
+	// HlsDiscontinuityTagsInsert is a HlsDiscontinuityTags enum value
+	HlsDiscontinuityTagsInsert = "INSERT"
+
+	// HlsDiscontinuityTagsNeverInsert is a HlsDiscontinuityTags enum value
+	HlsDiscontinuityTagsNeverInsert = "NEVER_INSERT"
+)
+
+// HlsDiscontinuityTags_Values returns all elements of the HlsDiscontinuityTags enum
+func HlsDiscontinuityTags_Values() []string {
+	return []string{
+		HlsDiscontinuityTagsInsert,
+		HlsDiscontinuityTagsNeverInsert,
+	}
+}
+
 // Hls Encryption Type
 const (
 	// HlsEncryptionTypeAes128 is a HlsEncryptionType enum value
@@ -26978,6 +29325,23 @@ func HlsId3SegmentTaggingState_Values() []string {
 	return []string{
 		HlsId3SegmentTaggingStateDisabled,
 		HlsId3SegmentTaggingStateEnabled,
+	}
+}
+
+// Hls Incomplete Segment Behavior
+const (
+	// HlsIncompleteSegmentBehaviorAuto is a HlsIncompleteSegmentBehavior enum value
+	HlsIncompleteSegmentBehaviorAuto = "AUTO"
+
+	// HlsIncompleteSegmentBehaviorSuppress is a HlsIncompleteSegmentBehavior enum value
+	HlsIncompleteSegmentBehaviorSuppress = "SUPPRESS"
+)
+
+// HlsIncompleteSegmentBehavior_Values returns all elements of the HlsIncompleteSegmentBehavior enum
+func HlsIncompleteSegmentBehavior_Values() []string {
+	return []string{
+		HlsIncompleteSegmentBehaviorAuto,
+		HlsIncompleteSegmentBehaviorSuppress,
 	}
 }
 
@@ -27418,6 +29782,25 @@ func InputDeviceState_Values() []string {
 	return []string{
 		InputDeviceStateIdle,
 		InputDeviceStateStreaming,
+	}
+}
+
+// The type of device transfer. INCOMING for an input device that is being transferred
+// to you, OUTGOING for an input device that you are transferring to another
+// AWS account.
+const (
+	// InputDeviceTransferTypeOutgoing is a InputDeviceTransferType enum value
+	InputDeviceTransferTypeOutgoing = "OUTGOING"
+
+	// InputDeviceTransferTypeIncoming is a InputDeviceTransferType enum value
+	InputDeviceTransferTypeIncoming = "INCOMING"
+)
+
+// InputDeviceTransferType_Values returns all elements of the InputDeviceTransferType enum
+func InputDeviceTransferType_Values() []string {
+	return []string{
+		InputDeviceTransferTypeOutgoing,
+		InputDeviceTransferTypeIncoming,
 	}
 }
 
@@ -28237,6 +30620,154 @@ func Mp2CodingMode_Values() []string {
 	}
 }
 
+// Mpeg2 Adaptive Quantization
+const (
+	// Mpeg2AdaptiveQuantizationAuto is a Mpeg2AdaptiveQuantization enum value
+	Mpeg2AdaptiveQuantizationAuto = "AUTO"
+
+	// Mpeg2AdaptiveQuantizationHigh is a Mpeg2AdaptiveQuantization enum value
+	Mpeg2AdaptiveQuantizationHigh = "HIGH"
+
+	// Mpeg2AdaptiveQuantizationLow is a Mpeg2AdaptiveQuantization enum value
+	Mpeg2AdaptiveQuantizationLow = "LOW"
+
+	// Mpeg2AdaptiveQuantizationMedium is a Mpeg2AdaptiveQuantization enum value
+	Mpeg2AdaptiveQuantizationMedium = "MEDIUM"
+
+	// Mpeg2AdaptiveQuantizationOff is a Mpeg2AdaptiveQuantization enum value
+	Mpeg2AdaptiveQuantizationOff = "OFF"
+)
+
+// Mpeg2AdaptiveQuantization_Values returns all elements of the Mpeg2AdaptiveQuantization enum
+func Mpeg2AdaptiveQuantization_Values() []string {
+	return []string{
+		Mpeg2AdaptiveQuantizationAuto,
+		Mpeg2AdaptiveQuantizationHigh,
+		Mpeg2AdaptiveQuantizationLow,
+		Mpeg2AdaptiveQuantizationMedium,
+		Mpeg2AdaptiveQuantizationOff,
+	}
+}
+
+// Mpeg2 Color Metadata
+const (
+	// Mpeg2ColorMetadataIgnore is a Mpeg2ColorMetadata enum value
+	Mpeg2ColorMetadataIgnore = "IGNORE"
+
+	// Mpeg2ColorMetadataInsert is a Mpeg2ColorMetadata enum value
+	Mpeg2ColorMetadataInsert = "INSERT"
+)
+
+// Mpeg2ColorMetadata_Values returns all elements of the Mpeg2ColorMetadata enum
+func Mpeg2ColorMetadata_Values() []string {
+	return []string{
+		Mpeg2ColorMetadataIgnore,
+		Mpeg2ColorMetadataInsert,
+	}
+}
+
+// Mpeg2 Color Space
+const (
+	// Mpeg2ColorSpaceAuto is a Mpeg2ColorSpace enum value
+	Mpeg2ColorSpaceAuto = "AUTO"
+
+	// Mpeg2ColorSpacePassthrough is a Mpeg2ColorSpace enum value
+	Mpeg2ColorSpacePassthrough = "PASSTHROUGH"
+)
+
+// Mpeg2ColorSpace_Values returns all elements of the Mpeg2ColorSpace enum
+func Mpeg2ColorSpace_Values() []string {
+	return []string{
+		Mpeg2ColorSpaceAuto,
+		Mpeg2ColorSpacePassthrough,
+	}
+}
+
+// Mpeg2 Display Ratio
+const (
+	// Mpeg2DisplayRatioDisplayratio16x9 is a Mpeg2DisplayRatio enum value
+	Mpeg2DisplayRatioDisplayratio16x9 = "DISPLAYRATIO16X9"
+
+	// Mpeg2DisplayRatioDisplayratio4x3 is a Mpeg2DisplayRatio enum value
+	Mpeg2DisplayRatioDisplayratio4x3 = "DISPLAYRATIO4X3"
+)
+
+// Mpeg2DisplayRatio_Values returns all elements of the Mpeg2DisplayRatio enum
+func Mpeg2DisplayRatio_Values() []string {
+	return []string{
+		Mpeg2DisplayRatioDisplayratio16x9,
+		Mpeg2DisplayRatioDisplayratio4x3,
+	}
+}
+
+// Mpeg2 Gop Size Units
+const (
+	// Mpeg2GopSizeUnitsFrames is a Mpeg2GopSizeUnits enum value
+	Mpeg2GopSizeUnitsFrames = "FRAMES"
+
+	// Mpeg2GopSizeUnitsSeconds is a Mpeg2GopSizeUnits enum value
+	Mpeg2GopSizeUnitsSeconds = "SECONDS"
+)
+
+// Mpeg2GopSizeUnits_Values returns all elements of the Mpeg2GopSizeUnits enum
+func Mpeg2GopSizeUnits_Values() []string {
+	return []string{
+		Mpeg2GopSizeUnitsFrames,
+		Mpeg2GopSizeUnitsSeconds,
+	}
+}
+
+// Mpeg2 Scan Type
+const (
+	// Mpeg2ScanTypeInterlaced is a Mpeg2ScanType enum value
+	Mpeg2ScanTypeInterlaced = "INTERLACED"
+
+	// Mpeg2ScanTypeProgressive is a Mpeg2ScanType enum value
+	Mpeg2ScanTypeProgressive = "PROGRESSIVE"
+)
+
+// Mpeg2ScanType_Values returns all elements of the Mpeg2ScanType enum
+func Mpeg2ScanType_Values() []string {
+	return []string{
+		Mpeg2ScanTypeInterlaced,
+		Mpeg2ScanTypeProgressive,
+	}
+}
+
+// Mpeg2 Sub Gop Length
+const (
+	// Mpeg2SubGopLengthDynamic is a Mpeg2SubGopLength enum value
+	Mpeg2SubGopLengthDynamic = "DYNAMIC"
+
+	// Mpeg2SubGopLengthFixed is a Mpeg2SubGopLength enum value
+	Mpeg2SubGopLengthFixed = "FIXED"
+)
+
+// Mpeg2SubGopLength_Values returns all elements of the Mpeg2SubGopLength enum
+func Mpeg2SubGopLength_Values() []string {
+	return []string{
+		Mpeg2SubGopLengthDynamic,
+		Mpeg2SubGopLengthFixed,
+	}
+}
+
+// Mpeg2 Timecode Insertion Behavior
+const (
+	// Mpeg2TimecodeInsertionBehaviorDisabled is a Mpeg2TimecodeInsertionBehavior enum value
+	Mpeg2TimecodeInsertionBehaviorDisabled = "DISABLED"
+
+	// Mpeg2TimecodeInsertionBehaviorGopTimecode is a Mpeg2TimecodeInsertionBehavior enum value
+	Mpeg2TimecodeInsertionBehaviorGopTimecode = "GOP_TIMECODE"
+)
+
+// Mpeg2TimecodeInsertionBehavior_Values returns all elements of the Mpeg2TimecodeInsertionBehavior enum
+func Mpeg2TimecodeInsertionBehavior_Values() []string {
+	return []string{
+		Mpeg2TimecodeInsertionBehaviorDisabled,
+		Mpeg2TimecodeInsertionBehaviorGopTimecode,
+	}
+}
+
 // Ms Smooth H265 Packaging Type
 const (
 	// MsSmoothH265PackagingTypeHev1 is a MsSmoothH265PackagingType enum value
@@ -28580,6 +31111,19 @@ func ReservationVideoQuality_Values() []string {
 		ReservationVideoQualityStandard,
 		ReservationVideoQualityEnhanced,
 		ReservationVideoQualityPremium,
+	}
+}
+
+// Rtmp Ad Markers
+const (
+	// RtmpAdMarkersOnCuePointScte35 is a RtmpAdMarkers enum value
+	RtmpAdMarkersOnCuePointScte35 = "ON_CUE_POINT_SCTE35"
+)
+
+// RtmpAdMarkers_Values returns all elements of the RtmpAdMarkers enum
+func RtmpAdMarkers_Values() []string {
+	return []string{
+		RtmpAdMarkersOnCuePointScte35,
 	}
 }
 
@@ -29219,5 +31763,30 @@ func VideoSelectorColorSpaceUsage_Values() []string {
 	return []string{
 		VideoSelectorColorSpaceUsageFallback,
 		VideoSelectorColorSpaceUsageForce,
+	}
+}
+
+// Wav Coding Mode
+const (
+	// WavCodingModeCodingMode10 is a WavCodingMode enum value
+	WavCodingModeCodingMode10 = "CODING_MODE_1_0"
+
+	// WavCodingModeCodingMode20 is a WavCodingMode enum value
+	WavCodingModeCodingMode20 = "CODING_MODE_2_0"
+
+	// WavCodingModeCodingMode40 is a WavCodingMode enum value
+	WavCodingModeCodingMode40 = "CODING_MODE_4_0"
+
+	// WavCodingModeCodingMode80 is a WavCodingMode enum value
+	WavCodingModeCodingMode80 = "CODING_MODE_8_0"
+)
+
+// WavCodingMode_Values returns all elements of the WavCodingMode enum
+func WavCodingMode_Values() []string {
+	return []string{
+		WavCodingModeCodingMode10,
+		WavCodingModeCodingMode20,
+		WavCodingModeCodingMode40,
+		WavCodingModeCodingMode80,
 	}
 }

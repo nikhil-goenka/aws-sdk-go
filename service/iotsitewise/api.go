@@ -385,9 +385,9 @@ func (c *IoTSiteWise) BatchPutAssetPropertyValueRequest(input *BatchPutAssetProp
 //    To define an asset property's alias, see UpdateAssetProperty (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetProperty.html).
 //
 // With respect to Unix epoch time, AWS IoT SiteWise accepts only TQVs that
-// have a timestamp of no more than 15 minutes in the past and no more than
-// 5 minutes in the future. AWS IoT SiteWise rejects timestamps outside of the
-// inclusive range of [-15, +5] minutes and returns a TimestampOutOfRangeException
+// have a timestamp of no more than 7 days in the past and no more than 5 minutes
+// in the future. AWS IoT SiteWise rejects timestamps outside of the inclusive
+// range of [-7 days, +5 minutes] and returns a TimestampOutOfRangeException
 // error.
 //
 // For each asset property, AWS IoT SiteWise overwrites TQVs with duplicate
@@ -509,9 +509,9 @@ func (c *IoTSiteWise) CreateAccessPolicyRequest(input *CreateAccessPolicyInput) 
 
 // CreateAccessPolicy API operation for AWS IoT SiteWise.
 //
-// Creates an access policy that grants the specified AWS Single Sign-On user
-// or group access to the specified AWS IoT SiteWise Monitor portal or project
-// resource.
+// Creates an access policy that grants the specified identity (AWS SSO user,
+// AWS SSO group, or IAM user) access to the specified AWS IoT SiteWise Monitor
+// portal or project resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1055,15 +1055,13 @@ func (c *IoTSiteWise) CreatePortalRequest(input *CreatePortalInput) (req *reques
 
 // CreatePortal API operation for AWS IoT SiteWise.
 //
-// Creates a portal, which can contain projects and dashboards. Before you can
-// create a portal, you must enable AWS Single Sign-On. AWS IoT SiteWise Monitor
-// uses AWS SSO to manage user permissions. For more information, see Enabling
-// AWS SSO (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-get-started.html#mon-gs-sso)
-// in the AWS IoT SiteWise User Guide.
+// Creates a portal, which can contain projects and dashboards. AWS IoT SiteWise
+// Monitor uses AWS SSO or IAM to authenticate portal users and manage user
+// permissions.
 //
-// Before you can sign in to a new portal, you must add at least one AWS SSO
-// user or group to that portal. For more information, see Adding or removing
-// portal administrators (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/administer-portals.html#portal-change-admins)
+// Before you can sign in to a new portal, you must add at least one identity
+// to that portal. For more information, see Adding or removing portal administrators
+// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/administer-portals.html#portal-change-admins)
 // in the AWS IoT SiteWise User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1273,9 +1271,9 @@ func (c *IoTSiteWise) DeleteAccessPolicyRequest(input *DeleteAccessPolicyInput) 
 
 // DeleteAccessPolicy API operation for AWS IoT SiteWise.
 //
-// Deletes an access policy that grants the specified AWS Single Sign-On identity
-// access to the specified AWS IoT SiteWise Monitor resource. You can use this
-// operation to revoke access to an AWS IoT SiteWise Monitor resource.
+// Deletes an access policy that grants the specified identity access to the
+// specified AWS IoT SiteWise Monitor resource. You can use this operation to
+// revoke access to an AWS IoT SiteWise Monitor resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1680,9 +1678,7 @@ func (c *IoTSiteWise) DeleteGatewayRequest(input *DeleteGatewayInput) (req *requ
 // DeleteGateway API operation for AWS IoT SiteWise.
 //
 // Deletes a gateway from AWS IoT SiteWise. When you delete a gateway, some
-// of the gateway's files remain in your gateway's file system. For more information,
-// see Data retention (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/data-retention.html)
-// in the AWS IoT SiteWise User Guide.
+// of the gateway's files remain in your gateway's file system.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1975,8 +1971,8 @@ func (c *IoTSiteWise) DescribeAccessPolicyRequest(input *DescribeAccessPolicyInp
 
 // DescribeAccessPolicy API operation for AWS IoT SiteWise.
 //
-// Describes an access policy, which specifies an AWS SSO user or group's access
-// to an AWS IoT SiteWise Monitor portal or project.
+// Describes an access policy, which specifies an identity's access to an AWS
+// IoT SiteWise Monitor portal or project.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2413,6 +2409,100 @@ func (c *IoTSiteWise) DescribeDashboard(input *DescribeDashboardInput) (*Describ
 // for more information on using Contexts.
 func (c *IoTSiteWise) DescribeDashboardWithContext(ctx aws.Context, input *DescribeDashboardInput, opts ...request.Option) (*DescribeDashboardOutput, error) {
 	req, out := c.DescribeDashboardRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeDefaultEncryptionConfiguration = "DescribeDefaultEncryptionConfiguration"
+
+// DescribeDefaultEncryptionConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDefaultEncryptionConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeDefaultEncryptionConfiguration for more information on using the DescribeDefaultEncryptionConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeDefaultEncryptionConfigurationRequest method.
+//    req, resp := client.DescribeDefaultEncryptionConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeDefaultEncryptionConfiguration
+func (c *IoTSiteWise) DescribeDefaultEncryptionConfigurationRequest(input *DescribeDefaultEncryptionConfigurationInput) (req *request.Request, output *DescribeDefaultEncryptionConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDefaultEncryptionConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/configuration/account/encryption",
+	}
+
+	if input == nil {
+		input = &DescribeDefaultEncryptionConfigurationInput{}
+	}
+
+	output = &DescribeDefaultEncryptionConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeDefaultEncryptionConfiguration API operation for AWS IoT SiteWise.
+//
+// Retrieves information about the default encryption configuration for the
+// AWS account in the default or specified region. For more information, see
+// Key management (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/key-management.html)
+// in the AWS IoT SiteWise User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation DescribeDefaultEncryptionConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * InternalFailureException
+//   AWS IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of AWS IoT SiteWise assets that can be created per second, the
+//   allowed number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/DescribeDefaultEncryptionConfiguration
+func (c *IoTSiteWise) DescribeDefaultEncryptionConfiguration(input *DescribeDefaultEncryptionConfigurationInput) (*DescribeDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.DescribeDefaultEncryptionConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeDefaultEncryptionConfigurationWithContext is the same as DescribeDefaultEncryptionConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeDefaultEncryptionConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) DescribeDefaultEncryptionConfigurationWithContext(ctx aws.Context, input *DescribeDefaultEncryptionConfigurationInput, opts ...request.Option) (*DescribeDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.DescribeDefaultEncryptionConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3497,8 +3587,9 @@ func (c *IoTSiteWise) ListAccessPoliciesRequest(input *ListAccessPoliciesInput) 
 
 // ListAccessPolicies API operation for AWS IoT SiteWise.
 //
-// Retrieves a paginated list of access policies for an AWS SSO identity (a
-// user or group) or an AWS IoT SiteWise Monitor resource (a portal or project).
+// Retrieves a paginated list of access policies for an identity (an AWS SSO
+// user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise Monitor resource
+// (a portal or project).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3741,6 +3832,162 @@ func (c *IoTSiteWise) ListAssetModelsPagesWithContext(ctx aws.Context, input *Li
 
 	for p.Next() {
 		if !fn(p.Page().(*ListAssetModelsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListAssetRelationships = "ListAssetRelationships"
+
+// ListAssetRelationshipsRequest generates a "aws/request.Request" representing the
+// client's request for the ListAssetRelationships operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListAssetRelationships for more information on using the ListAssetRelationships
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAssetRelationshipsRequest method.
+//    req, resp := client.ListAssetRelationshipsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssetRelationships
+func (c *IoTSiteWise) ListAssetRelationshipsRequest(input *ListAssetRelationshipsInput) (req *request.Request, output *ListAssetRelationshipsOutput) {
+	op := &request.Operation{
+		Name:       opListAssetRelationships,
+		HTTPMethod: "GET",
+		HTTPPath:   "/assets/{assetId}/assetRelationships",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListAssetRelationshipsInput{}
+	}
+
+	output = &ListAssetRelationshipsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Build.PushBackNamed(protocol.NewHostPrefixHandler("model.", nil))
+	req.Handlers.Build.PushBackNamed(protocol.ValidateEndpointHostHandler)
+	return
+}
+
+// ListAssetRelationships API operation for AWS IoT SiteWise.
+//
+// Retrieves a paginated list of asset relationships for an asset. You can use
+// this operation to identify an asset's root asset and all associated assets
+// between that asset and its root.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation ListAssetRelationships for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * InternalFailureException
+//   AWS IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ResourceNotFoundException
+//   The requested resource can't be found.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of AWS IoT SiteWise assets that can be created per second, the
+//   allowed number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListAssetRelationships
+func (c *IoTSiteWise) ListAssetRelationships(input *ListAssetRelationshipsInput) (*ListAssetRelationshipsOutput, error) {
+	req, out := c.ListAssetRelationshipsRequest(input)
+	return out, req.Send()
+}
+
+// ListAssetRelationshipsWithContext is the same as ListAssetRelationships with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListAssetRelationships for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) ListAssetRelationshipsWithContext(ctx aws.Context, input *ListAssetRelationshipsInput, opts ...request.Option) (*ListAssetRelationshipsOutput, error) {
+	req, out := c.ListAssetRelationshipsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListAssetRelationshipsPages iterates over the pages of a ListAssetRelationships operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListAssetRelationships method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListAssetRelationships operation.
+//    pageNum := 0
+//    err := client.ListAssetRelationshipsPages(params,
+//        func(page *iotsitewise.ListAssetRelationshipsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *IoTSiteWise) ListAssetRelationshipsPages(input *ListAssetRelationshipsInput, fn func(*ListAssetRelationshipsOutput, bool) bool) error {
+	return c.ListAssetRelationshipsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListAssetRelationshipsPagesWithContext same as ListAssetRelationshipsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) ListAssetRelationshipsPagesWithContext(ctx aws.Context, input *ListAssetRelationshipsInput, fn func(*ListAssetRelationshipsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListAssetRelationshipsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListAssetRelationshipsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListAssetRelationshipsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -4903,6 +5150,21 @@ func (c *IoTSiteWise) ListTagsForResourceRequest(input *ListTagsForResourceInput
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
 //
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+//   * UnauthorizedException
+//   You are not authorized.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/ListTagsForResource
 func (c *IoTSiteWise) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
@@ -4920,6 +5182,111 @@ func (c *IoTSiteWise) ListTagsForResource(input *ListTagsForResourceInput) (*Lis
 // for more information on using Contexts.
 func (c *IoTSiteWise) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutDefaultEncryptionConfiguration = "PutDefaultEncryptionConfiguration"
+
+// PutDefaultEncryptionConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the PutDefaultEncryptionConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutDefaultEncryptionConfiguration for more information on using the PutDefaultEncryptionConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutDefaultEncryptionConfigurationRequest method.
+//    req, resp := client.PutDefaultEncryptionConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/PutDefaultEncryptionConfiguration
+func (c *IoTSiteWise) PutDefaultEncryptionConfigurationRequest(input *PutDefaultEncryptionConfigurationInput) (req *request.Request, output *PutDefaultEncryptionConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opPutDefaultEncryptionConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/configuration/account/encryption",
+	}
+
+	if input == nil {
+		input = &PutDefaultEncryptionConfigurationInput{}
+	}
+
+	output = &PutDefaultEncryptionConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutDefaultEncryptionConfiguration API operation for AWS IoT SiteWise.
+//
+// Sets the default encryption configuration for the AWS account. For more information,
+// see Key management (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/key-management.html)
+// in the AWS IoT SiteWise User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT SiteWise's
+// API operation PutDefaultEncryptionConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidRequestException
+//   The request isn't valid. This can occur if your request contains malformed
+//   JSON or unsupported characters. Check your request and try again.
+//
+//   * InternalFailureException
+//   AWS IoT SiteWise can't process your request right now. Try again later.
+//
+//   * ThrottlingException
+//   Your request exceeded a rate limit. For example, you might have exceeded
+//   the number of AWS IoT SiteWise assets that can be created per second, the
+//   allowed number of messages per second, and so on.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/PutDefaultEncryptionConfiguration
+func (c *IoTSiteWise) PutDefaultEncryptionConfiguration(input *PutDefaultEncryptionConfigurationInput) (*PutDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.PutDefaultEncryptionConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// PutDefaultEncryptionConfigurationWithContext is the same as PutDefaultEncryptionConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutDefaultEncryptionConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoTSiteWise) PutDefaultEncryptionConfigurationWithContext(ctx aws.Context, input *PutDefaultEncryptionConfigurationInput, opts ...request.Option) (*PutDefaultEncryptionConfigurationOutput, error) {
+	req, out := c.PutDefaultEncryptionConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -5100,6 +5467,21 @@ func (c *IoTSiteWise) TagResourceRequest(input *TagResourceInput) (req *request.
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
 //
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+//   * UnauthorizedException
+//   You are not authorized.
+//
 //   * TooManyTagsException
 //   You've reached the limit for the number of tags allowed for a resource. For
 //   more information, see Tag naming limits and requirements (https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions)
@@ -5200,6 +5582,21 @@ func (c *IoTSiteWise) UntagResourceRequest(input *UntagResourceInput) (req *requ
 //   * ResourceNotFoundException
 //   The requested resource can't be found.
 //
+//   * ConflictingOperationException
+//   Your request has conflicting operations. This can occur if you're trying
+//   to perform more than one operation on the same resource at the same time.
+//
+//   * LimitExceededException
+//   You've reached the limit for a resource. For example, this can occur if you're
+//   trying to associate more than the allowed number of child assets or attempting
+//   to create more than the allowed number of properties for an asset model.
+//
+//   For more information, see Quotas (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/quotas.html)
+//   in the AWS IoT SiteWise User Guide.
+//
+//   * UnauthorizedException
+//   You are not authorized.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/iotsitewise-2019-12-02/UntagResource
 func (c *IoTSiteWise) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
@@ -5269,8 +5666,8 @@ func (c *IoTSiteWise) UpdateAccessPolicyRequest(input *UpdateAccessPolicyInput) 
 
 // UpdateAccessPolicy API operation for AWS IoT SiteWise.
 //
-// Updates an existing access policy that specifies an AWS SSO user or group's
-// access to an AWS IoT SiteWise Monitor portal or project resource.
+// Updates an existing access policy that specifies an identity's access to
+// an AWS IoT SiteWise Monitor portal or project resource.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5482,11 +5879,10 @@ func (c *IoTSiteWise) UpdateAssetModelRequest(input *UpdateAssetModelInput) (req
 // their IDs and definitions in the updated asset model payload. For more information,
 // see DescribeAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DescribeAssetModel.html).
 //
-// If you remove a property from an asset model or update a property's formula
-// expression, AWS IoT SiteWise deletes all previous data for that property.
-// If you remove a hierarchy definition from an asset model, AWS IoT SiteWise
-// disassociates every asset associated with that hierarchy. You can't change
-// the type or data type of an existing property.
+// If you remove a property from an asset model, AWS IoT SiteWise deletes all
+// previous data for that property. If you remove a hierarchy definition from
+// an asset model, AWS IoT SiteWise disassociates every asset associated with
+// that hierarchy. You can't change the type or data type of an existing property.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6165,8 +6561,8 @@ func (c *IoTSiteWise) UpdateProjectWithContext(ctx aws.Context, input *UpdatePro
 	return out, req.Send()
 }
 
-// Contains an access policy that defines an AWS SSO identity's access to an
-// AWS IoT SiteWise Monitor resource.
+// Contains an access policy that defines an identity's access to an AWS IoT
+// SiteWise Monitor resource.
 type AccessPolicySummary struct {
 	_ struct{} `type:"structure"`
 
@@ -6178,7 +6574,7 @@ type AccessPolicySummary struct {
 	// Id is a required field
 	Id *string `locationName:"id" min:"36" type:"string" required:"true"`
 
-	// The AWS SSO identity (a user or group).
+	// The identity (an AWS SSO user, an AWS SSO group, or an IAM user).
 	//
 	// Identity is a required field
 	Identity *Identity `locationName:"identity" type:"structure" required:"true"`
@@ -6360,6 +6756,65 @@ func (s *Aggregates) SetSum(v float64) *Aggregates {
 	return s
 }
 
+// Contains information about a composite model in an asset. This object contains
+// the asset's properties that you define in the composite model.
+type AssetCompositeModel struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the composite model.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The name of the composite model.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The asset properties that this composite model defines.
+	//
+	// Properties is a required field
+	Properties []*AssetProperty `locationName:"properties" type:"list" required:"true"`
+
+	// The type of the composite model. For alarm composite models, this type is
+	// AWS/ALARM.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AssetCompositeModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssetCompositeModel) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssetCompositeModel) SetDescription(v string) *AssetCompositeModel {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AssetCompositeModel) SetName(v string) *AssetCompositeModel {
+	s.Name = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *AssetCompositeModel) SetProperties(v []*AssetProperty) *AssetCompositeModel {
+	s.Properties = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AssetCompositeModel) SetType(v string) *AssetCompositeModel {
+	s.Type = &v
+	return s
+}
+
 // Contains error details for the requested associate project asset action.
 type AssetErrorDetails struct {
 	_ struct{} `type:"structure"`
@@ -6417,7 +6872,7 @@ type AssetHierarchy struct {
 
 	// The hierarchy name provided in the CreateAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_CreateAssetModel.html)
 	// or UpdateAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetModel.html)
-	// API.
+	// API operation.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
@@ -6445,6 +6900,225 @@ func (s *AssetHierarchy) SetName(v string) *AssetHierarchy {
 	return s
 }
 
+// Contains information about a parent asset and a child asset that are related
+// through an asset hierarchy.
+type AssetHierarchyInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the child asset in this asset relationship.
+	ChildAssetId *string `locationName:"childAssetId" min:"36" type:"string"`
+
+	// The ID of the parent asset in this asset relationship.
+	ParentAssetId *string `locationName:"parentAssetId" min:"36" type:"string"`
+}
+
+// String returns the string representation
+func (s AssetHierarchyInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssetHierarchyInfo) GoString() string {
+	return s.String()
+}
+
+// SetChildAssetId sets the ChildAssetId field's value.
+func (s *AssetHierarchyInfo) SetChildAssetId(v string) *AssetHierarchyInfo {
+	s.ChildAssetId = &v
+	return s
+}
+
+// SetParentAssetId sets the ParentAssetId field's value.
+func (s *AssetHierarchyInfo) SetParentAssetId(v string) *AssetHierarchyInfo {
+	s.ParentAssetId = &v
+	return s
+}
+
+// Contains information about a composite model in an asset model. This object
+// contains the asset property definitions that you define in the composite
+// model.
+type AssetModelCompositeModel struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the composite model.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The name of the composite model.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The asset property definitions for this composite model.
+	Properties []*AssetModelProperty `locationName:"properties" type:"list"`
+
+	// The type of the composite model. For alarm composite models, this type is
+	// AWS/ALARM.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AssetModelCompositeModel) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssetModelCompositeModel) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssetModelCompositeModel) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssetModelCompositeModel"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Type != nil && len(*s.Type) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Type", 1))
+	}
+	if s.Properties != nil {
+		for i, v := range s.Properties {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Properties", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssetModelCompositeModel) SetDescription(v string) *AssetModelCompositeModel {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AssetModelCompositeModel) SetName(v string) *AssetModelCompositeModel {
+	s.Name = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *AssetModelCompositeModel) SetProperties(v []*AssetModelProperty) *AssetModelCompositeModel {
+	s.Properties = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AssetModelCompositeModel) SetType(v string) *AssetModelCompositeModel {
+	s.Type = &v
+	return s
+}
+
+// Contains a composite model definition in an asset model. This composite model
+// definition is applied to all assets created from the asset model.
+type AssetModelCompositeModelDefinition struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the composite model.
+	Description *string `locationName:"description" min:"1" type:"string"`
+
+	// The name of the composite model.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The asset property definitions for this composite model.
+	Properties []*AssetModelPropertyDefinition `locationName:"properties" type:"list"`
+
+	// The type of the composite model. For alarm composite models, this type is
+	// AWS/ALARM.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AssetModelCompositeModelDefinition) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssetModelCompositeModelDefinition) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssetModelCompositeModelDefinition) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssetModelCompositeModelDefinition"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Type != nil && len(*s.Type) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Type", 1))
+	}
+	if s.Properties != nil {
+		for i, v := range s.Properties {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Properties", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *AssetModelCompositeModelDefinition) SetDescription(v string) *AssetModelCompositeModelDefinition {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AssetModelCompositeModelDefinition) SetName(v string) *AssetModelCompositeModelDefinition {
+	s.Name = &v
+	return s
+}
+
+// SetProperties sets the Properties field's value.
+func (s *AssetModelCompositeModelDefinition) SetProperties(v []*AssetModelPropertyDefinition) *AssetModelCompositeModelDefinition {
+	s.Properties = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *AssetModelCompositeModelDefinition) SetType(v string) *AssetModelCompositeModelDefinition {
+	s.Type = &v
+	return s
+}
+
 // Describes an asset hierarchy that contains a hierarchy's name, ID, and child
 // asset model ID that specifies the type of asset that can be in this hierarchy.
 type AssetModelHierarchy struct {
@@ -6462,7 +7136,7 @@ type AssetModelHierarchy struct {
 	// The name of the asset model hierarchy that you specify by using the CreateAssetModel
 	// (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_CreateAssetModel.html)
 	// or UpdateAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetModel.html)
-	// API.
+	// API operation.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
@@ -6532,9 +7206,10 @@ type AssetModelHierarchyDefinition struct {
 	// ChildAssetModelId is a required field
 	ChildAssetModelId *string `locationName:"childAssetModelId" min:"36" type:"string" required:"true"`
 
-	// The name of the asset model hierarchy definition (as specified in CreateAssetModel
+	// The name of the asset model hierarchy definition (as specified in the CreateAssetModel
 	// (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_CreateAssetModel.html)
-	// or UpdateAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetModel.html)).
+	// or UpdateAssetModel (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_UpdateAssetModel.html)
+	// API operation).
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
@@ -6593,6 +7268,10 @@ type AssetModelProperty struct {
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"PropertyDataType"`
 
+	// The data type of the structure for this property. This parameter exists on
+	// properties that have the STRUCT data type.
+	DataTypeSpec *string `locationName:"dataTypeSpec" min:"1" type:"string"`
+
 	// The ID of the asset model property.
 	Id *string `locationName:"id" min:"36" type:"string"`
 
@@ -6625,6 +7304,9 @@ func (s *AssetModelProperty) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "AssetModelProperty"}
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
+	}
+	if s.DataTypeSpec != nil && len(*s.DataTypeSpec) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataTypeSpec", 1))
 	}
 	if s.Id != nil && len(*s.Id) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("Id", 36))
@@ -6659,6 +7341,12 @@ func (s *AssetModelProperty) SetDataType(v string) *AssetModelProperty {
 	return s
 }
 
+// SetDataTypeSpec sets the DataTypeSpec field's value.
+func (s *AssetModelProperty) SetDataTypeSpec(v string) *AssetModelProperty {
+	s.DataTypeSpec = &v
+	return s
+}
+
 // SetId sets the Id field's value.
 func (s *AssetModelProperty) SetId(v string) *AssetModelProperty {
 	s.Id = &v
@@ -6690,8 +7378,19 @@ type AssetModelPropertyDefinition struct {
 
 	// The data type of the property definition.
 	//
+	// If you specify STRUCT, you must also specify dataTypeSpec to identify the
+	// type of the structure for this property.
+	//
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"PropertyDataType"`
+
+	// The data type of the structure for this property. This parameter is required
+	// on properties that have the STRUCT data type.
+	//
+	// The options for this parameter depend on the type of the composite model
+	// in which you define this property. Use AWS/ALARM_STATE for alarm state in
+	// alarm composite models.
+	DataTypeSpec *string `locationName:"dataTypeSpec" min:"1" type:"string"`
 
 	// The name of the property definition.
 	//
@@ -6724,6 +7423,9 @@ func (s *AssetModelPropertyDefinition) Validate() error {
 	if s.DataType == nil {
 		invalidParams.Add(request.NewErrParamRequired("DataType"))
 	}
+	if s.DataTypeSpec != nil && len(*s.DataTypeSpec) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataTypeSpec", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -6751,6 +7453,12 @@ func (s *AssetModelPropertyDefinition) Validate() error {
 // SetDataType sets the DataType field's value.
 func (s *AssetModelPropertyDefinition) SetDataType(v string) *AssetModelPropertyDefinition {
 	s.DataType = &v
+	return s
+}
+
+// SetDataTypeSpec sets the DataTypeSpec field's value.
+func (s *AssetModelPropertyDefinition) SetDataTypeSpec(v string) *AssetModelPropertyDefinition {
+	s.DataTypeSpec = &v
 	return s
 }
 
@@ -6920,6 +7628,10 @@ type AssetProperty struct {
 	// DataType is a required field
 	DataType *string `locationName:"dataType" type:"string" required:"true" enum:"PropertyDataType"`
 
+	// The data type of the structure for this property. This parameter exists on
+	// properties that have the STRUCT data type.
+	DataTypeSpec *string `locationName:"dataTypeSpec" min:"1" type:"string"`
+
 	// The ID of the asset property.
 	//
 	// Id is a required field
@@ -6957,6 +7669,12 @@ func (s *AssetProperty) SetAlias(v string) *AssetProperty {
 // SetDataType sets the DataType field's value.
 func (s *AssetProperty) SetDataType(v string) *AssetProperty {
 	s.DataType = &v
+	return s
+}
+
+// SetDataTypeSpec sets the DataTypeSpec field's value.
+func (s *AssetProperty) SetDataTypeSpec(v string) *AssetProperty {
+	s.DataTypeSpec = &v
 	return s
 }
 
@@ -7026,11 +7744,6 @@ func (s *AssetPropertyValue) Validate() error {
 			invalidParams.AddNested("Timestamp", err.(request.ErrInvalidParams))
 		}
 	}
-	if s.Value != nil {
-		if err := s.Value.Validate(); err != nil {
-			invalidParams.AddNested("Value", err.(request.ErrInvalidParams))
-		}
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -7053,6 +7766,48 @@ func (s *AssetPropertyValue) SetTimestamp(v *TimeInNanos) *AssetPropertyValue {
 // SetValue sets the Value field's value.
 func (s *AssetPropertyValue) SetValue(v *Variant) *AssetPropertyValue {
 	s.Value = v
+	return s
+}
+
+// Contains information about assets that are related to one another.
+type AssetRelationshipSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The assets that are related through an asset hierarchy.
+	//
+	// This object is present if the relationshipType is HIERARCHY.
+	HierarchyInfo *AssetHierarchyInfo `locationName:"hierarchyInfo" type:"structure"`
+
+	// The relationship type of the assets in this relationship. This value is one
+	// of the following:
+	//
+	//    * HIERARCHY – The assets are related through an asset hierarchy. If
+	//    you specify this relationship type, this asset relationship includes the
+	//    hierarchyInfo object.
+	//
+	// RelationshipType is a required field
+	RelationshipType *string `locationName:"relationshipType" type:"string" required:"true" enum:"AssetRelationshipType"`
+}
+
+// String returns the string representation
+func (s AssetRelationshipSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssetRelationshipSummary) GoString() string {
+	return s.String()
+}
+
+// SetHierarchyInfo sets the HierarchyInfo field's value.
+func (s *AssetRelationshipSummary) SetHierarchyInfo(v *AssetHierarchyInfo) *AssetRelationshipSummary {
+	s.HierarchyInfo = v
+	return s
+}
+
+// SetRelationshipType sets the RelationshipType field's value.
+func (s *AssetRelationshipSummary) SetRelationshipType(v string) *AssetRelationshipSummary {
+	s.RelationshipType = &v
 	return s
 }
 
@@ -7808,6 +8563,126 @@ func (s *BatchPutAssetPropertyValueOutput) SetErrorEntries(v []*BatchPutAssetPro
 	return s
 }
 
+// Contains information about a composite model property on an asset.
+type CompositeModelProperty struct {
+	_ struct{} `type:"structure"`
+
+	// Contains asset property information.
+	//
+	// AssetProperty is a required field
+	AssetProperty *Property `locationName:"assetProperty" type:"structure" required:"true"`
+
+	// The name of the property.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The type of the composite model that defines this property.
+	//
+	// Type is a required field
+	Type *string `locationName:"type" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CompositeModelProperty) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CompositeModelProperty) GoString() string {
+	return s.String()
+}
+
+// SetAssetProperty sets the AssetProperty field's value.
+func (s *CompositeModelProperty) SetAssetProperty(v *Property) *CompositeModelProperty {
+	s.AssetProperty = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CompositeModelProperty) SetName(v string) *CompositeModelProperty {
+	s.Name = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CompositeModelProperty) SetType(v string) *CompositeModelProperty {
+	s.Type = &v
+	return s
+}
+
+// Contains the details of an AWS IoT SiteWise configuration error.
+type ConfigurationErrorDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The error code.
+	//
+	// Code is a required field
+	Code *string `locationName:"code" type:"string" required:"true" enum:"ErrorCode"`
+
+	// The error message.
+	//
+	// Message is a required field
+	Message *string `locationName:"message" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ConfigurationErrorDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfigurationErrorDetails) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *ConfigurationErrorDetails) SetCode(v string) *ConfigurationErrorDetails {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ConfigurationErrorDetails) SetMessage(v string) *ConfigurationErrorDetails {
+	s.Message = &v
+	return s
+}
+
+// Contains current status information for the configuration.
+type ConfigurationStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Contains associated error information, if any.
+	Error *ConfigurationErrorDetails `locationName:"error" type:"structure"`
+
+	// The current state of the configuration.
+	//
+	// State is a required field
+	State *string `locationName:"state" type:"string" required:"true" enum:"ConfigurationState"`
+}
+
+// String returns the string representation
+func (s ConfigurationStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfigurationStatus) GoString() string {
+	return s.String()
+}
+
+// SetError sets the Error field's value.
+func (s *ConfigurationStatus) SetError(v *ConfigurationErrorDetails) *ConfigurationStatus {
+	s.Error = v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ConfigurationStatus) SetState(v string) *ConfigurationStatus {
+	s.State = &v
+	return s
+}
+
 // Your request has conflicting operations. This can occur if you're trying
 // to perform more than one operation on the same resource at the same time.
 type ConflictingOperationException struct {
@@ -7878,8 +8753,8 @@ func (s *ConflictingOperationException) RequestID() string {
 type CreateAccessPolicyInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identity for this access policy. Choose either a user or a group but
-	// not both.
+	// The identity for this access policy. Choose an AWS SSO user, an AWS SSO group,
+	// or an IAM user.
 	//
 	// AccessPolicyIdentity is a required field
 	AccessPolicyIdentity *Identity `locationName:"accessPolicyIdentity" type:"structure" required:"true"`
@@ -7891,7 +8766,7 @@ type CreateAccessPolicyInput struct {
 	AccessPolicyPermission *string `locationName:"accessPolicyPermission" type:"string" required:"true" enum:"Permission"`
 
 	// The AWS IoT SiteWise Monitor resource for this access policy. Choose either
-	// portal or project but not both.
+	// a portal or a project.
 	//
 	// AccessPolicyResource is a required field
 	AccessPolicyResource *Resource `locationName:"accessPolicyResource" type:"structure" required:"true"`
@@ -8110,6 +8985,12 @@ func (s *CreateAssetInput) SetTags(v map[string]*string) *CreateAssetInput {
 type CreateAssetModelInput struct {
 	_ struct{} `type:"structure"`
 
+	// The composite asset models that are part of this asset model. Composite asset
+	// models are asset models that contain specific properties. Each composite
+	// model has a type that defines the properties that the composite model supports.
+	// Use composite asset models to define alarms on this asset model.
+	AssetModelCompositeModels []*AssetModelCompositeModelDefinition `locationName:"assetModelCompositeModels" type:"list"`
+
 	// A description for the asset model.
 	AssetModelDescription *string `locationName:"assetModelDescription" min:"1" type:"string"`
 
@@ -8176,6 +9057,16 @@ func (s *CreateAssetModelInput) Validate() error {
 	if s.Tags != nil && len(s.Tags) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
 	}
+	if s.AssetModelCompositeModels != nil {
+		for i, v := range s.AssetModelCompositeModels {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AssetModelCompositeModels", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.AssetModelHierarchies != nil {
 		for i, v := range s.AssetModelHierarchies {
 			if v == nil {
@@ -8201,6 +9092,12 @@ func (s *CreateAssetModelInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAssetModelCompositeModels sets the AssetModelCompositeModels field's value.
+func (s *CreateAssetModelInput) SetAssetModelCompositeModels(v []*AssetModelCompositeModelDefinition) *CreateAssetModelInput {
+	s.AssetModelCompositeModels = v
+	return s
 }
 
 // SetAssetModelDescription sets the AssetModelDescription field's value.
@@ -8618,6 +9515,25 @@ type CreatePortalInput struct {
 	// is required.
 	ClientToken *string `locationName:"clientToken" min:"36" type:"string" idempotencyToken:"true"`
 
+	// The service to use to authenticate users to the portal. Choose from the following
+	// options:
+	//
+	//    * SSO – The portal uses AWS Single Sign-On to authenticate users and
+	//    manage user permissions. Before you can create a portal that uses AWS
+	//    SSO, you must enable AWS SSO. For more information, see Enabling AWS SSO
+	//    (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/monitor-get-started.html#mon-gs-sso)
+	//    in the AWS IoT SiteWise User Guide. This option is only available in AWS
+	//    Regions other than the China Regions.
+	//
+	//    * IAM – The portal uses AWS Identity and Access Management (IAM) to
+	//    authenticate users and manage user permissions. This option is only available
+	//    in the China Regions.
+	//
+	// You can't change this value after you create a portal.
+	//
+	// Default: SSO
+	PortalAuthMode *string `locationName:"portalAuthMode" type:"string" enum:"AuthMode"`
+
 	// The AWS administrator's contact email address.
 	//
 	// PortalContactEmail is a required field
@@ -8708,6 +9624,12 @@ func (s *CreatePortalInput) SetClientToken(v string) *CreatePortalInput {
 	return s
 }
 
+// SetPortalAuthMode sets the PortalAuthMode field's value.
+func (s *CreatePortalInput) SetPortalAuthMode(v string) *CreatePortalInput {
+	s.PortalAuthMode = &v
+	return s
+}
+
 // SetPortalContactEmail sets the PortalContactEmail field's value.
 func (s *CreatePortalInput) SetPortalContactEmail(v string) *CreatePortalInput {
 	s.PortalContactEmail = &v
@@ -8760,7 +9682,10 @@ type CreatePortalOutput struct {
 	// PortalId is a required field
 	PortalId *string `locationName:"portalId" min:"36" type:"string" required:"true"`
 
-	// The public URL for the AWS IoT SiteWise Monitor portal.
+	// The URL for the AWS IoT SiteWise Monitor portal. You can use this URL to
+	// access portals that use AWS SSO for authentication. For portals that use
+	// IAM for authentication, you must use the AWS IoT SiteWise console to get
+	// a URL that you can use to access the portal.
 	//
 	// PortalStartUrl is a required field
 	PortalStartUrl *string `locationName:"portalStartUrl" min:"1" type:"string" required:"true"`
@@ -8771,7 +9696,7 @@ type CreatePortalOutput struct {
 	// PortalStatus is a required field
 	PortalStatus *PortalStatus `locationName:"portalStatus" type:"structure" required:"true"`
 
-	// The associated AWS SSO application Id.
+	// The associated AWS SSO application ID, if the portal uses AWS SSO.
 	//
 	// SsoApplicationId is a required field
 	SsoApplicationId *string `locationName:"ssoApplicationId" min:"1" type:"string" required:"true"`
@@ -9585,7 +10510,8 @@ type DescribeAccessPolicyOutput struct {
 	// AccessPolicyId is a required field
 	AccessPolicyId *string `locationName:"accessPolicyId" min:"36" type:"string" required:"true"`
 
-	// The AWS SSO identity (user or group) to which this access policy applies.
+	// The identity (AWS SSO user, AWS SSO group, or IAM user) to which this access
+	// policy applies.
 	//
 	// AccessPolicyIdentity is a required field
 	AccessPolicyIdentity *Identity `locationName:"accessPolicyIdentity" type:"structure" required:"true"`
@@ -9753,6 +10679,9 @@ type DescribeAssetModelOutput struct {
 	// AssetModelArn is a required field
 	AssetModelArn *string `locationName:"assetModelArn" min:"1" type:"string" required:"true"`
 
+	// The list of composite asset models for the asset model.
+	AssetModelCompositeModels []*AssetModelCompositeModel `locationName:"assetModelCompositeModels" type:"list"`
+
 	// The date the asset model was created, in Unix epoch time.
 	//
 	// AssetModelCreationDate is a required field
@@ -9787,6 +10716,10 @@ type DescribeAssetModelOutput struct {
 
 	// The list of asset properties for the asset model.
 	//
+	// This object doesn't include properties that you define in composite models.
+	// You can find composite model properties in the assetModelCompositeModels
+	// object.
+	//
 	// AssetModelProperties is a required field
 	AssetModelProperties []*AssetModelProperty `locationName:"assetModelProperties" type:"list" required:"true"`
 
@@ -9810,6 +10743,12 @@ func (s DescribeAssetModelOutput) GoString() string {
 // SetAssetModelArn sets the AssetModelArn field's value.
 func (s *DescribeAssetModelOutput) SetAssetModelArn(v string) *DescribeAssetModelOutput {
 	s.AssetModelArn = &v
+	return s
+}
+
+// SetAssetModelCompositeModels sets the AssetModelCompositeModels field's value.
+func (s *DescribeAssetModelOutput) SetAssetModelCompositeModels(v []*AssetModelCompositeModel) *DescribeAssetModelOutput {
+	s.AssetModelCompositeModels = v
 	return s
 }
 
@@ -9872,6 +10811,9 @@ type DescribeAssetOutput struct {
 	// AssetArn is a required field
 	AssetArn *string `locationName:"assetArn" min:"1" type:"string" required:"true"`
 
+	// The composite models for the asset.
+	AssetCompositeModels []*AssetCompositeModel `locationName:"assetCompositeModels" type:"list"`
+
 	// The date the asset was created, in Unix epoch time.
 	//
 	// AssetCreationDate is a required field
@@ -9905,6 +10847,9 @@ type DescribeAssetOutput struct {
 
 	// The list of asset properties for the asset.
 	//
+	// This object doesn't include properties that you define in composite models.
+	// You can find composite model properties in the assetCompositeModels object.
+	//
 	// AssetProperties is a required field
 	AssetProperties []*AssetProperty `locationName:"assetProperties" type:"list" required:"true"`
 
@@ -9927,6 +10872,12 @@ func (s DescribeAssetOutput) GoString() string {
 // SetAssetArn sets the AssetArn field's value.
 func (s *DescribeAssetOutput) SetAssetArn(v string) *DescribeAssetOutput {
 	s.AssetArn = &v
+	return s
+}
+
+// SetAssetCompositeModels sets the AssetCompositeModels field's value.
+func (s *DescribeAssetOutput) SetAssetCompositeModels(v []*AssetCompositeModel) *DescribeAssetOutput {
+	s.AssetCompositeModels = v
 	return s
 }
 
@@ -10056,8 +11007,14 @@ type DescribeAssetPropertyOutput struct {
 
 	// The asset property's definition, alias, and notification state.
 	//
-	// AssetProperty is a required field
-	AssetProperty *Property `locationName:"assetProperty" type:"structure" required:"true"`
+	// This response includes this object for normal asset properties. If you describe
+	// an asset property in a composite model, this response includes the asset
+	// property information in compositeModel.
+	AssetProperty *Property `locationName:"assetProperty" type:"structure"`
+
+	// The composite asset model that declares this asset property, if this asset
+	// property exists in a composite model.
+	CompositeModel *CompositeModelProperty `locationName:"compositeModel" type:"structure"`
 }
 
 // String returns the string representation
@@ -10091,6 +11048,12 @@ func (s *DescribeAssetPropertyOutput) SetAssetName(v string) *DescribeAssetPrope
 // SetAssetProperty sets the AssetProperty field's value.
 func (s *DescribeAssetPropertyOutput) SetAssetProperty(v *Property) *DescribeAssetPropertyOutput {
 	s.AssetProperty = v
+	return s
+}
+
+// SetCompositeModel sets the CompositeModel field's value.
+func (s *DescribeAssetPropertyOutput) SetCompositeModel(v *CompositeModelProperty) *DescribeAssetPropertyOutput {
+	s.CompositeModel = v
 	return s
 }
 
@@ -10237,6 +11200,67 @@ func (s *DescribeDashboardOutput) SetDashboardName(v string) *DescribeDashboardO
 // SetProjectId sets the ProjectId field's value.
 func (s *DescribeDashboardOutput) SetProjectId(v string) *DescribeDashboardOutput {
 	s.ProjectId = &v
+	return s
+}
+
+type DescribeDefaultEncryptionConfigurationInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeDefaultEncryptionConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDefaultEncryptionConfigurationInput) GoString() string {
+	return s.String()
+}
+
+type DescribeDefaultEncryptionConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of the account configuration. This contains the ConfigurationState.
+	// If there's an error, it also contains the ErrorDetails.
+	//
+	// ConfigurationStatus is a required field
+	ConfigurationStatus *ConfigurationStatus `locationName:"configurationStatus" type:"structure" required:"true"`
+
+	// The type of encryption used for the encryption configuration.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The key ARN of the customer managed customer master key (CMK) used for AWS
+	// KMS encryption if you use KMS_BASED_ENCRYPTION.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeDefaultEncryptionConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDefaultEncryptionConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationStatus sets the ConfigurationStatus field's value.
+func (s *DescribeDefaultEncryptionConfigurationOutput) SetConfigurationStatus(v *ConfigurationStatus) *DescribeDefaultEncryptionConfigurationOutput {
+	s.ConfigurationStatus = v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *DescribeDefaultEncryptionConfigurationOutput) SetEncryptionType(v string) *DescribeDefaultEncryptionConfigurationOutput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *DescribeDefaultEncryptionConfigurationOutput) SetKmsKeyArn(v string) *DescribeDefaultEncryptionConfigurationOutput {
+	s.KmsKeyArn = &v
 	return s
 }
 
@@ -10595,7 +11619,12 @@ type DescribePortalOutput struct {
 	// PortalArn is a required field
 	PortalArn *string `locationName:"portalArn" min:"1" type:"string" required:"true"`
 
-	// The AWS SSO application generated client ID (used with AWS SSO APIs).
+	// The service to use to authenticate users to the portal.
+	PortalAuthMode *string `locationName:"portalAuthMode" type:"string" enum:"AuthMode"`
+
+	// The AWS SSO application generated client ID (used with AWS SSO APIs). AWS
+	// IoT SiteWise includes portalClientId for only portals that use AWS SSO to
+	// authenticate users.
 	//
 	// PortalClientId is a required field
 	PortalClientId *string `locationName:"portalClientId" min:"1" type:"string" required:"true"`
@@ -10631,8 +11660,10 @@ type DescribePortalOutput struct {
 	// PortalName is a required field
 	PortalName *string `locationName:"portalName" min:"1" type:"string" required:"true"`
 
-	// The public root URL for the AWS IoT AWS IoT SiteWise Monitor application
-	// portal.
+	// The URL for the AWS IoT SiteWise Monitor portal. You can use this URL to
+	// access portals that use AWS SSO for authentication. For portals that use
+	// IAM for authentication, you must use the AWS IoT SiteWise console to get
+	// a URL that you can use to access the portal.
 	//
 	// PortalStartUrl is a required field
 	PortalStartUrl *string `locationName:"portalStartUrl" min:"1" type:"string" required:"true"`
@@ -10663,6 +11694,12 @@ func (s DescribePortalOutput) GoString() string {
 // SetPortalArn sets the PortalArn field's value.
 func (s *DescribePortalOutput) SetPortalArn(v string) *DescribePortalOutput {
 	s.PortalArn = &v
+	return s
+}
+
+// SetPortalAuthMode sets the PortalAuthMode field's value.
+func (s *DescribePortalOutput) SetPortalAuthMode(v string) *DescribePortalOutput {
+	s.PortalAuthMode = &v
 	return s
 }
 
@@ -11792,7 +12829,99 @@ func (s *GroupIdentity) SetId(v string) *GroupIdentity {
 	return s
 }
 
-// Contains an AWS SSO identity ID for a user or group.
+// Contains information about an AWS Identity and Access Management (IAM) role.
+// For more information, see IAM roles (https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html)
+// in the IAM User Guide.
+type IAMRoleIdentity struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the IAM role. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.htmll#identifiers-arns)
+	// in the IAM User Guide.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s IAMRoleIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IAMRoleIdentity) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IAMRoleIdentity) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IAMRoleIdentity"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *IAMRoleIdentity) SetArn(v string) *IAMRoleIdentity {
+	s.Arn = &v
+	return s
+}
+
+// Contains information about an AWS Identity and Access Management (IAM) user.
+type IAMUserIdentity struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the IAM user. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html)
+	// in the IAM User Guide.
+	//
+	// If you delete the IAM user, access policies that contain this identity include
+	// an empty arn. You can delete the access policy for the IAM user that no longer
+	// exists.
+	//
+	// Arn is a required field
+	Arn *string `locationName:"arn" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s IAMUserIdentity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IAMUserIdentity) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IAMUserIdentity) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IAMUserIdentity"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *IAMUserIdentity) SetArn(v string) *IAMUserIdentity {
+	s.Arn = &v
+	return s
+}
+
+// Contains an identity that can access an AWS IoT SiteWise Monitor resource.
 //
 // Currently, you can't use AWS APIs to retrieve AWS SSO identity IDs. You can
 // find the AWS SSO identity IDs in the URL of user and group pages in the AWS
@@ -11800,10 +12929,16 @@ func (s *GroupIdentity) SetId(v string) *GroupIdentity {
 type Identity struct {
 	_ struct{} `type:"structure"`
 
-	// A group identity.
+	// An AWS SSO group identity.
 	Group *GroupIdentity `locationName:"group" type:"structure"`
 
-	// A user identity.
+	// An IAM role identity.
+	IamRole *IAMRoleIdentity `locationName:"iamRole" type:"structure"`
+
+	// An IAM user identity.
+	IamUser *IAMUserIdentity `locationName:"iamUser" type:"structure"`
+
+	// An AWS SSO user identity.
 	User *UserIdentity `locationName:"user" type:"structure"`
 }
 
@@ -11825,6 +12960,16 @@ func (s *Identity) Validate() error {
 			invalidParams.AddNested("Group", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.IamRole != nil {
+		if err := s.IamRole.Validate(); err != nil {
+			invalidParams.AddNested("IamRole", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.IamUser != nil {
+		if err := s.IamUser.Validate(); err != nil {
+			invalidParams.AddNested("IamUser", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.User != nil {
 		if err := s.User.Validate(); err != nil {
 			invalidParams.AddNested("User", err.(request.ErrInvalidParams))
@@ -11840,6 +12985,18 @@ func (s *Identity) Validate() error {
 // SetGroup sets the Group field's value.
 func (s *Identity) SetGroup(v *GroupIdentity) *Identity {
 	s.Group = v
+	return s
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *Identity) SetIamRole(v *IAMRoleIdentity) *Identity {
+	s.IamRole = v
+	return s
+}
+
+// SetIamUser sets the IamUser field's value.
+func (s *Identity) SetIamUser(v *IAMUserIdentity) *Identity {
+	s.IamUser = v
 	return s
 }
 
@@ -12180,11 +13337,17 @@ func (s *LimitExceededException) RequestID() string {
 type ListAccessPoliciesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the identity. This parameter is required if you specify identityType.
+	// The ARN of the IAM user. For more information, see IAM ARNs (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html)
+	// in the IAM User Guide. This parameter is required if you specify IAM for
+	// identityType.
+	IamArn *string `location:"querystring" locationName:"iamArn" min:"1" type:"string"`
+
+	// The ID of the identity. This parameter is required if you specify USER or
+	// GROUP for identityType.
 	IdentityId *string `location:"querystring" locationName:"identityId" min:"1" type:"string"`
 
-	// The type of identity (user or group). This parameter is required if you specify
-	// identityId.
+	// The type of identity (AWS SSO user, AWS SSO group, or IAM user). This parameter
+	// is required if you specify identityId.
 	IdentityType *string `location:"querystring" locationName:"identityType" type:"string" enum:"IdentityType"`
 
 	// The maximum number of results to be returned per paginated request.
@@ -12216,6 +13379,9 @@ func (s ListAccessPoliciesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListAccessPoliciesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListAccessPoliciesInput"}
+	if s.IamArn != nil && len(*s.IamArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IamArn", 1))
+	}
 	if s.IdentityId != nil && len(*s.IdentityId) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("IdentityId", 1))
 	}
@@ -12233,6 +13399,12 @@ func (s *ListAccessPoliciesInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetIamArn sets the IamArn field's value.
+func (s *ListAccessPoliciesInput) SetIamArn(v string) *ListAccessPoliciesInput {
+	s.IamArn = &v
+	return s
 }
 
 // SetIdentityId sets the IdentityId field's value.
@@ -12387,6 +13559,125 @@ func (s *ListAssetModelsOutput) SetAssetModelSummaries(v []*AssetModelSummary) *
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListAssetModelsOutput) SetNextToken(v string) *ListAssetModelsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAssetRelationshipsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the asset.
+	//
+	// AssetId is a required field
+	AssetId *string `location:"uri" locationName:"assetId" min:"36" type:"string" required:"true"`
+
+	// The maximum number of results to be returned per paginated request.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The token to be used for the next set of paginated results.
+	NextToken *string `location:"querystring" locationName:"nextToken" min:"1" type:"string"`
+
+	// The type of traversal to use to identify asset relationships. Choose the
+	// following option:
+	//
+	//    * PATH_TO_ROOT – Identify the asset's parent assets up to the root asset.
+	//    The asset that you specify in assetId is the first result in the list
+	//    of assetRelationshipSummaries, and the root asset is the last result.
+	//
+	// TraversalType is a required field
+	TraversalType *string `location:"querystring" locationName:"traversalType" type:"string" required:"true" enum:"TraversalType"`
+}
+
+// String returns the string representation
+func (s ListAssetRelationshipsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAssetRelationshipsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListAssetRelationshipsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListAssetRelationshipsInput"}
+	if s.AssetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AssetId"))
+	}
+	if s.AssetId != nil && len(*s.AssetId) < 36 {
+		invalidParams.Add(request.NewErrParamMinLen("AssetId", 36))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.TraversalType == nil {
+		invalidParams.Add(request.NewErrParamRequired("TraversalType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAssetId sets the AssetId field's value.
+func (s *ListAssetRelationshipsInput) SetAssetId(v string) *ListAssetRelationshipsInput {
+	s.AssetId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAssetRelationshipsInput) SetMaxResults(v int64) *ListAssetRelationshipsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAssetRelationshipsInput) SetNextToken(v string) *ListAssetRelationshipsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTraversalType sets the TraversalType field's value.
+func (s *ListAssetRelationshipsInput) SetTraversalType(v string) *ListAssetRelationshipsInput {
+	s.TraversalType = &v
+	return s
+}
+
+type ListAssetRelationshipsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list that summarizes each asset relationship.
+	//
+	// AssetRelationshipSummaries is a required field
+	AssetRelationshipSummaries []*AssetRelationshipSummary `locationName:"assetRelationshipSummaries" type:"list" required:"true"`
+
+	// The token for the next set of results, or null if there are no additional
+	// results.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAssetRelationshipsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAssetRelationshipsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAssetRelationshipSummaries sets the AssetRelationshipSummaries field's value.
+func (s *ListAssetRelationshipsOutput) SetAssetRelationshipSummaries(v []*AssetRelationshipSummary) *ListAssetRelationshipsOutput {
+	s.AssetRelationshipSummaries = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAssetRelationshipsOutput) SetNextToken(v string) *ListAssetRelationshipsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -13223,8 +14514,8 @@ func (s *LoggingOptions) SetLevel(v string) *LoggingOptions {
 	return s
 }
 
-// Contains an asset measurement property. This structure is empty. For more
-// information, see Measurements (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#measurements)
+// Contains an asset measurement property. For more information, see Measurements
+// (https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-properties.html#measurements)
 // in the AWS IoT SiteWise User Guide.
 type Measurement struct {
 	_ struct{} `type:"structure"`
@@ -13523,8 +14814,10 @@ type PortalSummary struct {
 	// in the AWS IoT SiteWise User Guide.
 	RoleArn *string `locationName:"roleArn" min:"1" type:"string"`
 
-	// The public root URL for the AWS IoT AWS IoT SiteWise Monitor application
-	// portal.
+	// The URL for the AWS IoT SiteWise Monitor portal. You can use this URL to
+	// access portals that use AWS SSO for authentication. For portals that use
+	// IAM for authentication, you must use the AWS IoT SiteWise console to get
+	// a URL that you can use to access the portal.
 	//
 	// StartUrl is a required field
 	StartUrl *string `locationName:"startUrl" min:"1" type:"string" required:"true"`
@@ -13918,7 +15211,7 @@ func (s *PropertyType) SetTransform(v *Transform) *PropertyType {
 
 // Contains a list of value updates for an asset property in the list of asset
 // entries consumed by the BatchPutAssetPropertyValue (https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_BatchPutAssetPropertyValue.html)
-// API.
+// API operation.
 type PutAssetPropertyValueEntry struct {
 	_ struct{} `type:"structure"`
 
@@ -14023,6 +15316,103 @@ func (s *PutAssetPropertyValueEntry) SetPropertyId(v string) *PutAssetPropertyVa
 // SetPropertyValues sets the PropertyValues field's value.
 func (s *PutAssetPropertyValueEntry) SetPropertyValues(v []*AssetPropertyValue) *PutAssetPropertyValueEntry {
 	s.PropertyValues = v
+	return s
+}
+
+type PutDefaultEncryptionConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The type of encryption used for the encryption configuration.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The Key ID of the customer managed customer master key (CMK) used for AWS
+	// KMS encryption. This is required if you use KMS_BASED_ENCRYPTION.
+	KmsKeyId *string `locationName:"kmsKeyId" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PutDefaultEncryptionConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutDefaultEncryptionConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutDefaultEncryptionConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutDefaultEncryptionConfigurationInput"}
+	if s.EncryptionType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EncryptionType"))
+	}
+	if s.KmsKeyId != nil && len(*s.KmsKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KmsKeyId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *PutDefaultEncryptionConfigurationInput) SetEncryptionType(v string) *PutDefaultEncryptionConfigurationInput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *PutDefaultEncryptionConfigurationInput) SetKmsKeyId(v string) *PutDefaultEncryptionConfigurationInput {
+	s.KmsKeyId = &v
+	return s
+}
+
+type PutDefaultEncryptionConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The status of the account configuration. This contains the ConfigurationState.
+	// If there is an error, it also contains the ErrorDetails.
+	//
+	// ConfigurationStatus is a required field
+	ConfigurationStatus *ConfigurationStatus `locationName:"configurationStatus" type:"structure" required:"true"`
+
+	// The type of encryption used for the encryption configuration.
+	//
+	// EncryptionType is a required field
+	EncryptionType *string `locationName:"encryptionType" type:"string" required:"true" enum:"EncryptionType"`
+
+	// The Key ARN of the AWS KMS CMK used for AWS KMS encryption if you use KMS_BASED_ENCRYPTION.
+	KmsKeyArn *string `locationName:"kmsKeyArn" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PutDefaultEncryptionConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutDefaultEncryptionConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationStatus sets the ConfigurationStatus field's value.
+func (s *PutDefaultEncryptionConfigurationOutput) SetConfigurationStatus(v *ConfigurationStatus) *PutDefaultEncryptionConfigurationOutput {
+	s.ConfigurationStatus = v
+	return s
+}
+
+// SetEncryptionType sets the EncryptionType field's value.
+func (s *PutDefaultEncryptionConfigurationOutput) SetEncryptionType(v string) *PutDefaultEncryptionConfigurationOutput {
+	s.EncryptionType = &v
+	return s
+}
+
+// SetKmsKeyArn sets the KmsKeyArn field's value.
+func (s *PutDefaultEncryptionConfigurationOutput) SetKmsKeyArn(v string) *PutDefaultEncryptionConfigurationOutput {
+	s.KmsKeyArn = &v
 	return s
 }
 
@@ -14694,6 +16084,62 @@ func (s *TumblingWindow) SetInterval(v string) *TumblingWindow {
 	return s
 }
 
+// You are not authorized.
+type UnauthorizedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s UnauthorizedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UnauthorizedException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnauthorizedException(v protocol.ResponseMetadata) error {
+	return &UnauthorizedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnauthorizedException) Code() string {
+	return "UnauthorizedException"
+}
+
+// Message returns the exception's message.
+func (s *UnauthorizedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnauthorizedException) OrigErr() error {
+	return nil
+}
+
+func (s *UnauthorizedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnauthorizedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnauthorizedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -14772,8 +16218,8 @@ type UpdateAccessPolicyInput struct {
 	// AccessPolicyId is a required field
 	AccessPolicyId *string `location:"uri" locationName:"accessPolicyId" min:"36" type:"string" required:"true"`
 
-	// The identity for this access policy. Choose either a user or a group but
-	// not both.
+	// The identity for this access policy. Choose an AWS SSO user, an AWS SSO group,
+	// or an IAM user.
 	//
 	// AccessPolicyIdentity is a required field
 	AccessPolicyIdentity *Identity `locationName:"accessPolicyIdentity" type:"structure" required:"true"`
@@ -14785,7 +16231,7 @@ type UpdateAccessPolicyInput struct {
 	AccessPolicyPermission *string `locationName:"accessPolicyPermission" type:"string" required:"true" enum:"Permission"`
 
 	// The AWS IoT SiteWise Monitor resource for this access policy. Choose either
-	// portal or project but not both.
+	// a portal or a project.
 	//
 	// AccessPolicyResource is a required field
 	AccessPolicyResource *Resource `locationName:"accessPolicyResource" type:"structure" required:"true"`
@@ -14963,6 +16409,12 @@ func (s *UpdateAssetInput) SetClientToken(v string) *UpdateAssetInput {
 type UpdateAssetModelInput struct {
 	_ struct{} `type:"structure"`
 
+	// The composite asset models that are part of this asset model. Composite asset
+	// models are asset models that contain specific properties. Each composite
+	// model has a type that defines the properties that the composite model supports.
+	// Use composite asset models to define alarms on this asset model.
+	AssetModelCompositeModels []*AssetModelCompositeModel `locationName:"assetModelCompositeModels" type:"list"`
+
 	// A description for the asset model.
 	AssetModelDescription *string `locationName:"assetModelDescription" min:"1" type:"string"`
 
@@ -15032,6 +16484,16 @@ func (s *UpdateAssetModelInput) Validate() error {
 	if s.ClientToken != nil && len(*s.ClientToken) < 36 {
 		invalidParams.Add(request.NewErrParamMinLen("ClientToken", 36))
 	}
+	if s.AssetModelCompositeModels != nil {
+		for i, v := range s.AssetModelCompositeModels {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AssetModelCompositeModels", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.AssetModelHierarchies != nil {
 		for i, v := range s.AssetModelHierarchies {
 			if v == nil {
@@ -15057,6 +16519,12 @@ func (s *UpdateAssetModelInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAssetModelCompositeModels sets the AssetModelCompositeModels field's value.
+func (s *UpdateAssetModelInput) SetAssetModelCompositeModels(v []*AssetModelCompositeModel) *UpdateAssetModelInput {
+	s.AssetModelCompositeModels = v
+	return s
 }
 
 // SetAssetModelDescription sets the AssetModelDescription field's value.
@@ -15961,7 +17429,7 @@ type Variant struct {
 	IntegerValue *int64 `locationName:"integerValue" type:"integer"`
 
 	// Asset property data of type string (sequence of characters).
-	StringValue *string `locationName:"stringValue" min:"1" type:"string"`
+	StringValue *string `locationName:"stringValue" type:"string"`
 }
 
 // String returns the string representation
@@ -15972,19 +17440,6 @@ func (s Variant) String() string {
 // GoString returns the string representation
 func (s Variant) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *Variant) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "Variant"}
-	if s.StringValue != nil && len(*s.StringValue) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("StringValue", 1))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetBooleanValue sets the BooleanValue field's value.
@@ -16088,6 +17543,18 @@ func AssetModelState_Values() []string {
 }
 
 const (
+	// AssetRelationshipTypeHierarchy is a AssetRelationshipType enum value
+	AssetRelationshipTypeHierarchy = "HIERARCHY"
+)
+
+// AssetRelationshipType_Values returns all elements of the AssetRelationshipType enum
+func AssetRelationshipType_Values() []string {
+	return []string{
+		AssetRelationshipTypeHierarchy,
+	}
+}
+
+const (
 	// AssetStateCreating is a AssetState enum value
 	AssetStateCreating = "CREATING"
 
@@ -16112,6 +17579,22 @@ func AssetState_Values() []string {
 		AssetStateUpdating,
 		AssetStateDeleting,
 		AssetStateFailed,
+	}
+}
+
+const (
+	// AuthModeIam is a AuthMode enum value
+	AuthModeIam = "IAM"
+
+	// AuthModeSso is a AuthMode enum value
+	AuthModeSso = "SSO"
+)
+
+// AuthMode_Values returns all elements of the AuthMode enum
+func AuthMode_Values() []string {
+	return []string{
+		AuthModeIam,
+		AuthModeSso,
 	}
 }
 
@@ -16180,6 +17663,42 @@ func CapabilitySyncStatus_Values() []string {
 }
 
 const (
+	// ConfigurationStateActive is a ConfigurationState enum value
+	ConfigurationStateActive = "ACTIVE"
+
+	// ConfigurationStateUpdateInProgress is a ConfigurationState enum value
+	ConfigurationStateUpdateInProgress = "UPDATE_IN_PROGRESS"
+
+	// ConfigurationStateUpdateFailed is a ConfigurationState enum value
+	ConfigurationStateUpdateFailed = "UPDATE_FAILED"
+)
+
+// ConfigurationState_Values returns all elements of the ConfigurationState enum
+func ConfigurationState_Values() []string {
+	return []string{
+		ConfigurationStateActive,
+		ConfigurationStateUpdateInProgress,
+		ConfigurationStateUpdateFailed,
+	}
+}
+
+const (
+	// EncryptionTypeSitewiseDefaultEncryption is a EncryptionType enum value
+	EncryptionTypeSitewiseDefaultEncryption = "SITEWISE_DEFAULT_ENCRYPTION"
+
+	// EncryptionTypeKmsBasedEncryption is a EncryptionType enum value
+	EncryptionTypeKmsBasedEncryption = "KMS_BASED_ENCRYPTION"
+)
+
+// EncryptionType_Values returns all elements of the EncryptionType enum
+func EncryptionType_Values() []string {
+	return []string{
+		EncryptionTypeSitewiseDefaultEncryption,
+		EncryptionTypeKmsBasedEncryption,
+	}
+}
+
+const (
 	// ErrorCodeValidationError is a ErrorCode enum value
 	ErrorCodeValidationError = "VALIDATION_ERROR"
 
@@ -16201,6 +17720,9 @@ const (
 
 	// IdentityTypeGroup is a IdentityType enum value
 	IdentityTypeGroup = "GROUP"
+
+	// IdentityTypeIam is a IdentityType enum value
+	IdentityTypeIam = "IAM"
 )
 
 // IdentityType_Values returns all elements of the IdentityType enum
@@ -16208,6 +17730,7 @@ func IdentityType_Values() []string {
 	return []string{
 		IdentityTypeUser,
 		IdentityTypeGroup,
+		IdentityTypeIam,
 	}
 }
 
@@ -16335,6 +17858,9 @@ const (
 
 	// PropertyDataTypeBoolean is a PropertyDataType enum value
 	PropertyDataTypeBoolean = "BOOLEAN"
+
+	// PropertyDataTypeStruct is a PropertyDataType enum value
+	PropertyDataTypeStruct = "STRUCT"
 )
 
 // PropertyDataType_Values returns all elements of the PropertyDataType enum
@@ -16344,6 +17870,7 @@ func PropertyDataType_Values() []string {
 		PropertyDataTypeInteger,
 		PropertyDataTypeDouble,
 		PropertyDataTypeBoolean,
+		PropertyDataTypeStruct,
 	}
 }
 
@@ -16428,5 +17955,17 @@ func TraversalDirection_Values() []string {
 	return []string{
 		TraversalDirectionParent,
 		TraversalDirectionChild,
+	}
+}
+
+const (
+	// TraversalTypePathToRoot is a TraversalType enum value
+	TraversalTypePathToRoot = "PATH_TO_ROOT"
+)
+
+// TraversalType_Values returns all elements of the TraversalType enum
+func TraversalType_Values() []string {
+	return []string{
+		TraversalTypePathToRoot,
 	}
 }

@@ -1304,7 +1304,8 @@
         },
         "template":{"shape":"Arn"},
         "worldCount":{"shape":"WorldCount"},
-        "tags":{"shape":"TagMap"}
+        "tags":{"shape":"TagMap"},
+        "worldTags":{"shape":"TagMap"}
       }
     },
     "CreateWorldGenerationJobResponse":{
@@ -1317,7 +1318,8 @@
         "clientRequestToken":{"shape":"ClientRequestToken"},
         "template":{"shape":"Arn"},
         "worldCount":{"shape":"WorldCount"},
-        "tags":{"shape":"TagMap"}
+        "tags":{"shape":"TagMap"},
+        "worldTags":{"shape":"TagMap"}
       }
     },
     "CreateWorldTemplateRequest":{
@@ -1766,7 +1768,8 @@
         "template":{"shape":"Arn"},
         "worldCount":{"shape":"WorldCount"},
         "finishedWorldsSummary":{"shape":"FinishedWorldsSummary"},
-        "tags":{"shape":"TagMap"}
+        "tags":{"shape":"TagMap"},
+        "worldTags":{"shape":"TagMap"}
       }
     },
     "DescribeWorldRequest":{
@@ -2364,7 +2367,9 @@
       "members":{
         "application":{"shape":"Arn"},
         "applicationVersion":{"shape":"Version"},
-        "launchConfig":{"shape":"LaunchConfig"}
+        "launchConfig":{"shape":"LaunchConfig"},
+        "uploadConfigurations":{"shape":"UploadConfigurations"},
+        "useDefaultUploadConfigurations":{"shape":"BoxedBoolean"}
       }
     },
     "RobotApplicationConfigs":{
@@ -2527,7 +2532,9 @@
         "application":{"shape":"Arn"},
         "applicationVersion":{"shape":"Version"},
         "launchConfig":{"shape":"LaunchConfig"},
-        "worldConfigs":{"shape":"WorldConfigs"}
+        "uploadConfigurations":{"shape":"UploadConfigurations"},
+        "worldConfigs":{"shape":"WorldConfigs"},
+        "useDefaultUploadConfigurations":{"shape":"BoxedBoolean"}
       }
     },
     "SimulationApplicationConfigs":{
@@ -2646,7 +2653,8 @@
         "WrongRegionS3Bucket",
         "WrongRegionS3Output",
         "WrongRegionRobotApplication",
-        "WrongRegionSimulationApplication"
+        "WrongRegionSimulationApplication",
+        "UploadContentMismatchError"
       ]
     },
     "SimulationJobRequest":{
@@ -2997,6 +3005,32 @@
         "createdAt":{"shape":"CreatedAt"},
         "lastUpdatedAt":{"shape":"LastUpdatedAt"}
       }
+    },
+    "UploadBehavior":{
+      "type":"string",
+      "enum":[
+        "UPLOAD_ON_TERMINATE",
+        "UPLOAD_ROLLING_AUTO_REMOVE"
+      ]
+    },
+    "UploadConfiguration":{
+      "type":"structure",
+      "required":[
+        "name",
+        "path",
+        "uploadBehavior"
+      ],
+      "members":{
+        "name":{"shape":"Name"},
+        "path":{"shape":"Path"},
+        "uploadBehavior":{"shape":"UploadBehavior"}
+      }
+    },
+    "UploadConfigurations":{
+      "type":"list",
+      "member":{"shape":"UploadConfiguration"},
+      "max":10,
+      "min":0
     },
     "VPCConfig":{
       "type":"structure",

@@ -7,14 +7,14 @@ aws-sdk-go is the official AWS SDK for the Go programming language.
 Checkout our [release notes](https://github.com/aws/aws-sdk-go/releases) for
 information about the latest bug fixes, updates, and features added to the SDK.
 
-We [announced](https://aws.amazon.com/blogs/developer/aws-sdk-for-go-2-0-developer-preview/) the Developer Preview for the [v2 AWS SDK for Go](https://github.com/aws/aws-sdk-go-v2). The v2 SDK source is available at https://github.com/aws/aws-sdk-go-v2, and add it to your project with `go get github.com/aws/aws-sdk-go-v2`. Check out the v2 SDK's [changes and updates](https://github.com/aws/aws-sdk-go-v2/blob/master/CHANGELOG.md), and let us know what you think. We want your feedback.
+We [announced](https://aws.amazon.com/blogs/developer/aws-sdk-for-go-version-2-general-availability/) the General Availability for the [AWS SDK for Go V2 (v2)](https://github.com/aws/aws-sdk-go-v2). The v2 SDK source is available at https://github.com/aws/aws-sdk-go-v2. Review the v2 SDK's [Developer Guide](https://aws.github.io/aws-sdk-go-v2/docs/) to get started with AWS SDK for Go V2 or review the [migration guide](https://aws.github.io/aws-sdk-go-v2/docs/migrating/) if you already use version 1.
 
 Jump To:
-* [Getting Started](_#Getting-Started_)
-* [Quick Examples](_#Quick-Examples_)
-* [Getting Help](_#Getting-Help_)
-* [Contributing](_#Contributing_)
-* [More Resources](_#Resources_)
+* [Getting Started](#Getting-Started)
+* [Quick Examples](#Quick-Examples)
+* [Getting Help](#Getting-Help)
+* [Contributing](#Contributing)
+* [More Resources](#Resources)
 
 ## Getting Started
 
@@ -482,6 +482,13 @@ Keeping the list of open issues lean will help us respond in a timely manner.
 ## Contributing
 
 We work hard to provide a high-quality and useful SDK for our AWS services, and we greatly value feedback and contributions from our community. Please review our [contributing guidelines](./CONTRIBUTING.md) before submitting any [issues] or [pull requests][pr] to ensure we have all the necessary information to effectively respond to your bug report or contribution.
+
+## Maintenance and support for SDK major versions
+
+For information about maintenance and support for SDK major versions and our underlying dependencies, see the following in the AWS SDKs and Tools Shared Configuration and Credentials Reference Guide:
+
+* [AWS SDKs and Tools Maintenance Policy](https://docs.aws.amazon.com/credref/latest/refdocs/maint-policy.html)
+* [AWS SDKs and Tools Version Support Matrix](https://docs.aws.amazon.com/credref/latest/refdocs/version-support-matrix.html)
 
 ## Resources
 

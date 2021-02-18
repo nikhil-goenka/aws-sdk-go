@@ -1606,6 +1606,88 @@ func (c *CodeBuild) DescribeTestCasesPagesWithContext(ctx aws.Context, input *De
 	return p.Err()
 }
 
+const opGetReportGroupTrend = "GetReportGroupTrend"
+
+// GetReportGroupTrendRequest generates a "aws/request.Request" representing the
+// client's request for the GetReportGroupTrend operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetReportGroupTrend for more information on using the GetReportGroupTrend
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetReportGroupTrendRequest method.
+//    req, resp := client.GetReportGroupTrendRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/GetReportGroupTrend
+func (c *CodeBuild) GetReportGroupTrendRequest(input *GetReportGroupTrendInput) (req *request.Request, output *GetReportGroupTrendOutput) {
+	op := &request.Operation{
+		Name:       opGetReportGroupTrend,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetReportGroupTrendInput{}
+	}
+
+	output = &GetReportGroupTrendOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetReportGroupTrend API operation for AWS CodeBuild.
+//
+// Analyzes and accumulates test report values for the specified test reports.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS CodeBuild's
+// API operation GetReportGroupTrend for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidInputException
+//   The input value that was provided is not valid.
+//
+//   * ResourceNotFoundException
+//   The specified AWS resource cannot be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/codebuild-2016-10-06/GetReportGroupTrend
+func (c *CodeBuild) GetReportGroupTrend(input *GetReportGroupTrendInput) (*GetReportGroupTrendOutput, error) {
+	req, out := c.GetReportGroupTrendRequest(input)
+	return out, req.Send()
+}
+
+// GetReportGroupTrendWithContext is the same as GetReportGroupTrend with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetReportGroupTrend for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CodeBuild) GetReportGroupTrendWithContext(ctx aws.Context, input *GetReportGroupTrendInput, opts ...request.Option) (*GetReportGroupTrendOutput, error) {
+	req, out := c.GetReportGroupTrendRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetResourcePolicy = "GetResourcePolicy"
 
 // GetResourcePolicyRequest generates a "aws/request.Request" representing the
@@ -2322,8 +2404,8 @@ func (c *CodeBuild) ListBuildsForProjectRequest(input *ListBuildsForProjectInput
 
 // ListBuildsForProject API operation for AWS CodeBuild.
 //
-// Gets a list of build IDs for the specified build project, with each build
-// ID representing a single build.
+// Gets a list of build identifiers for the specified build project, with each
+// build identifier representing a single build.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3603,7 +3685,8 @@ func (c *CodeBuild) RetryBuildBatchRequest(input *RetryBuildBatchInput) (req *re
 
 // RetryBuildBatch API operation for AWS CodeBuild.
 //
-// Restarts a batch build.
+// Restarts a failed batch build. Only batch builds that have failed can be
+// retried.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6322,6 +6405,13 @@ type CreateProjectInput struct {
 	// later time.
 	Cache *ProjectCache `locationName:"cache" type:"structure"`
 
+	// The maximum number of concurrent builds that are allowed for this project.
+	//
+	// New builds are only started if the current number of builds is less than
+	// or equal to this limit. If the current build count meets this limit, new
+	// builds are throttled and are not run.
+	ConcurrentBuildLimit *int64 `locationName:"concurrentBuildLimit" type:"integer"`
+
 	// A description that makes the build project easy to identify.
 	Description *string `locationName:"description" type:"string"`
 
@@ -6568,6 +6658,12 @@ func (s *CreateProjectInput) SetBuildBatchConfig(v *ProjectBuildBatchConfig) *Cr
 // SetCache sets the Cache field's value.
 func (s *CreateProjectInput) SetCache(v *ProjectCache) *CreateProjectInput {
 	s.Cache = v
+	return s
+}
+
+// SetConcurrentBuildLimit sets the ConcurrentBuildLimit field's value.
+func (s *CreateProjectInput) SetConcurrentBuildLimit(v int64) *CreateProjectInput {
+	s.ConcurrentBuildLimit = &v
 	return s
 }
 
@@ -7874,6 +7970,148 @@ func (s *ExportedEnvironmentVariable) SetValue(v string) *ExportedEnvironmentVar
 	return s
 }
 
+type GetReportGroupTrendInput struct {
+	_ struct{} `type:"structure"`
+
+	// The number of reports to analyze. This operation always retrieves the most
+	// recent reports.
+	//
+	// If this parameter is omitted, the most recent 100 reports are analyzed.
+	NumOfReports *int64 `locationName:"numOfReports" min:"1" type:"integer"`
+
+	// The ARN of the report group that contains the reports to analyze.
+	//
+	// ReportGroupArn is a required field
+	ReportGroupArn *string `locationName:"reportGroupArn" min:"1" type:"string" required:"true"`
+
+	// The test report value to accumulate. This must be one of the following values:
+	//
+	// Test reports:
+	//
+	// DURATION
+	//
+	// Accumulate the test run times for the specified reports.
+	//
+	// PASS_RATE
+	//
+	// Accumulate the percentage of tests that passed for the specified test reports.
+	//
+	// TOTAL
+	//
+	// Accumulate the total number of tests for the specified test reports.
+	//
+	// Code coverage reports:
+	//
+	// BRANCH_COVERAGE
+	//
+	// Accumulate the branch coverage percentages for the specified test reports.
+	//
+	// BRANCHES_COVERED
+	//
+	// Accumulate the branches covered values for the specified test reports.
+	//
+	// BRANCHES_MISSED
+	//
+	// Accumulate the branches missed values for the specified test reports.
+	//
+	// LINE_COVERAGE
+	//
+	// Accumulate the line coverage percentages for the specified test reports.
+	//
+	// LINES_COVERED
+	//
+	// Accumulate the lines covered values for the specified test reports.
+	//
+	// LINES_MISSED
+	//
+	// Accumulate the lines not covered values for the specified test reports.
+	//
+	// TrendField is a required field
+	TrendField *string `locationName:"trendField" type:"string" required:"true" enum:"ReportGroupTrendFieldType"`
+}
+
+// String returns the string representation
+func (s GetReportGroupTrendInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetReportGroupTrendInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetReportGroupTrendInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetReportGroupTrendInput"}
+	if s.NumOfReports != nil && *s.NumOfReports < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("NumOfReports", 1))
+	}
+	if s.ReportGroupArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReportGroupArn"))
+	}
+	if s.ReportGroupArn != nil && len(*s.ReportGroupArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReportGroupArn", 1))
+	}
+	if s.TrendField == nil {
+		invalidParams.Add(request.NewErrParamRequired("TrendField"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNumOfReports sets the NumOfReports field's value.
+func (s *GetReportGroupTrendInput) SetNumOfReports(v int64) *GetReportGroupTrendInput {
+	s.NumOfReports = &v
+	return s
+}
+
+// SetReportGroupArn sets the ReportGroupArn field's value.
+func (s *GetReportGroupTrendInput) SetReportGroupArn(v string) *GetReportGroupTrendInput {
+	s.ReportGroupArn = &v
+	return s
+}
+
+// SetTrendField sets the TrendField field's value.
+func (s *GetReportGroupTrendInput) SetTrendField(v string) *GetReportGroupTrendInput {
+	s.TrendField = &v
+	return s
+}
+
+type GetReportGroupTrendOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array that contains the raw data for each report.
+	RawData []*ReportWithRawData `locationName:"rawData" type:"list"`
+
+	// Contains the accumulated trend data.
+	Stats *ReportGroupTrendStats `locationName:"stats" type:"structure"`
+}
+
+// String returns the string representation
+func (s GetReportGroupTrendOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetReportGroupTrendOutput) GoString() string {
+	return s.String()
+}
+
+// SetRawData sets the RawData field's value.
+func (s *GetReportGroupTrendOutput) SetRawData(v []*ReportWithRawData) *GetReportGroupTrendOutput {
+	s.RawData = v
+	return s
+}
+
+// SetStats sets the Stats field's value.
+func (s *GetReportGroupTrendOutput) SetStats(v *ReportGroupTrendStats) *GetReportGroupTrendOutput {
+	s.Stats = v
+	return s
+}
+
 type GetResourcePolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8443,11 +8681,17 @@ type ListBuildsForProjectInput struct {
 	// ProjectName is a required field
 	ProjectName *string `locationName:"projectName" min:"1" type:"string" required:"true"`
 
-	// The order to list build IDs. Valid values include:
+	// The order to list results in. The results are sorted by build number, not
+	// the build identifier.
+	//
+	// Valid values include:
 	//
 	//    * ASCENDING: List the build IDs in ascending order by build ID.
 	//
 	//    * DESCENDING: List the build IDs in descending order by build ID.
+	//
+	// If the project has more than 100 builds, setting the sort order will result
+	// in an error.
 	SortOrder *string `locationName:"sortOrder" type:"string" enum:"SortOrderType"`
 }
 
@@ -9682,6 +9926,13 @@ type Project struct {
 	// Information about the cache for the build project.
 	Cache *ProjectCache `locationName:"cache" type:"structure"`
 
+	// The maximum number of concurrent builds that are allowed for this project.
+	//
+	// New builds are only started if the current number of builds is less than
+	// or equal to this limit. If the current build count meets this limit, new
+	// builds are throttled and are not run.
+	ConcurrentBuildLimit *int64 `locationName:"concurrentBuildLimit" type:"integer"`
+
 	// When the build project was created, expressed in Unix time format.
 	Created *time.Time `locationName:"created" type:"timestamp"`
 
@@ -9822,6 +10073,12 @@ func (s *Project) SetBuildBatchConfig(v *ProjectBuildBatchConfig) *Project {
 // SetCache sets the Cache field's value.
 func (s *Project) SetCache(v *ProjectCache) *Project {
 	s.Cache = v
+	return s
+}
+
+// SetConcurrentBuildLimit sets the ConcurrentBuildLimit field's value.
+func (s *Project) SetConcurrentBuildLimit(v int64) *Project {
+	s.ConcurrentBuildLimit = &v
 	return s
 }
 
@@ -10148,9 +10405,6 @@ type ProjectBadge struct {
 
 	// The publicly-accessible URL through which you can access the build badge
 	// for your project.
-	//
-	// The publicly accessible URL through which you can access the build badge
-	// for your project.
 	BadgeRequestUrl *string `locationName:"badgeRequestUrl" type:"string"`
 }
 
@@ -10254,32 +10508,50 @@ type ProjectCache struct {
 	//    * S3: This is the S3 bucket name/prefix.
 	Location *string `locationName:"location" type:"string"`
 
-	// If you use a LOCAL cache, the local cache mode. You can use one or more local
-	// cache modes at the same time.
+	// An array of strings that specify the local cache modes. You can use one or
+	// more local cache modes at the same time. This is only used for LOCAL cache
+	// types.
 	//
-	//    * LOCAL_SOURCE_CACHE mode caches Git metadata for primary and secondary
-	//    sources. After the cache is created, subsequent builds pull only the change
-	//    between commits. This mode is a good choice for projects with a clean
-	//    working directory and a source that is a large Git repository. If you
-	//    choose this option and your project does not use a Git repository (GitHub,
-	//    GitHub Enterprise, or Bitbucket), the option is ignored.
+	// Possible values are:
 	//
-	//    * LOCAL_DOCKER_LAYER_CACHE mode caches existing Docker layers. This mode
-	//    is a good choice for projects that build or pull large Docker images.
-	//    It can prevent the performance issues caused by pulling large Docker images
-	//    down from the network. You can use a Docker layer cache in the Linux environment
-	//    only. The privileged flag must be set so that your project has the required
-	//    Docker permissions. You should consider the security implications before
-	//    you use a Docker layer cache.
+	// LOCAL_SOURCE_CACHE
 	//
-	//    * LOCAL_CUSTOM_CACHE mode caches directories you specify in the buildspec
-	//    file. This mode is a good choice if your build scenario is not suited
-	//    to one of the other three local cache modes. If you use a custom cache:
-	//    Only directories can be specified for caching. You cannot specify individual
-	//    files. Symlinks are used to reference cached directories. Cached directories
-	//    are linked to your build before it downloads its project sources. Cached
-	//    items are overridden if a source item has the same name. Directories are
-	//    specified using cache paths in the buildspec file.
+	// Caches Git metadata for primary and secondary sources. After the cache is
+	// created, subsequent builds pull only the change between commits. This mode
+	// is a good choice for projects with a clean working directory and a source
+	// that is a large Git repository. If you choose this option and your project
+	// does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket),
+	// the option is ignored.
+	//
+	// LOCAL_DOCKER_LAYER_CACHE
+	//
+	// Caches existing Docker layers. This mode is a good choice for projects that
+	// build or pull large Docker images. It can prevent the performance issues
+	// caused by pulling large Docker images down from the network.
+	//
+	//    * You can use a Docker layer cache in the Linux environment only.
+	//
+	//    * The privileged flag must be set so that your project has the required
+	//    Docker permissions.
+	//
+	//    * You should consider the security implications before you use a Docker
+	//    layer cache.
+	//
+	// LOCAL_CUSTOM_CACHE
+	//
+	// Caches directories you specify in the buildspec file. This mode is a good
+	// choice if your build scenario is not suited to one of the other three local
+	// cache modes. If you use a custom cache:
+	//
+	//    * Only directories can be specified for caching. You cannot specify individual
+	//    files.
+	//
+	//    * Symlinks are used to reference cached directories.
+	//
+	//    * Cached directories are linked to your build before it downloads its
+	//    project sources. Cached items are overridden if a source item has the
+	//    same name. Directories are specified using cache paths in the buildspec
+	//    file.
 	Modes []*string `locationName:"modes" type:"list"`
 
 	// The type of cache used by the build project. Valid values include:
@@ -10340,7 +10612,10 @@ func (s *ProjectCache) SetType(v string) *ProjectCache {
 type ProjectEnvironment struct {
 	_ struct{} `type:"structure"`
 
-	// The certificate to use with this build project.
+	// The ARN of the Amazon Simple Storage Service (Amazon S3) bucket, path prefix,
+	// and object key that contains the PEM-encoded certificate for the build project.
+	// For more information, see certificate (https://docs.aws.amazon.com/codebuild/latest/userguide/create-project-cli.html#cli.environment.certificate)
+	// in the AWS CodeBuild User Guide.
 	Certificate *string `locationName:"certificate" type:"string"`
 
 	// Information about the compute resources the build project uses. Available
@@ -10383,8 +10658,7 @@ type ProjectEnvironment struct {
 	//
 	//    * For an image tag: <registry>/<repository>:<tag>. For example, in the
 	//    Docker repository that CodeBuild uses to manage its Docker images, this
-	//    would be aws/codebuild/standard:4.0. To specify the latest version of
-	//    this image, this would be aws/codebuild/standard:latest.
+	//    would be aws/codebuild/standard:4.0.
 	//
 	//    * For an image digest: <registry>/<repository>@<digest>. For example,
 	//    to specify an image with the digest "sha256:cbbf2f9a99b47fc460d422812b6a5adff7dfee951d8fa2e4a98caa0382cfbdbf,"
@@ -10560,8 +10834,8 @@ type ProjectFileSystemLocation struct {
 
 	// The name used to access a file system created by Amazon EFS. CodeBuild creates
 	// an environment variable by appending the identifier in all capital letters
-	// to CODEBUILD_. For example, if you specify my-efs for identifier, a new environment
-	// variable is create named CODEBUILD_MY-EFS.
+	// to CODEBUILD_. For example, if you specify my_efs for identifier, a new environment
+	// variable is create named CODEBUILD_MY_EFS.
 	//
 	// The identifier is used to mount your file system.
 	Identifier *string `locationName:"identifier" type:"string"`
@@ -10713,6 +10987,12 @@ type ProjectSource struct {
 	// provider. This option is valid only when your source provider is GitHub,
 	// GitHub Enterprise, or Bitbucket. If this is set and you use a different source
 	// provider, an invalidInputException is thrown.
+	//
+	// To be able to report the build status to the source provider, the user associated
+	// with the source provider must have write access to the repo. If the user
+	// does not have write access, the build status cannot be updated. For more
+	// information, see Source provider access (https://docs.aws.amazon.com/codebuild/latest/userguide/access-tokens.html)
+	// in the AWS CodeBuild User Guide.
 	//
 	// The status of a build triggered by a webhook is always reported to your source
 	// provider.
@@ -11290,7 +11570,7 @@ func (s *ReportFilter) SetStatus(v string) *ReportFilter {
 type ReportGroup struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of a ReportGroup.
+	// The ARN of the ReportGroup.
 	Arn *string `locationName:"arn" min:"1" type:"string"`
 
 	// The date and time this ReportGroup was created.
@@ -11303,8 +11583,21 @@ type ReportGroup struct {
 	// The date and time this ReportGroup was last modified.
 	LastModified *time.Time `locationName:"lastModified" type:"timestamp"`
 
-	// The name of a ReportGroup.
+	// The name of the ReportGroup.
 	Name *string `locationName:"name" min:"2" type:"string"`
+
+	// The status of the report group. This property is read-only.
+	//
+	// This can be one of the following values:
+	//
+	// ACTIVE
+	//
+	// The report group is active.
+	//
+	// DELETING
+	//
+	// The report group is in the process of being deleted.
+	Status *string `locationName:"status" type:"string" enum:"ReportGroupStatusType"`
 
 	// A list of tag key and value pairs associated with this report group.
 	//
@@ -11312,7 +11605,15 @@ type ReportGroup struct {
 	// report group tags.
 	Tags []*Tag `locationName:"tags" type:"list"`
 
-	// The type of the ReportGroup. The one valid value is TEST.
+	// The type of the ReportGroup. This can be one of the following values:
+	//
+	// CODE_COVERAGE
+	//
+	// The report group contains code coverage reports.
+	//
+	// TEST
+	//
+	// The report group contains test reports.
 	Type *string `locationName:"type" type:"string" enum:"ReportType"`
 }
 
@@ -11356,6 +11657,12 @@ func (s *ReportGroup) SetName(v string) *ReportGroup {
 	return s
 }
 
+// SetStatus sets the Status field's value.
+func (s *ReportGroup) SetStatus(v string) *ReportGroup {
+	s.Status = &v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *ReportGroup) SetTags(v []*Tag) *ReportGroup {
 	s.Tags = v
@@ -11365,6 +11672,82 @@ func (s *ReportGroup) SetTags(v []*Tag) *ReportGroup {
 // SetType sets the Type field's value.
 func (s *ReportGroup) SetType(v string) *ReportGroup {
 	s.Type = &v
+	return s
+}
+
+// Contains trend statistics for a set of reports. The actual values depend
+// on the type of trend being collected. For more information, see .
+type ReportGroupTrendStats struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the average of all values analyzed.
+	Average *string `locationName:"average" type:"string"`
+
+	// Contains the maximum value analyzed.
+	Max *string `locationName:"max" type:"string"`
+
+	// Contains the minimum value analyzed.
+	Min *string `locationName:"min" type:"string"`
+}
+
+// String returns the string representation
+func (s ReportGroupTrendStats) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReportGroupTrendStats) GoString() string {
+	return s.String()
+}
+
+// SetAverage sets the Average field's value.
+func (s *ReportGroupTrendStats) SetAverage(v string) *ReportGroupTrendStats {
+	s.Average = &v
+	return s
+}
+
+// SetMax sets the Max field's value.
+func (s *ReportGroupTrendStats) SetMax(v string) *ReportGroupTrendStats {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *ReportGroupTrendStats) SetMin(v string) *ReportGroupTrendStats {
+	s.Min = &v
+	return s
+}
+
+// Contains the unmodified data for the report. For more information, see .
+type ReportWithRawData struct {
+	_ struct{} `type:"structure"`
+
+	// The value of the requested data field from the report.
+	Data *string `locationName:"data" type:"string"`
+
+	// The ARN of the report.
+	ReportArn *string `locationName:"reportArn" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ReportWithRawData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReportWithRawData) GoString() string {
+	return s.String()
+}
+
+// SetData sets the Data field's value.
+func (s *ReportWithRawData) SetData(v string) *ReportWithRawData {
+	s.Data = &v
+	return s
+}
+
+// SetReportArn sets the ReportArn field's value.
+func (s *ReportWithRawData) SetReportArn(v string) *ReportWithRawData {
+	s.ReportArn = &v
 	return s
 }
 
@@ -12562,6 +12945,12 @@ type StartBuildInput struct {
 	// and completion. If you use this option with a source provider other than
 	// GitHub, GitHub Enterprise, or Bitbucket, an invalidInputException is thrown.
 	//
+	// To be able to report the build status to the source provider, the user associated
+	// with the source provider must have write access to the repo. If the user
+	// does not have write access, the build status cannot be updated. For more
+	// information, see Source provider access (https://docs.aws.amazon.com/codebuild/latest/userguide/access-tokens.html)
+	// in the AWS CodeBuild User Guide.
+	//
 	// The status of a build triggered by a webhook is always reported to your source
 	// provider.
 	ReportBuildStatusOverride *bool `locationName:"reportBuildStatusOverride" type:"boolean"`
@@ -13336,6 +13725,15 @@ type UpdateProjectInput struct {
 	// later time.
 	Cache *ProjectCache `locationName:"cache" type:"structure"`
 
+	// The maximum number of concurrent builds that are allowed for this project.
+	//
+	// New builds are only started if the current number of builds is less than
+	// or equal to this limit. If the current build count meets this limit, new
+	// builds are throttled and are not run.
+	//
+	// To remove this limit, set this value to -1.
+	ConcurrentBuildLimit *int64 `locationName:"concurrentBuildLimit" type:"integer"`
+
 	// A new or replacement description of the build project.
 	Description *string `locationName:"description" type:"string"`
 
@@ -13566,6 +13964,12 @@ func (s *UpdateProjectInput) SetBuildBatchConfig(v *ProjectBuildBatchConfig) *Up
 // SetCache sets the Cache field's value.
 func (s *UpdateProjectInput) SetCache(v *ProjectCache) *UpdateProjectInput {
 	s.Cache = v
+	return s
+}
+
+// SetConcurrentBuildLimit sets the ConcurrentBuildLimit field's value.
+func (s *UpdateProjectInput) SetConcurrentBuildLimit(v int64) *UpdateProjectInput {
+	s.ConcurrentBuildLimit = &v
 	return s
 }
 
@@ -14624,6 +15028,66 @@ func ReportGroupSortByType_Values() []string {
 		ReportGroupSortByTypeName,
 		ReportGroupSortByTypeCreatedTime,
 		ReportGroupSortByTypeLastModifiedTime,
+	}
+}
+
+const (
+	// ReportGroupStatusTypeActive is a ReportGroupStatusType enum value
+	ReportGroupStatusTypeActive = "ACTIVE"
+
+	// ReportGroupStatusTypeDeleting is a ReportGroupStatusType enum value
+	ReportGroupStatusTypeDeleting = "DELETING"
+)
+
+// ReportGroupStatusType_Values returns all elements of the ReportGroupStatusType enum
+func ReportGroupStatusType_Values() []string {
+	return []string{
+		ReportGroupStatusTypeActive,
+		ReportGroupStatusTypeDeleting,
+	}
+}
+
+const (
+	// ReportGroupTrendFieldTypePassRate is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypePassRate = "PASS_RATE"
+
+	// ReportGroupTrendFieldTypeDuration is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeDuration = "DURATION"
+
+	// ReportGroupTrendFieldTypeTotal is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeTotal = "TOTAL"
+
+	// ReportGroupTrendFieldTypeLineCoverage is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeLineCoverage = "LINE_COVERAGE"
+
+	// ReportGroupTrendFieldTypeLinesCovered is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeLinesCovered = "LINES_COVERED"
+
+	// ReportGroupTrendFieldTypeLinesMissed is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeLinesMissed = "LINES_MISSED"
+
+	// ReportGroupTrendFieldTypeBranchCoverage is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeBranchCoverage = "BRANCH_COVERAGE"
+
+	// ReportGroupTrendFieldTypeBranchesCovered is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeBranchesCovered = "BRANCHES_COVERED"
+
+	// ReportGroupTrendFieldTypeBranchesMissed is a ReportGroupTrendFieldType enum value
+	ReportGroupTrendFieldTypeBranchesMissed = "BRANCHES_MISSED"
+)
+
+// ReportGroupTrendFieldType_Values returns all elements of the ReportGroupTrendFieldType enum
+func ReportGroupTrendFieldType_Values() []string {
+	return []string{
+		ReportGroupTrendFieldTypePassRate,
+		ReportGroupTrendFieldTypeDuration,
+		ReportGroupTrendFieldTypeTotal,
+		ReportGroupTrendFieldTypeLineCoverage,
+		ReportGroupTrendFieldTypeLinesCovered,
+		ReportGroupTrendFieldTypeLinesMissed,
+		ReportGroupTrendFieldTypeBranchCoverage,
+		ReportGroupTrendFieldTypeBranchesCovered,
+		ReportGroupTrendFieldTypeBranchesMissed,
 	}
 }
 

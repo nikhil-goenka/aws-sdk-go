@@ -213,6 +213,115 @@ func (c *DirectoryService) AddIpRoutesWithContext(ctx aws.Context, input *AddIpR
 	return out, req.Send()
 }
 
+const opAddRegion = "AddRegion"
+
+// AddRegionRequest generates a "aws/request.Request" representing the
+// client's request for the AddRegion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AddRegion for more information on using the AddRegion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AddRegionRequest method.
+//    req, resp := client.AddRegionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/AddRegion
+func (c *DirectoryService) AddRegionRequest(input *AddRegionInput) (req *request.Request, output *AddRegionOutput) {
+	op := &request.Operation{
+		Name:       opAddRegion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AddRegionInput{}
+	}
+
+	output = &AddRegionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AddRegion API operation for AWS Directory Service.
+//
+// Adds two domain controllers in the specified Region for the specified directory.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation AddRegion for usage and error information.
+//
+// Returned Error Types:
+//   * DirectoryUnavailableException
+//   The specified directory is unavailable or could not be found.
+//
+//   * InvalidParameterException
+//   One or more parameters are not valid.
+//
+//   * EntityDoesNotExistException
+//   The specified entity could not be found.
+//
+//   * DirectoryAlreadyInRegionException
+//   The Region you specified is the same Region where the AWS Managed Microsoft
+//   AD directory was created. Specify a different Region and try again.
+//
+//   * UnsupportedOperationException
+//   The operation is not supported.
+//
+//   * DirectoryDoesNotExistException
+//   The specified directory does not exist in the system.
+//
+//   * RegionLimitExceededException
+//   You have reached the limit for maximum number of simultaneous Region replications
+//   per directory.
+//
+//   * AccessDeniedException
+//   Client authentication is not available in this region at this time.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/AddRegion
+func (c *DirectoryService) AddRegion(input *AddRegionInput) (*AddRegionOutput, error) {
+	req, out := c.AddRegionRequest(input)
+	return out, req.Send()
+}
+
+// AddRegionWithContext is the same as AddRegion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AddRegion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectoryService) AddRegionWithContext(ctx aws.Context, input *AddRegionInput, opts ...request.Option) (*AddRegionOutput, error) {
+	req, out := c.AddRegionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opAddTagsToResource = "AddTagsToResource"
 
 // AddTagsToResourceRequest generates a "aws/request.Request" representing the
@@ -631,8 +740,7 @@ func (c *DirectoryService) CreateComputerRequest(input *CreateComputerInput) (re
 
 // CreateComputer API operation for AWS Directory Service.
 //
-// Creates a computer account in the specified directory, and joins the computer
-// to the directory.
+// Creates an Active Directory computer object in the specified directory.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1777,8 +1885,8 @@ func (c *DirectoryService) DeregisterCertificateRequest(input *DeregisterCertifi
 
 // DeregisterCertificate API operation for AWS Directory Service.
 //
-// Deletes from the system the certificate that was registered for a secured
-// LDAP connection.
+// Deletes from the system the certificate that was registered for secure LDAP
+// or client certificate authentication.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1968,8 +2076,8 @@ func (c *DirectoryService) DescribeCertificateRequest(input *DescribeCertificate
 
 // DescribeCertificate API operation for AWS Directory Service.
 //
-// Displays information about the certificate registered for a secured LDAP
-// connection.
+// Displays information about the certificate registered for secure LDAP or
+// client certificate authentication.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2556,6 +2664,104 @@ func (c *DirectoryService) DescribeLDAPSSettingsWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opDescribeRegions = "DescribeRegions"
+
+// DescribeRegionsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeRegions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeRegions for more information on using the DescribeRegions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeRegionsRequest method.
+//    req, resp := client.DescribeRegionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/DescribeRegions
+func (c *DirectoryService) DescribeRegionsRequest(input *DescribeRegionsInput) (req *request.Request, output *DescribeRegionsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeRegions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeRegionsInput{}
+	}
+
+	output = &DescribeRegionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeRegions API operation for AWS Directory Service.
+//
+// Provides information about the Regions that are configured for multi-Region
+// replication.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation DescribeRegions for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   One or more parameters are not valid.
+//
+//   * DirectoryDoesNotExistException
+//   The specified directory does not exist in the system.
+//
+//   * UnsupportedOperationException
+//   The operation is not supported.
+//
+//   * InvalidNextTokenException
+//   The NextToken value is not valid.
+//
+//   * AccessDeniedException
+//   Client authentication is not available in this region at this time.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/DescribeRegions
+func (c *DirectoryService) DescribeRegions(input *DescribeRegionsInput) (*DescribeRegionsOutput, error) {
+	req, out := c.DescribeRegionsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeRegionsWithContext is the same as DescribeRegions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeRegions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectoryService) DescribeRegionsWithContext(ctx aws.Context, input *DescribeRegionsInput, opts ...request.Option) (*DescribeRegionsOutput, error) {
+	req, out := c.DescribeRegionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeSharedDirectories = "DescribeSharedDirectories"
 
 // DescribeSharedDirectoriesRequest generates a "aws/request.Request" representing the
@@ -2845,6 +3051,101 @@ func (c *DirectoryService) DescribeTrustsWithContext(ctx aws.Context, input *Des
 	return out, req.Send()
 }
 
+const opDisableClientAuthentication = "DisableClientAuthentication"
+
+// DisableClientAuthenticationRequest generates a "aws/request.Request" representing the
+// client's request for the DisableClientAuthentication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisableClientAuthentication for more information on using the DisableClientAuthentication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisableClientAuthenticationRequest method.
+//    req, resp := client.DisableClientAuthenticationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/DisableClientAuthentication
+func (c *DirectoryService) DisableClientAuthenticationRequest(input *DisableClientAuthenticationInput) (req *request.Request, output *DisableClientAuthenticationOutput) {
+	op := &request.Operation{
+		Name:       opDisableClientAuthentication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisableClientAuthenticationInput{}
+	}
+
+	output = &DisableClientAuthenticationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisableClientAuthentication API operation for AWS Directory Service.
+//
+// Disables alternative client authentication methods for the specified directory.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation DisableClientAuthentication for usage and error information.
+//
+// Returned Error Types:
+//   * DirectoryDoesNotExistException
+//   The specified directory does not exist in the system.
+//
+//   * UnsupportedOperationException
+//   The operation is not supported.
+//
+//   * InvalidClientAuthStatusException
+//   Client authentication is already enabled.
+//
+//   * AccessDeniedException
+//   Client authentication is not available in this region at this time.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/DisableClientAuthentication
+func (c *DirectoryService) DisableClientAuthentication(input *DisableClientAuthenticationInput) (*DisableClientAuthenticationOutput, error) {
+	req, out := c.DisableClientAuthenticationRequest(input)
+	return out, req.Send()
+}
+
+// DisableClientAuthenticationWithContext is the same as DisableClientAuthentication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisableClientAuthentication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectoryService) DisableClientAuthenticationWithContext(ctx aws.Context, input *DisableClientAuthenticationInput, opts ...request.Option) (*DisableClientAuthenticationOutput, error) {
+	req, out := c.DisableClientAuthenticationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDisableLDAPS = "DisableLDAPS"
 
 // DisableLDAPSRequest generates a "aws/request.Request" representing the
@@ -3124,6 +3425,105 @@ func (c *DirectoryService) DisableSsoWithContext(ctx aws.Context, input *Disable
 	return out, req.Send()
 }
 
+const opEnableClientAuthentication = "EnableClientAuthentication"
+
+// EnableClientAuthenticationRequest generates a "aws/request.Request" representing the
+// client's request for the EnableClientAuthentication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See EnableClientAuthentication for more information on using the EnableClientAuthentication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the EnableClientAuthenticationRequest method.
+//    req, resp := client.EnableClientAuthenticationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/EnableClientAuthentication
+func (c *DirectoryService) EnableClientAuthenticationRequest(input *EnableClientAuthenticationInput) (req *request.Request, output *EnableClientAuthenticationOutput) {
+	op := &request.Operation{
+		Name:       opEnableClientAuthentication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &EnableClientAuthenticationInput{}
+	}
+
+	output = &EnableClientAuthenticationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// EnableClientAuthentication API operation for AWS Directory Service.
+//
+// Enables alternative client authentication methods for the specified directory.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation EnableClientAuthentication for usage and error information.
+//
+// Returned Error Types:
+//   * DirectoryDoesNotExistException
+//   The specified directory does not exist in the system.
+//
+//   * UnsupportedOperationException
+//   The operation is not supported.
+//
+//   * InvalidClientAuthStatusException
+//   Client authentication is already enabled.
+//
+//   * AccessDeniedException
+//   Client authentication is not available in this region at this time.
+//
+//   * NoAvailableCertificateException
+//   Client authentication setup could not be completed because at least one valid
+//   certificate must be registered in the system.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/EnableClientAuthentication
+func (c *DirectoryService) EnableClientAuthentication(input *EnableClientAuthenticationInput) (*EnableClientAuthenticationOutput, error) {
+	req, out := c.EnableClientAuthenticationRequest(input)
+	return out, req.Send()
+}
+
+// EnableClientAuthenticationWithContext is the same as EnableClientAuthentication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See EnableClientAuthentication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectoryService) EnableClientAuthenticationWithContext(ctx aws.Context, input *EnableClientAuthenticationInput, opts ...request.Option) (*EnableClientAuthenticationOutput, error) {
+	req, out := c.EnableClientAuthenticationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opEnableLDAPS = "EnableLDAPS"
 
 // EnableLDAPSRequest generates a "aws/request.Request" representing the
@@ -3187,8 +3587,8 @@ func (c *DirectoryService) EnableLDAPSRequest(input *EnableLDAPSInput) (req *req
 //   The specified directory does not exist in the system.
 //
 //   * NoAvailableCertificateException
-//   The LDAP activities could not be performed because at least one valid certificate
-//   must be registered with the system.
+//   Client authentication setup could not be completed because at least one valid
+//   certificate must be registered in the system.
 //
 //   * InvalidLDAPSStatusException
 //   The LDAP activities could not be performed because they are limited by the
@@ -3631,7 +4031,7 @@ func (c *DirectoryService) ListCertificatesRequest(input *ListCertificatesInput)
 // ListCertificates API operation for AWS Directory Service.
 //
 // For the specified directory, lists all the certificates registered for a
-// secured LDAP connection.
+// secure LDAP or client certificate authentication.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4083,7 +4483,7 @@ func (c *DirectoryService) RegisterCertificateRequest(input *RegisterCertificate
 
 // RegisterCertificate API operation for AWS Directory Service.
 //
-// Registers a certificate for secured LDAP connection.
+// Registers a certificate for a secure LDAP or client certificate authentication.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4416,6 +4816,103 @@ func (c *DirectoryService) RemoveIpRoutes(input *RemoveIpRoutesInput) (*RemoveIp
 // for more information on using Contexts.
 func (c *DirectoryService) RemoveIpRoutesWithContext(ctx aws.Context, input *RemoveIpRoutesInput, opts ...request.Option) (*RemoveIpRoutesOutput, error) {
 	req, out := c.RemoveIpRoutesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRemoveRegion = "RemoveRegion"
+
+// RemoveRegionRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveRegion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RemoveRegion for more information on using the RemoveRegion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RemoveRegionRequest method.
+//    req, resp := client.RemoveRegionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/RemoveRegion
+func (c *DirectoryService) RemoveRegionRequest(input *RemoveRegionInput) (req *request.Request, output *RemoveRegionOutput) {
+	op := &request.Operation{
+		Name:       opRemoveRegion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RemoveRegionInput{}
+	}
+
+	output = &RemoveRegionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// RemoveRegion API operation for AWS Directory Service.
+//
+// Stops all replication and removes the domain controllers from the specified
+// Region. You cannot remove the primary Region with this operation. Instead,
+// use the DeleteDirectory API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Directory Service's
+// API operation RemoveRegion for usage and error information.
+//
+// Returned Error Types:
+//   * DirectoryUnavailableException
+//   The specified directory is unavailable or could not be found.
+//
+//   * DirectoryDoesNotExistException
+//   The specified directory does not exist in the system.
+//
+//   * UnsupportedOperationException
+//   The operation is not supported.
+//
+//   * AccessDeniedException
+//   Client authentication is not available in this region at this time.
+//
+//   * ClientException
+//   A client exception has occurred.
+//
+//   * ServiceException
+//   An exception has occurred in AWS Directory Service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ds-2015-04-16/RemoveRegion
+func (c *DirectoryService) RemoveRegion(input *RemoveRegionInput) (*RemoveRegionOutput, error) {
+	req, out := c.RemoveRegionRequest(input)
+	return out, req.Send()
+}
+
+// RemoveRegionWithContext is the same as RemoveRegion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RemoveRegion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectoryService) RemoveRegionWithContext(ctx aws.Context, input *RemoveRegionInput, opts ...request.Option) (*RemoveRegionOutput, error) {
+	req, out := c.RemoveRegionRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4815,7 +5312,7 @@ func (c *DirectoryService) ShareDirectoryRequest(input *ShareDirectoryInput) (re
 //   Exception encountered while trying to access your AWS organization.
 //
 //   * AccessDeniedException
-//   You do not have sufficient access to perform this action.
+//   Client authentication is not available in this region at this time.
 //
 //   * UnsupportedOperationException
 //   The operation is not supported.
@@ -5567,7 +6064,7 @@ func (s *AcceptSharedDirectoryOutput) SetSharedDirectory(v *SharedDirectory) *Ac
 	return s
 }
 
-// You do not have sufficient access to perform this action.
+// Client authentication is not available in this region at this time.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -5745,6 +6242,95 @@ func (s AddIpRoutesOutput) String() string {
 
 // GoString returns the string representation
 func (s AddIpRoutesOutput) GoString() string {
+	return s.String()
+}
+
+type AddRegionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the directory to which you want to add Region replication.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The name of the Region where you want to add domain controllers for replication.
+	// For example, us-east-1.
+	//
+	// RegionName is a required field
+	RegionName *string `min:"8" type:"string" required:"true"`
+
+	// Contains VPC information for the CreateDirectory or CreateMicrosoftAD operation.
+	//
+	// VPCSettings is a required field
+	VPCSettings *DirectoryVpcSettings `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s AddRegionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddRegionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddRegionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddRegionInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+	if s.RegionName == nil {
+		invalidParams.Add(request.NewErrParamRequired("RegionName"))
+	}
+	if s.RegionName != nil && len(*s.RegionName) < 8 {
+		invalidParams.Add(request.NewErrParamMinLen("RegionName", 8))
+	}
+	if s.VPCSettings == nil {
+		invalidParams.Add(request.NewErrParamRequired("VPCSettings"))
+	}
+	if s.VPCSettings != nil {
+		if err := s.VPCSettings.Validate(); err != nil {
+			invalidParams.AddNested("VPCSettings", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *AddRegionInput) SetDirectoryId(v string) *AddRegionInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetRegionName sets the RegionName field's value.
+func (s *AddRegionInput) SetRegionName(v string) *AddRegionInput {
+	s.RegionName = &v
+	return s
+}
+
+// SetVPCSettings sets the VPCSettings field's value.
+func (s *AddRegionInput) SetVPCSettings(v *DirectoryVpcSettings) *AddRegionInput {
+	s.VPCSettings = v
+	return s
+}
+
+type AddRegionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AddRegionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddRegionOutput) GoString() string {
 	return s.String()
 }
 
@@ -6003,6 +6589,10 @@ type Certificate struct {
 	// The identifier of the certificate.
 	CertificateId *string `type:"string"`
 
+	// A ClientCertAuthSettings object that contains client certificate authentication
+	// settings.
+	ClientCertAuthSettings *ClientCertAuthSettings `type:"structure"`
+
 	// The common name for the certificate.
 	CommonName *string `type:"string"`
 
@@ -6017,6 +6607,10 @@ type Certificate struct {
 
 	// Describes a state change for the certificate.
 	StateReason *string `type:"string"`
+
+	// The function that the registered certificate performs. Valid values include
+	// ClientLDAPS or ClientCertAuth. The default value is ClientLDAPS.
+	Type *string `type:"string" enum:"CertificateType"`
 }
 
 // String returns the string representation
@@ -6032,6 +6626,12 @@ func (s Certificate) GoString() string {
 // SetCertificateId sets the CertificateId field's value.
 func (s *Certificate) SetCertificateId(v string) *Certificate {
 	s.CertificateId = &v
+	return s
+}
+
+// SetClientCertAuthSettings sets the ClientCertAuthSettings field's value.
+func (s *Certificate) SetClientCertAuthSettings(v *ClientCertAuthSettings) *Certificate {
+	s.ClientCertAuthSettings = v
 	return s
 }
 
@@ -6062,6 +6662,12 @@ func (s *Certificate) SetState(v string) *Certificate {
 // SetStateReason sets the StateReason field's value.
 func (s *Certificate) SetStateReason(v string) *Certificate {
 	s.StateReason = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *Certificate) SetType(v string) *Certificate {
+	s.Type = &v
 	return s
 }
 
@@ -6261,6 +6867,10 @@ type CertificateInfo struct {
 
 	// The state of the certificate.
 	State *string `type:"string" enum:"CertificateState"`
+
+	// The function that the registered certificate performs. Valid values include
+	// ClientLDAPS or ClientCertAuth. The default value is ClientLDAPS.
+	Type *string `type:"string" enum:"CertificateType"`
 }
 
 // String returns the string representation
@@ -6294,6 +6904,12 @@ func (s *CertificateInfo) SetExpiryDateTime(v time.Time) *CertificateInfo {
 // SetState sets the State field's value.
 func (s *CertificateInfo) SetState(v string) *CertificateInfo {
 	s.State = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *CertificateInfo) SetType(v string) *CertificateInfo {
+	s.Type = &v
 	return s
 }
 
@@ -6356,6 +6972,46 @@ func (s *CertificateLimitExceededException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *CertificateLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+// Contains information about the client certificate authentication settings
+// for the RegisterCertificate and DescribeCertificate operations.
+type ClientCertAuthSettings struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the URL of the default OCSP server used to check for revocation
+	// status. A secondary value to any OCSP address found in the AIA extension
+	// of the user certificate.
+	OCSPUrl *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ClientCertAuthSettings) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClientCertAuthSettings) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ClientCertAuthSettings) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ClientCertAuthSettings"}
+	if s.OCSPUrl != nil && len(*s.OCSPUrl) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OCSPUrl", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOCSPUrl sets the OCSPUrl field's value.
+func (s *ClientCertAuthSettings) SetOCSPUrl(v string) *ClientCertAuthSettings {
+	s.OCSPUrl = &v
+	return s
 }
 
 // A client exception has occurred.
@@ -6988,6 +7644,24 @@ type CreateDirectoryInput struct {
 	//
 	// If you need to change the password for the administrator account, you can
 	// use the ResetUserPassword API call.
+	//
+	// The regex pattern for this string is made up of the following conditions:
+	//
+	//    * Length (?=^.{8,64}$) – Must be between 8 and 64 characters
+	//
+	// AND any 3 of the following password complexity rules required by Active Directory:
+	//
+	//    * Numbers and upper case and lowercase (?=.*\d)(?=.*[A-Z])(?=.*[a-z])
+	//
+	//    * Numbers and special characters and lower case (?=.*\d)(?=.*[^A-Za-z0-9\s])(?=.*[a-z])
+	//
+	//    * Special characters and upper case and lower case (?=.*[^A-Za-z0-9\s])(?=.*[A-Z])(?=.*[a-z])
+	//
+	//    * Numbers and upper case and special characters (?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9\s])
+	//
+	// For additional information about how Active Directory passwords are enforced,
+	// see Password must meet complexity requirements (https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements)
+	// on the Microsoft website.
 	//
 	// Password is a required field
 	Password *string `type:"string" required:"true" sensitive:"true"`
@@ -8519,6 +9193,100 @@ func (s *DescribeLDAPSSettingsOutput) SetNextToken(v string) *DescribeLDAPSSetti
 	return s
 }
 
+type DescribeRegionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the directory.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The DescribeRegionsResult.NextToken value from a previous call to DescribeRegions.
+	// Pass null if this is the first call.
+	NextToken *string `type:"string"`
+
+	// The name of the Region. For example, us-east-1.
+	RegionName *string `min:"8" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeRegionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeRegionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeRegionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeRegionsInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+	if s.RegionName != nil && len(*s.RegionName) < 8 {
+		invalidParams.Add(request.NewErrParamMinLen("RegionName", 8))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *DescribeRegionsInput) SetDirectoryId(v string) *DescribeRegionsInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeRegionsInput) SetNextToken(v string) *DescribeRegionsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRegionName sets the RegionName field's value.
+func (s *DescribeRegionsInput) SetRegionName(v string) *DescribeRegionsInput {
+	s.RegionName = &v
+	return s
+}
+
+type DescribeRegionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If not null, more results are available. Pass this value for the NextToken
+	// parameter in a subsequent call to DescribeRegions to retrieve the next set
+	// of items.
+	NextToken *string `type:"string"`
+
+	// List of Region information related to the directory for each replicated Region.
+	RegionsDescription []*RegionDescription `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeRegionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeRegionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeRegionsOutput) SetNextToken(v string) *DescribeRegionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRegionsDescription sets the RegionsDescription field's value.
+func (s *DescribeRegionsOutput) SetRegionsDescription(v []*RegionDescription) *DescribeRegionsOutput {
+	s.RegionsDescription = v
+	return s
+}
+
 type DescribeSharedDirectoriesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8811,6 +9579,67 @@ func (s *DescribeTrustsOutput) SetTrusts(v []*Trust) *DescribeTrustsOutput {
 	return s
 }
 
+// The Region you specified is the same Region where the AWS Managed Microsoft
+// AD directory was created. Specify a different Region and try again.
+type DirectoryAlreadyInRegionException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The descriptive message for the exception.
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// The AWS request identifier.
+	RequestId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DirectoryAlreadyInRegionException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DirectoryAlreadyInRegionException) GoString() string {
+	return s.String()
+}
+
+func newErrorDirectoryAlreadyInRegionException(v protocol.ResponseMetadata) error {
+	return &DirectoryAlreadyInRegionException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *DirectoryAlreadyInRegionException) Code() string {
+	return "DirectoryAlreadyInRegionException"
+}
+
+// Message returns the exception's message.
+func (s *DirectoryAlreadyInRegionException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *DirectoryAlreadyInRegionException) OrigErr() error {
+	return nil
+}
+
+func (s *DirectoryAlreadyInRegionException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *DirectoryAlreadyInRegionException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *DirectoryAlreadyInRegionException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The specified directory has already been shared with this AWS account.
 type DirectoryAlreadySharedException struct {
 	_            struct{}                  `type:"structure"`
@@ -9087,6 +9916,9 @@ type DirectoryDescription struct {
 	// The status of the RADIUS MFA server connection.
 	RadiusStatus *string `type:"string" enum:"RadiusStatus"`
 
+	// Lists the Regions where the directory has replicated.
+	RegionsInfo *RegionsInfo `type:"structure"`
+
 	// The method used when sharing a directory to determine whether the directory
 	// should be shared within your AWS organization (ORGANIZATIONS) or with any
 	// AWS account by sending a shared directory request (HANDSHAKE).
@@ -9213,6 +10045,12 @@ func (s *DirectoryDescription) SetRadiusSettings(v *RadiusSettings) *DirectoryDe
 // SetRadiusStatus sets the RadiusStatus field's value.
 func (s *DirectoryDescription) SetRadiusStatus(v string) *DirectoryDescription {
 	s.RadiusStatus = &v
+	return s
+}
+
+// SetRegionsInfo sets the RegionsInfo field's value.
+func (s *DirectoryDescription) SetRegionsInfo(v *RegionsInfo) *DirectoryDescription {
+	s.RegionsInfo = v
 	return s
 }
 
@@ -9727,6 +10565,73 @@ func (s *DirectoryVpcSettingsDescription) SetVpcId(v string) *DirectoryVpcSettin
 	return s
 }
 
+type DisableClientAuthenticationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the directory
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The type of client authentication to disable. Currently, only the parameter,
+	// SmartCard is supported.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"ClientAuthenticationType"`
+}
+
+// String returns the string representation
+func (s DisableClientAuthenticationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisableClientAuthenticationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisableClientAuthenticationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisableClientAuthenticationInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *DisableClientAuthenticationInput) SetDirectoryId(v string) *DisableClientAuthenticationInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *DisableClientAuthenticationInput) SetType(v string) *DisableClientAuthenticationInput {
+	s.Type = &v
+	return s
+}
+
+type DisableClientAuthenticationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisableClientAuthenticationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisableClientAuthenticationOutput) GoString() string {
+	return s.String()
+}
+
 type DisableLDAPSInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10099,6 +11004,75 @@ func (s *DomainControllerLimitExceededException) StatusCode() int {
 // RequestID returns the service's response RequestID for request.
 func (s *DomainControllerLimitExceededException) RequestID() string {
 	return s.RespMetadata.RequestID
+}
+
+type EnableClientAuthenticationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the specified directory.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+
+	// The type of client authentication to enable. Currently only the value SmartCard
+	// is supported. Smart card authentication in AD Connector requires that you
+	// enable Kerberos Constrained Delegation for the Service User to the LDAP service
+	// in the on-premises AD.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"ClientAuthenticationType"`
+}
+
+// String returns the string representation
+func (s EnableClientAuthenticationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EnableClientAuthenticationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnableClientAuthenticationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnableClientAuthenticationInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *EnableClientAuthenticationInput) SetDirectoryId(v string) *EnableClientAuthenticationInput {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *EnableClientAuthenticationInput) SetType(v string) *EnableClientAuthenticationInput {
+	s.Type = &v
+	return s
+}
+
+type EnableClientAuthenticationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s EnableClientAuthenticationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EnableClientAuthenticationOutput) GoString() string {
+	return s.String()
 }
 
 type EnableLDAPSInput struct {
@@ -10730,6 +11704,66 @@ func (s *InvalidCertificateException) StatusCode() int {
 
 // RequestID returns the service's response RequestID for request.
 func (s *InvalidCertificateException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Client authentication is already enabled.
+type InvalidClientAuthStatusException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The descriptive message for the exception.
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// The AWS request identifier.
+	RequestId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidClientAuthStatusException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidClientAuthStatusException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidClientAuthStatusException(v protocol.ResponseMetadata) error {
+	return &InvalidClientAuthStatusException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidClientAuthStatusException) Code() string {
+	return "InvalidClientAuthStatusException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidClientAuthStatusException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidClientAuthStatusException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidClientAuthStatusException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidClientAuthStatusException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidClientAuthStatusException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
@@ -11731,8 +12765,8 @@ func (s *LogSubscription) SetSubscriptionCreatedDateTime(v time.Time) *LogSubscr
 	return s
 }
 
-// The LDAP activities could not be performed because at least one valid certificate
-// must be registered with the system.
+// Client authentication setup could not be completed because at least one valid
+// certificate must be registered in the system.
 type NoAvailableCertificateException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -11943,8 +12977,9 @@ type RadiusSettings struct {
 	// attempted.
 	RadiusRetries *int64 `type:"integer"`
 
-	// An array of strings that contains the IP addresses of the RADIUS server endpoints,
-	// or the IP addresses of your RADIUS server load balancer.
+	// An array of strings that contains the fully qualified domain name (FQDN)
+	// or IP addresses of the RADIUS server endpoints, or the FQDN or IP addresses
+	// of your RADIUS server load balancer.
 	RadiusServers []*string `type:"list"`
 
 	// The amount of time, in seconds, to wait for the RADIUS server to respond.
@@ -12037,6 +13072,199 @@ func (s *RadiusSettings) SetUseSameUsername(v bool) *RadiusSettings {
 	return s
 }
 
+// The replicated Region information for a directory.
+type RegionDescription struct {
+	_ struct{} `type:"structure"`
+
+	// The desired number of domain controllers in the specified Region for the
+	// specified directory.
+	DesiredNumberOfDomainControllers *int64 `min:"2" type:"integer"`
+
+	// The identifier of the directory.
+	DirectoryId *string `type:"string"`
+
+	// The date and time that the Region description was last updated.
+	LastUpdatedDateTime *time.Time `type:"timestamp"`
+
+	// Specifies when the Region replication began.
+	LaunchTime *time.Time `type:"timestamp"`
+
+	// The name of the Region. For example, us-east-1.
+	RegionName *string `min:"8" type:"string"`
+
+	// Specifies whether the Region is the primary Region or an additional Region.
+	RegionType *string `type:"string" enum:"RegionType"`
+
+	// The status of the replication process for the specified Region.
+	Status *string `type:"string" enum:"DirectoryStage"`
+
+	// The date and time that the Region status was last updated.
+	StatusLastUpdatedDateTime *time.Time `type:"timestamp"`
+
+	// Contains VPC information for the CreateDirectory or CreateMicrosoftAD operation.
+	VpcSettings *DirectoryVpcSettings `type:"structure"`
+}
+
+// String returns the string representation
+func (s RegionDescription) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegionDescription) GoString() string {
+	return s.String()
+}
+
+// SetDesiredNumberOfDomainControllers sets the DesiredNumberOfDomainControllers field's value.
+func (s *RegionDescription) SetDesiredNumberOfDomainControllers(v int64) *RegionDescription {
+	s.DesiredNumberOfDomainControllers = &v
+	return s
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *RegionDescription) SetDirectoryId(v string) *RegionDescription {
+	s.DirectoryId = &v
+	return s
+}
+
+// SetLastUpdatedDateTime sets the LastUpdatedDateTime field's value.
+func (s *RegionDescription) SetLastUpdatedDateTime(v time.Time) *RegionDescription {
+	s.LastUpdatedDateTime = &v
+	return s
+}
+
+// SetLaunchTime sets the LaunchTime field's value.
+func (s *RegionDescription) SetLaunchTime(v time.Time) *RegionDescription {
+	s.LaunchTime = &v
+	return s
+}
+
+// SetRegionName sets the RegionName field's value.
+func (s *RegionDescription) SetRegionName(v string) *RegionDescription {
+	s.RegionName = &v
+	return s
+}
+
+// SetRegionType sets the RegionType field's value.
+func (s *RegionDescription) SetRegionType(v string) *RegionDescription {
+	s.RegionType = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *RegionDescription) SetStatus(v string) *RegionDescription {
+	s.Status = &v
+	return s
+}
+
+// SetStatusLastUpdatedDateTime sets the StatusLastUpdatedDateTime field's value.
+func (s *RegionDescription) SetStatusLastUpdatedDateTime(v time.Time) *RegionDescription {
+	s.StatusLastUpdatedDateTime = &v
+	return s
+}
+
+// SetVpcSettings sets the VpcSettings field's value.
+func (s *RegionDescription) SetVpcSettings(v *DirectoryVpcSettings) *RegionDescription {
+	s.VpcSettings = v
+	return s
+}
+
+// You have reached the limit for maximum number of simultaneous Region replications
+// per directory.
+type RegionLimitExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The descriptive message for the exception.
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// The AWS request identifier.
+	RequestId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s RegionLimitExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegionLimitExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorRegionLimitExceededException(v protocol.ResponseMetadata) error {
+	return &RegionLimitExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *RegionLimitExceededException) Code() string {
+	return "RegionLimitExceededException"
+}
+
+// Message returns the exception's message.
+func (s *RegionLimitExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *RegionLimitExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *RegionLimitExceededException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *RegionLimitExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *RegionLimitExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Provides information about the Regions that are configured for multi-Region
+// replication.
+type RegionsInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Lists the Regions where the directory has been replicated, excluding the
+	// primary Region.
+	AdditionalRegions []*string `type:"list"`
+
+	// The Region where the AWS Managed Microsoft AD directory was originally created.
+	PrimaryRegion *string `min:"8" type:"string"`
+}
+
+// String returns the string representation
+func (s RegionsInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegionsInfo) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalRegions sets the AdditionalRegions field's value.
+func (s *RegionsInfo) SetAdditionalRegions(v []*string) *RegionsInfo {
+	s.AdditionalRegions = v
+	return s
+}
+
+// SetPrimaryRegion sets the PrimaryRegion field's value.
+func (s *RegionsInfo) SetPrimaryRegion(v string) *RegionsInfo {
+	s.PrimaryRegion = &v
+	return s
+}
+
 type RegisterCertificateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -12045,10 +13273,18 @@ type RegisterCertificateInput struct {
 	// CertificateData is a required field
 	CertificateData *string `min:"1" type:"string" required:"true"`
 
+	// A ClientCertAuthSettings object that contains client certificate authentication
+	// settings.
+	ClientCertAuthSettings *ClientCertAuthSettings `type:"structure"`
+
 	// The identifier of the directory.
 	//
 	// DirectoryId is a required field
 	DirectoryId *string `type:"string" required:"true"`
+
+	// The function that the registered certificate performs. Valid values include
+	// ClientLDAPS or ClientCertAuth. The default value is ClientLDAPS.
+	Type *string `type:"string" enum:"CertificateType"`
 }
 
 // String returns the string representation
@@ -12073,6 +13309,11 @@ func (s *RegisterCertificateInput) Validate() error {
 	if s.DirectoryId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
 	}
+	if s.ClientCertAuthSettings != nil {
+		if err := s.ClientCertAuthSettings.Validate(); err != nil {
+			invalidParams.AddNested("ClientCertAuthSettings", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -12086,9 +13327,21 @@ func (s *RegisterCertificateInput) SetCertificateData(v string) *RegisterCertifi
 	return s
 }
 
+// SetClientCertAuthSettings sets the ClientCertAuthSettings field's value.
+func (s *RegisterCertificateInput) SetClientCertAuthSettings(v *ClientCertAuthSettings) *RegisterCertificateInput {
+	s.ClientCertAuthSettings = v
+	return s
+}
+
 // SetDirectoryId sets the DirectoryId field's value.
 func (s *RegisterCertificateInput) SetDirectoryId(v string) *RegisterCertificateInput {
 	s.DirectoryId = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *RegisterCertificateInput) SetType(v string) *RegisterCertificateInput {
+	s.Type = &v
 	return s
 }
 
@@ -12312,6 +13565,58 @@ func (s RemoveIpRoutesOutput) String() string {
 
 // GoString returns the string representation
 func (s RemoveIpRoutesOutput) GoString() string {
+	return s.String()
+}
+
+type RemoveRegionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the directory for which you want to remove Region replication.
+	//
+	// DirectoryId is a required field
+	DirectoryId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RemoveRegionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveRegionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveRegionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveRegionInput"}
+	if s.DirectoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DirectoryId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDirectoryId sets the DirectoryId field's value.
+func (s *RemoveRegionInput) SetDirectoryId(v string) *RemoveRegionInput {
+	s.DirectoryId = &v
+	return s
+}
+
+type RemoveRegionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RemoveRegionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveRegionOutput) GoString() string {
 	return s.String()
 }
 
@@ -14175,6 +15480,34 @@ func CertificateState_Values() []string {
 }
 
 const (
+	// CertificateTypeClientCertAuth is a CertificateType enum value
+	CertificateTypeClientCertAuth = "ClientCertAuth"
+
+	// CertificateTypeClientLdaps is a CertificateType enum value
+	CertificateTypeClientLdaps = "ClientLDAPS"
+)
+
+// CertificateType_Values returns all elements of the CertificateType enum
+func CertificateType_Values() []string {
+	return []string{
+		CertificateTypeClientCertAuth,
+		CertificateTypeClientLdaps,
+	}
+}
+
+const (
+	// ClientAuthenticationTypeSmartCard is a ClientAuthenticationType enum value
+	ClientAuthenticationTypeSmartCard = "SmartCard"
+)
+
+// ClientAuthenticationType_Values returns all elements of the ClientAuthenticationType enum
+func ClientAuthenticationType_Values() []string {
+	return []string{
+		ClientAuthenticationTypeSmartCard,
+	}
+}
+
+const (
 	// DirectoryEditionEnterprise is a DirectoryEdition enum value
 	DirectoryEditionEnterprise = "Enterprise"
 
@@ -14427,6 +15760,22 @@ func RadiusStatus_Values() []string {
 		RadiusStatusCreating,
 		RadiusStatusCompleted,
 		RadiusStatusFailed,
+	}
+}
+
+const (
+	// RegionTypePrimary is a RegionType enum value
+	RegionTypePrimary = "Primary"
+
+	// RegionTypeAdditional is a RegionType enum value
+	RegionTypeAdditional = "Additional"
+)
+
+// RegionType_Values returns all elements of the RegionType enum
+func RegionType_Values() []string {
+	return []string{
+		RegionTypePrimary,
+		RegionTypeAdditional,
 	}
 }
 

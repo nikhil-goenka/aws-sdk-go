@@ -103,7 +103,8 @@ func (c *Textract) AnalyzeDocumentRequest(input *AnalyzeDocumentInput) (req *req
 //
 //   * InvalidS3ObjectException
 //   Amazon Textract is unable to access the S3 object that's specified in the
-//   request.
+//   request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+//   For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
 //
 //   * UnsupportedDocumentException
 //   The format of the input document isn't supported. Documents for synchronous
@@ -112,14 +113,16 @@ func (c *Textract) AnalyzeDocumentRequest(input *AnalyzeDocumentInput) (req *req
 //
 //   * DocumentTooLargeException
 //   The document can't be processed because it's too large. The maximum document
-//   size for synchronous operations 5 MB. The maximum document size for asynchronous
+//   size for synchronous operations 10 MB. The maximum document size for asynchronous
 //   operations is 500 MB for PDF files.
 //
 //   * BadDocumentException
-//   Amazon Textract isn't able to read the document.
+//   Amazon Textract isn't able to read the document. For more information on
+//   the document limits in Amazon Textract, see limits.
 //
 //   * AccessDeniedException
-//   You aren't authorized to perform the action.
+//   You aren't authorized to perform the action. Use the Amazon Resource Name
+//   (ARN) of an authorized user or IAM role to perform the operation.
 //
 //   * ProvisionedThroughputExceededException
 //   The number of requests exceeded your throughput limit. If you want to increase
@@ -233,7 +236,8 @@ func (c *Textract) DetectDocumentTextRequest(input *DetectDocumentTextInput) (re
 //
 //   * InvalidS3ObjectException
 //   Amazon Textract is unable to access the S3 object that's specified in the
-//   request.
+//   request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+//   For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
 //
 //   * UnsupportedDocumentException
 //   The format of the input document isn't supported. Documents for synchronous
@@ -242,14 +246,16 @@ func (c *Textract) DetectDocumentTextRequest(input *DetectDocumentTextInput) (re
 //
 //   * DocumentTooLargeException
 //   The document can't be processed because it's too large. The maximum document
-//   size for synchronous operations 5 MB. The maximum document size for asynchronous
+//   size for synchronous operations 10 MB. The maximum document size for asynchronous
 //   operations is 500 MB for PDF files.
 //
 //   * BadDocumentException
-//   Amazon Textract isn't able to read the document.
+//   Amazon Textract isn't able to read the document. For more information on
+//   the document limits in Amazon Textract, see limits.
 //
 //   * AccessDeniedException
-//   You aren't authorized to perform the action.
+//   You aren't authorized to perform the action. Use the Amazon Resource Name
+//   (ARN) of an authorized user or IAM role to perform the operation.
 //
 //   * ProvisionedThroughputExceededException
 //   The number of requests exceeded your throughput limit. If you want to increase
@@ -385,7 +391,8 @@ func (c *Textract) GetDocumentAnalysisRequest(input *GetDocumentAnalysisInput) (
 //   your parameter before calling the API operation again.
 //
 //   * AccessDeniedException
-//   You aren't authorized to perform the action.
+//   You aren't authorized to perform the action. Use the Amazon Resource Name
+//   (ARN) of an authorized user or IAM role to perform the operation.
 //
 //   * ProvisionedThroughputExceededException
 //   The number of requests exceeded your throughput limit. If you want to increase
@@ -400,6 +407,11 @@ func (c *Textract) GetDocumentAnalysisRequest(input *GetDocumentAnalysisInput) (
 //   * ThrottlingException
 //   Amazon Textract is temporarily unable to process the request. Try your call
 //   again.
+//
+//   * InvalidS3ObjectException
+//   Amazon Textract is unable to access the S3 object that's specified in the
+//   request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+//   For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/textract-2018-06-27/GetDocumentAnalysis
 func (c *Textract) GetDocumentAnalysis(input *GetDocumentAnalysisInput) (*GetDocumentAnalysisOutput, error) {
@@ -511,7 +523,8 @@ func (c *Textract) GetDocumentTextDetectionRequest(input *GetDocumentTextDetecti
 //   your parameter before calling the API operation again.
 //
 //   * AccessDeniedException
-//   You aren't authorized to perform the action.
+//   You aren't authorized to perform the action. Use the Amazon Resource Name
+//   (ARN) of an authorized user or IAM role to perform the operation.
 //
 //   * ProvisionedThroughputExceededException
 //   The number of requests exceeded your throughput limit. If you want to increase
@@ -526,6 +539,11 @@ func (c *Textract) GetDocumentTextDetectionRequest(input *GetDocumentTextDetecti
 //   * ThrottlingException
 //   Amazon Textract is temporarily unable to process the request. Try your call
 //   again.
+//
+//   * InvalidS3ObjectException
+//   Amazon Textract is unable to access the S3 object that's specified in the
+//   request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+//   For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/textract-2018-06-27/GetDocumentTextDetection
 func (c *Textract) GetDocumentTextDetection(input *GetDocumentTextDetectionInput) (*GetDocumentTextDetectionOutput, error) {
@@ -626,7 +644,12 @@ func (c *Textract) StartDocumentAnalysisRequest(input *StartDocumentAnalysisInpu
 //
 //   * InvalidS3ObjectException
 //   Amazon Textract is unable to access the S3 object that's specified in the
-//   request.
+//   request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+//   For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
+//
+//   * InvalidKMSKeyException
+//   Indicates you do not have decrypt permissions with the KMS key entered, or
+//   the KMS key was entered incorrectly.
 //
 //   * UnsupportedDocumentException
 //   The format of the input document isn't supported. Documents for synchronous
@@ -635,14 +658,16 @@ func (c *Textract) StartDocumentAnalysisRequest(input *StartDocumentAnalysisInpu
 //
 //   * DocumentTooLargeException
 //   The document can't be processed because it's too large. The maximum document
-//   size for synchronous operations 5 MB. The maximum document size for asynchronous
+//   size for synchronous operations 10 MB. The maximum document size for asynchronous
 //   operations is 500 MB for PDF files.
 //
 //   * BadDocumentException
-//   Amazon Textract isn't able to read the document.
+//   Amazon Textract isn't able to read the document. For more information on
+//   the document limits in Amazon Textract, see limits.
 //
 //   * AccessDeniedException
-//   You aren't authorized to perform the action.
+//   You aren't authorized to perform the action. Use the Amazon Resource Name
+//   (ARN) of an authorized user or IAM role to perform the operation.
 //
 //   * ProvisionedThroughputExceededException
 //   The number of requests exceeded your throughput limit. If you want to increase
@@ -766,7 +791,12 @@ func (c *Textract) StartDocumentTextDetectionRequest(input *StartDocumentTextDet
 //
 //   * InvalidS3ObjectException
 //   Amazon Textract is unable to access the S3 object that's specified in the
-//   request.
+//   request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+//   For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
+//
+//   * InvalidKMSKeyException
+//   Indicates you do not have decrypt permissions with the KMS key entered, or
+//   the KMS key was entered incorrectly.
 //
 //   * UnsupportedDocumentException
 //   The format of the input document isn't supported. Documents for synchronous
@@ -775,14 +805,16 @@ func (c *Textract) StartDocumentTextDetectionRequest(input *StartDocumentTextDet
 //
 //   * DocumentTooLargeException
 //   The document can't be processed because it's too large. The maximum document
-//   size for synchronous operations 5 MB. The maximum document size for asynchronous
+//   size for synchronous operations 10 MB. The maximum document size for asynchronous
 //   operations is 500 MB for PDF files.
 //
 //   * BadDocumentException
-//   Amazon Textract isn't able to read the document.
+//   Amazon Textract isn't able to read the document. For more information on
+//   the document limits in Amazon Textract, see limits.
 //
 //   * AccessDeniedException
-//   You aren't authorized to perform the action.
+//   You aren't authorized to perform the action. Use the Amazon Resource Name
+//   (ARN) of an authorized user or IAM role to perform the operation.
 //
 //   * ProvisionedThroughputExceededException
 //   The number of requests exceeded your throughput limit. If you want to increase
@@ -829,7 +861,8 @@ func (c *Textract) StartDocumentTextDetectionWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
-// You aren't authorized to perform the action.
+// You aren't authorized to perform the action. Use the Amazon Resource Name
+// (ARN) of an authorized user or IAM role to perform the operation.
 type AccessDeniedException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -1016,7 +1049,8 @@ func (s *AnalyzeDocumentOutput) SetHumanLoopActivationOutput(v *HumanLoopActivat
 	return s
 }
 
-// Amazon Textract isn't able to read the document.
+// Amazon Textract isn't able to read the document. For more information on
+// the document limits in Amazon Textract, see limits.
 type BadDocumentException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -1192,6 +1226,10 @@ type Block struct {
 
 	// The word or line of text that's recognized by Amazon Textract.
 	Text *string `type:"string"`
+
+	// The kind of text that Amazon Textract has detected. Can check for handwritten
+	// text and printed text.
+	TextType *string `type:"string" enum:"TextType"`
 }
 
 // String returns the string representation
@@ -1279,6 +1317,12 @@ func (s *Block) SetSelectionStatus(v string) *Block {
 // SetText sets the Text field's value.
 func (s *Block) SetText(v string) *Block {
 	s.Text = &v
+	return s
+}
+
+// SetTextType sets the TextType field's value.
+func (s *Block) SetTextType(v string) *Block {
+	s.TextType = &v
 	return s
 }
 
@@ -1586,7 +1630,7 @@ func (s *DocumentMetadata) SetPages(v int64) *DocumentMetadata {
 }
 
 // The document can't be processed because it's too large. The maximum document
-// size for synchronous operations 5 MB. The maximum document size for asynchronous
+// size for synchronous operations 10 MB. The maximum document size for asynchronous
 // operations is 500 MB for PDF files.
 type DocumentTooLargeException struct {
 	_            struct{}                  `type:"structure"`
@@ -1770,7 +1814,8 @@ type GetDocumentAnalysisOutput struct {
 	// detection results.
 	NextToken *string `min:"1" type:"string"`
 
-	// The current status of an asynchronous document-analysis operation.
+	// Returns if the detection job could not be completed. Contains explanation
+	// for what error occured.
 	StatusMessage *string `type:"string"`
 
 	// A list of warnings that occurred during the document-analysis operation.
@@ -1920,7 +1965,8 @@ type GetDocumentTextDetectionOutput struct {
 	// results.
 	NextToken *string `min:"1" type:"string"`
 
-	// The current status of an asynchronous text-detection operation for the document.
+	// Returns if the detection job could not be completed. Contains explanation
+	// for what error occured.
 	StatusMessage *string `type:"string"`
 
 	// A list of warnings that occurred during the text-detection operation for
@@ -2126,10 +2172,13 @@ type HumanLoopQuotaExceededException struct {
 
 	Message_ *string `locationName:"message" type:"string"`
 
+	// The quota code.
 	QuotaCode *string `type:"string"`
 
+	// The resource type.
 	ResourceType *string `type:"string"`
 
+	// The service code.
 	ServiceCode *string `type:"string"`
 }
 
@@ -2351,6 +2400,63 @@ func (s *InvalidJobIdException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Indicates you do not have decrypt permissions with the KMS key entered, or
+// the KMS key was entered incorrectly.
+type InvalidKMSKeyException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidKMSKeyException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidKMSKeyException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidKMSKeyException(v protocol.ResponseMetadata) error {
+	return &InvalidKMSKeyException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidKMSKeyException) Code() string {
+	return "InvalidKMSKeyException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidKMSKeyException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidKMSKeyException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidKMSKeyException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidKMSKeyException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidKMSKeyException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // An input parameter violated a constraint. For example, in synchronous operations,
 // an InvalidParameterException exception occurs when neither of the S3Object
 // or Bytes values are supplied in the Document request parameter. Validate
@@ -2411,7 +2517,8 @@ func (s *InvalidParameterException) RequestID() string {
 }
 
 // Amazon Textract is unable to access the S3 object that's specified in the
-// request.
+// request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+// For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
 type InvalidS3ObjectException struct {
 	_            struct{}                  `type:"structure"`
 	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
@@ -2589,6 +2696,62 @@ func (s *NotificationChannel) SetSNSTopicArn(v string) *NotificationChannel {
 	return s
 }
 
+// Sets whether or not your output will go to a user created bucket. Used to
+// set the name of the bucket, and the prefix on the output file.
+type OutputConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the bucket your output will go to.
+	//
+	// S3Bucket is a required field
+	S3Bucket *string `min:"3" type:"string" required:"true"`
+
+	// The prefix of the object key that the output will be saved to. When not enabled,
+	// the prefix will be “textract_output".
+	S3Prefix *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s OutputConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OutputConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OutputConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OutputConfig"}
+	if s.S3Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Bucket"))
+	}
+	if s.S3Bucket != nil && len(*s.S3Bucket) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Bucket", 3))
+	}
+	if s.S3Prefix != nil && len(*s.S3Prefix) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Prefix", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *OutputConfig) SetS3Bucket(v string) *OutputConfig {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetS3Prefix sets the S3Prefix field's value.
+func (s *OutputConfig) SetS3Prefix(v string) *OutputConfig {
+	s.S3Prefix = &v
+	return s
+}
+
 // The X and Y coordinates of a point on a document page. The X and Y values
 // that are returned are ratios of the overall document page size. For example,
 // if the input document is 700 x 200 and the operation returns X=0.5 and Y=0.25,
@@ -2703,7 +2866,8 @@ type Relationship struct {
 	// block. The relationship can be VALUE or CHILD. A relationship of type VALUE
 	// is a list that contains the ID of the VALUE block that's associated with
 	// the KEY of a key-value pair. A relationship of type CHILD is a list of IDs
-	// that identify WORD blocks.
+	// that identify WORD blocks in the case of lines Cell blocks in the case of
+	// Tables, and WORD blocks in the case of Selection Elements.
 	Type *string `type:"string" enum:"RelationshipType"`
 }
 
@@ -2829,9 +2993,21 @@ type StartDocumentAnalysisInput struct {
 	// as a tax form or a receipt).
 	JobTag *string `min:"1" type:"string"`
 
+	// The KMS key used to encrypt the inference results. This can be in either
+	// Key ID or Key Alias format. When a KMS key is provided, the KMS key will
+	// be used for server-side encryption of the objects in the customer bucket.
+	// When this parameter is not enabled, the result will be encrypted server side,using
+	// SSE-S3.
+	KMSKeyId *string `min:"1" type:"string"`
+
 	// The Amazon SNS topic ARN that you want Amazon Textract to publish the completion
 	// status of the operation to.
 	NotificationChannel *NotificationChannel `type:"structure"`
+
+	// Sets if the output will go to a customer defined bucket. By default, Amazon
+	// Textract will save the results internally to be accessed by the GetDocumentAnalysis
+	// operation.
+	OutputConfig *OutputConfig `type:"structure"`
 }
 
 // String returns the string representation
@@ -2859,6 +3035,9 @@ func (s *StartDocumentAnalysisInput) Validate() error {
 	if s.JobTag != nil && len(*s.JobTag) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobTag", 1))
 	}
+	if s.KMSKeyId != nil && len(*s.KMSKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KMSKeyId", 1))
+	}
 	if s.DocumentLocation != nil {
 		if err := s.DocumentLocation.Validate(); err != nil {
 			invalidParams.AddNested("DocumentLocation", err.(request.ErrInvalidParams))
@@ -2867,6 +3046,11 @@ func (s *StartDocumentAnalysisInput) Validate() error {
 	if s.NotificationChannel != nil {
 		if err := s.NotificationChannel.Validate(); err != nil {
 			invalidParams.AddNested("NotificationChannel", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputConfig != nil {
+		if err := s.OutputConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputConfig", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -2900,9 +3084,21 @@ func (s *StartDocumentAnalysisInput) SetJobTag(v string) *StartDocumentAnalysisI
 	return s
 }
 
+// SetKMSKeyId sets the KMSKeyId field's value.
+func (s *StartDocumentAnalysisInput) SetKMSKeyId(v string) *StartDocumentAnalysisInput {
+	s.KMSKeyId = &v
+	return s
+}
+
 // SetNotificationChannel sets the NotificationChannel field's value.
 func (s *StartDocumentAnalysisInput) SetNotificationChannel(v *NotificationChannel) *StartDocumentAnalysisInput {
 	s.NotificationChannel = v
+	return s
+}
+
+// SetOutputConfig sets the OutputConfig field's value.
+func (s *StartDocumentAnalysisInput) SetOutputConfig(v *OutputConfig) *StartDocumentAnalysisInput {
+	s.OutputConfig = v
 	return s
 }
 
@@ -2952,9 +3148,21 @@ type StartDocumentTextDetectionInput struct {
 	// as a tax form or a receipt).
 	JobTag *string `min:"1" type:"string"`
 
+	// The KMS key used to encrypt the inference results. This can be in either
+	// Key ID or Key Alias format. When a KMS key is provided, the KMS key will
+	// be used for server-side encryption of the objects in the customer bucket.
+	// When this parameter is not enabled, the result will be encrypted server side,using
+	// SSE-S3.
+	KMSKeyId *string `min:"1" type:"string"`
+
 	// The Amazon SNS topic ARN that you want Amazon Textract to publish the completion
 	// status of the operation to.
 	NotificationChannel *NotificationChannel `type:"structure"`
+
+	// Sets if the output will go to a customer defined bucket. By default Amazon
+	// Textract will save the results internally to be accessed with the GetDocumentTextDetection
+	// operation.
+	OutputConfig *OutputConfig `type:"structure"`
 }
 
 // String returns the string representation
@@ -2979,6 +3187,9 @@ func (s *StartDocumentTextDetectionInput) Validate() error {
 	if s.JobTag != nil && len(*s.JobTag) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobTag", 1))
 	}
+	if s.KMSKeyId != nil && len(*s.KMSKeyId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("KMSKeyId", 1))
+	}
 	if s.DocumentLocation != nil {
 		if err := s.DocumentLocation.Validate(); err != nil {
 			invalidParams.AddNested("DocumentLocation", err.(request.ErrInvalidParams))
@@ -2987,6 +3198,11 @@ func (s *StartDocumentTextDetectionInput) Validate() error {
 	if s.NotificationChannel != nil {
 		if err := s.NotificationChannel.Validate(); err != nil {
 			invalidParams.AddNested("NotificationChannel", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputConfig != nil {
+		if err := s.OutputConfig.Validate(); err != nil {
+			invalidParams.AddNested("OutputConfig", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -3014,9 +3230,21 @@ func (s *StartDocumentTextDetectionInput) SetJobTag(v string) *StartDocumentText
 	return s
 }
 
+// SetKMSKeyId sets the KMSKeyId field's value.
+func (s *StartDocumentTextDetectionInput) SetKMSKeyId(v string) *StartDocumentTextDetectionInput {
+	s.KMSKeyId = &v
+	return s
+}
+
 // SetNotificationChannel sets the NotificationChannel field's value.
 func (s *StartDocumentTextDetectionInput) SetNotificationChannel(v *NotificationChannel) *StartDocumentTextDetectionInput {
 	s.NotificationChannel = v
+	return s
+}
+
+// SetOutputConfig sets the OutputConfig field's value.
+func (s *StartDocumentTextDetectionInput) SetOutputConfig(v *OutputConfig) *StartDocumentTextDetectionInput {
+	s.OutputConfig = v
 	return s
 }
 
@@ -3308,6 +3536,9 @@ const (
 
 	// RelationshipTypeChild is a RelationshipType enum value
 	RelationshipTypeChild = "CHILD"
+
+	// RelationshipTypeComplexFeatures is a RelationshipType enum value
+	RelationshipTypeComplexFeatures = "COMPLEX_FEATURES"
 )
 
 // RelationshipType_Values returns all elements of the RelationshipType enum
@@ -3315,6 +3546,7 @@ func RelationshipType_Values() []string {
 	return []string{
 		RelationshipTypeValue,
 		RelationshipTypeChild,
+		RelationshipTypeComplexFeatures,
 	}
 }
 
@@ -3331,5 +3563,21 @@ func SelectionStatus_Values() []string {
 	return []string{
 		SelectionStatusSelected,
 		SelectionStatusNotSelected,
+	}
+}
+
+const (
+	// TextTypeHandwriting is a TextType enum value
+	TextTypeHandwriting = "HANDWRITING"
+
+	// TextTypePrinted is a TextType enum value
+	TextTypePrinted = "PRINTED"
+)
+
+// TextType_Values returns all elements of the TextType enum
+func TextType_Values() []string {
+	return []string{
+		TextTypeHandwriting,
+		TextTypePrinted,
 	}
 }

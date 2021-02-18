@@ -1869,6 +1869,9 @@ func (c *Redshift) CreateSnapshotScheduleRequest(input *CreateSnapshotScheduleIn
 //   * ErrCodeScheduleDefinitionTypeUnsupportedFault "ScheduleDefinitionTypeUnsupported"
 //   The definition you submitted is not supported.
 //
+//   * ErrCodeInvalidTagFault "InvalidTagFault"
+//   The tag is invalid.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/CreateSnapshotSchedule
 func (c *Redshift) CreateSnapshotSchedule(input *CreateSnapshotScheduleInput) (*CreateSnapshotScheduleOutput, error) {
 	req, out := c.CreateSnapshotScheduleRequest(input)
@@ -1960,6 +1963,9 @@ func (c *Redshift) CreateTagsRequest(input *CreateTagsInput) (req *request.Reque
 //
 //   * ErrCodeInvalidTagFault "InvalidTagFault"
 //   The tag is invalid.
+//
+//   * ErrCodeInvalidClusterStateFault "InvalidClusterState"
+//   The specified cluster is not in the available state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/CreateTags
 func (c *Redshift) CreateTags(input *CreateTagsInput) (*CreateTagsOutput, error) {
@@ -3324,6 +3330,12 @@ func (c *Redshift) DescribeClusterDbRevisionsRequest(input *DescribeClusterDbRev
 		Name:       opDescribeClusterDbRevisions,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3373,6 +3385,58 @@ func (c *Redshift) DescribeClusterDbRevisionsWithContext(ctx aws.Context, input 
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeClusterDbRevisionsPages iterates over the pages of a DescribeClusterDbRevisions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeClusterDbRevisions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeClusterDbRevisions operation.
+//    pageNum := 0
+//    err := client.DescribeClusterDbRevisionsPages(params,
+//        func(page *redshift.DescribeClusterDbRevisionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeClusterDbRevisionsPages(input *DescribeClusterDbRevisionsInput, fn func(*DescribeClusterDbRevisionsOutput, bool) bool) error {
+	return c.DescribeClusterDbRevisionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeClusterDbRevisionsPagesWithContext same as DescribeClusterDbRevisionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeClusterDbRevisionsPagesWithContext(ctx aws.Context, input *DescribeClusterDbRevisionsInput, fn func(*DescribeClusterDbRevisionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeClusterDbRevisionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeClusterDbRevisionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeClusterDbRevisionsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeClusterParameterGroups = "DescribeClusterParameterGroups"
@@ -4179,6 +4243,12 @@ func (c *Redshift) DescribeClusterTracksRequest(input *DescribeClusterTracksInpu
 		Name:       opDescribeClusterTracks,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -4228,6 +4298,58 @@ func (c *Redshift) DescribeClusterTracksWithContext(ctx aws.Context, input *Desc
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeClusterTracksPages iterates over the pages of a DescribeClusterTracks operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeClusterTracks method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeClusterTracks operation.
+//    pageNum := 0
+//    err := client.DescribeClusterTracksPages(params,
+//        func(page *redshift.DescribeClusterTracksOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeClusterTracksPages(input *DescribeClusterTracksInput, fn func(*DescribeClusterTracksOutput, bool) bool) error {
+	return c.DescribeClusterTracksPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeClusterTracksPagesWithContext same as DescribeClusterTracksPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeClusterTracksPagesWithContext(ctx aws.Context, input *DescribeClusterTracksInput, fn func(*DescribeClusterTracksOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeClusterTracksInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeClusterTracksRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeClusterTracksOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeClusterVersions = "DescribeClusterVersions"
@@ -6245,6 +6367,12 @@ func (c *Redshift) DescribeSnapshotCopyGrantsRequest(input *DescribeSnapshotCopy
 		Name:       opDescribeSnapshotCopyGrants,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -6302,6 +6430,58 @@ func (c *Redshift) DescribeSnapshotCopyGrantsWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+// DescribeSnapshotCopyGrantsPages iterates over the pages of a DescribeSnapshotCopyGrants operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeSnapshotCopyGrants method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeSnapshotCopyGrants operation.
+//    pageNum := 0
+//    err := client.DescribeSnapshotCopyGrantsPages(params,
+//        func(page *redshift.DescribeSnapshotCopyGrantsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeSnapshotCopyGrantsPages(input *DescribeSnapshotCopyGrantsInput, fn func(*DescribeSnapshotCopyGrantsOutput, bool) bool) error {
+	return c.DescribeSnapshotCopyGrantsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeSnapshotCopyGrantsPagesWithContext same as DescribeSnapshotCopyGrantsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeSnapshotCopyGrantsPagesWithContext(ctx aws.Context, input *DescribeSnapshotCopyGrantsInput, fn func(*DescribeSnapshotCopyGrantsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeSnapshotCopyGrantsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeSnapshotCopyGrantsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeSnapshotCopyGrantsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeSnapshotSchedules = "DescribeSnapshotSchedules"
 
 // DescribeSnapshotSchedulesRequest generates a "aws/request.Request" representing the
@@ -6333,6 +6513,12 @@ func (c *Redshift) DescribeSnapshotSchedulesRequest(input *DescribeSnapshotSched
 		Name:       opDescribeSnapshotSchedules,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -6374,6 +6560,58 @@ func (c *Redshift) DescribeSnapshotSchedulesWithContext(ctx aws.Context, input *
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeSnapshotSchedulesPages iterates over the pages of a DescribeSnapshotSchedules operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeSnapshotSchedules method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeSnapshotSchedules operation.
+//    pageNum := 0
+//    err := client.DescribeSnapshotSchedulesPages(params,
+//        func(page *redshift.DescribeSnapshotSchedulesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeSnapshotSchedulesPages(input *DescribeSnapshotSchedulesInput, fn func(*DescribeSnapshotSchedulesOutput, bool) bool) error {
+	return c.DescribeSnapshotSchedulesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeSnapshotSchedulesPagesWithContext same as DescribeSnapshotSchedulesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeSnapshotSchedulesPagesWithContext(ctx aws.Context, input *DescribeSnapshotSchedulesInput, fn func(*DescribeSnapshotSchedulesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeSnapshotSchedulesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeSnapshotSchedulesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeSnapshotSchedulesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeStorage = "DescribeStorage"
@@ -6481,6 +6719,12 @@ func (c *Redshift) DescribeTableRestoreStatusRequest(input *DescribeTableRestore
 		Name:       opDescribeTableRestoreStatus,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -6536,6 +6780,58 @@ func (c *Redshift) DescribeTableRestoreStatusWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+// DescribeTableRestoreStatusPages iterates over the pages of a DescribeTableRestoreStatus operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeTableRestoreStatus method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeTableRestoreStatus operation.
+//    pageNum := 0
+//    err := client.DescribeTableRestoreStatusPages(params,
+//        func(page *redshift.DescribeTableRestoreStatusOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeTableRestoreStatusPages(input *DescribeTableRestoreStatusInput, fn func(*DescribeTableRestoreStatusOutput, bool) bool) error {
+	return c.DescribeTableRestoreStatusPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeTableRestoreStatusPagesWithContext same as DescribeTableRestoreStatusPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeTableRestoreStatusPagesWithContext(ctx aws.Context, input *DescribeTableRestoreStatusInput, fn func(*DescribeTableRestoreStatusOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeTableRestoreStatusInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeTableRestoreStatusRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeTableRestoreStatusOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeTags = "DescribeTags"
 
 // DescribeTagsRequest generates a "aws/request.Request" representing the
@@ -6567,6 +6863,12 @@ func (c *Redshift) DescribeTagsRequest(input *DescribeTagsInput) (req *request.R
 		Name:       opDescribeTags,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -6638,6 +6940,58 @@ func (c *Redshift) DescribeTagsWithContext(ctx aws.Context, input *DescribeTagsI
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// DescribeTagsPages iterates over the pages of a DescribeTags operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeTags method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeTags operation.
+//    pageNum := 0
+//    err := client.DescribeTagsPages(params,
+//        func(page *redshift.DescribeTagsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) DescribeTagsPages(input *DescribeTagsInput, fn func(*DescribeTagsOutput, bool) bool) error {
+	return c.DescribeTagsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeTagsPagesWithContext same as DescribeTagsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) DescribeTagsPagesWithContext(ctx aws.Context, input *DescribeTagsInput, fn func(*DescribeTagsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeTagsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeTagsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeTagsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opDescribeUsageLimits = "DescribeUsageLimits"
@@ -7316,6 +7670,12 @@ func (c *Redshift) GetReservedNodeExchangeOfferingsRequest(input *GetReservedNod
 		Name:       opGetReservedNodeExchangeOfferings,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -7379,6 +7739,58 @@ func (c *Redshift) GetReservedNodeExchangeOfferingsWithContext(ctx aws.Context, 
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// GetReservedNodeExchangeOfferingsPages iterates over the pages of a GetReservedNodeExchangeOfferings operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetReservedNodeExchangeOfferings method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetReservedNodeExchangeOfferings operation.
+//    pageNum := 0
+//    err := client.GetReservedNodeExchangeOfferingsPages(params,
+//        func(page *redshift.GetReservedNodeExchangeOfferingsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Redshift) GetReservedNodeExchangeOfferingsPages(input *GetReservedNodeExchangeOfferingsInput, fn func(*GetReservedNodeExchangeOfferingsOutput, bool) bool) error {
+	return c.GetReservedNodeExchangeOfferingsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetReservedNodeExchangeOfferingsPagesWithContext same as GetReservedNodeExchangeOfferingsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Redshift) GetReservedNodeExchangeOfferingsPagesWithContext(ctx aws.Context, input *GetReservedNodeExchangeOfferingsInput, fn func(*GetReservedNodeExchangeOfferingsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetReservedNodeExchangeOfferingsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetReservedNodeExchangeOfferingsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetReservedNodeExchangeOfferingsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opModifyCluster = "ModifyCluster"
@@ -9034,7 +9446,7 @@ func (c *Redshift) ResizeClusterRequest(input *ResizeClusterInput) (req *request
 //
 //    * You can only resize clusters of the following types: dc1.large (if your
 //    cluster is in a VPC) dc1.8xlarge (if your cluster is in a VPC) dc2.large
-//    dc2.8xlarge ds2.xlarge ds2.8xlarge ra3.4xlarge ra3.16xlarge
+//    dc2.8xlarge ds2.xlarge ds2.8xlarge ra3.xlplus ra3.4xlarge ra3.16xlarge
 //
 //    * The type of nodes that you add must match the node type for the cluster.
 //
@@ -9446,6 +9858,9 @@ func (c *Redshift) ResumeClusterRequest(input *ResumeClusterInput) (req *request
 //
 //   * ErrCodeInvalidClusterStateFault "InvalidClusterState"
 //   The specified cluster is not in the available state.
+//
+//   * ErrCodeInsufficientClusterCapacityFault "InsufficientClusterCapacity"
+//   The number of nodes specified exceeds the allotted capacity of the cluster.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/ResumeCluster
 func (c *Redshift) ResumeCluster(input *ResumeClusterInput) (*ResumeClusterOutput, error) {
@@ -10536,6 +10951,9 @@ type Cluster struct {
 	// The name of the Availability Zone in which the cluster is located.
 	AvailabilityZone *string `type:"string"`
 
+	// Describes the status of the Availability Zone relocation operation.
+	AvailabilityZoneRelocationStatus *string `type:"string"`
+
 	// The availability status of the cluster for queries. Possible values are the
 	// following:
 	//
@@ -10557,6 +10975,9 @@ type Cluster struct {
 
 	// The unique identifier of the cluster.
 	ClusterIdentifier *string `type:"string"`
+
+	// The namespace Amazon Resource Name (ARN) of the cluster.
+	ClusterNamespaceArn *string `type:"string"`
 
 	// The nodes in the cluster.
 	ClusterNodes []*ClusterNode `type:"list"`
@@ -10797,6 +11218,12 @@ func (s *Cluster) SetAvailabilityZone(v string) *Cluster {
 	return s
 }
 
+// SetAvailabilityZoneRelocationStatus sets the AvailabilityZoneRelocationStatus field's value.
+func (s *Cluster) SetAvailabilityZoneRelocationStatus(v string) *Cluster {
+	s.AvailabilityZoneRelocationStatus = &v
+	return s
+}
+
 // SetClusterAvailabilityStatus sets the ClusterAvailabilityStatus field's value.
 func (s *Cluster) SetClusterAvailabilityStatus(v string) *Cluster {
 	s.ClusterAvailabilityStatus = &v
@@ -10812,6 +11239,12 @@ func (s *Cluster) SetClusterCreateTime(v time.Time) *Cluster {
 // SetClusterIdentifier sets the ClusterIdentifier field's value.
 func (s *Cluster) SetClusterIdentifier(v string) *Cluster {
 	s.ClusterIdentifier = &v
+	return s
+}
+
+// SetClusterNamespaceArn sets the ClusterNamespaceArn field's value.
+func (s *Cluster) SetClusterNamespaceArn(v string) *Cluster {
+	s.ClusterNamespaceArn = &v
 	return s
 }
 
@@ -11846,6 +12279,10 @@ type CreateClusterInput struct {
 	// the current endpoint.
 	AvailabilityZone *string `type:"string"`
 
+	// The option to enable relocation for an Amazon Redshift cluster between Availability
+	// Zones after the cluster is created.
+	AvailabilityZoneRelocation *bool `type:"boolean"`
+
 	// A unique identifier for the cluster. You use this identifier to refer to
 	// the cluster for any subsequent cluster operations such as deleting or modifying.
 	// The identifier also appears in the Amazon Redshift console.
@@ -12030,7 +12467,7 @@ type CreateClusterInput struct {
 	// in the Amazon Redshift Cluster Management Guide.
 	//
 	// Valid Values: ds2.xlarge | ds2.8xlarge | dc1.large | dc1.8xlarge | dc2.large
-	// | dc2.8xlarge | ra3.4xlarge | ra3.16xlarge
+	// | dc2.8xlarge | ra3.xlplus | ra3.4xlarge | ra3.16xlarge
 	//
 	// NodeType is a required field
 	NodeType *string `type:"string" required:"true"`
@@ -12146,6 +12583,12 @@ func (s *CreateClusterInput) SetAutomatedSnapshotRetentionPeriod(v int64) *Creat
 // SetAvailabilityZone sets the AvailabilityZone field's value.
 func (s *CreateClusterInput) SetAvailabilityZone(v string) *CreateClusterInput {
 	s.AvailabilityZone = &v
+	return s
+}
+
+// SetAvailabilityZoneRelocation sets the AvailabilityZoneRelocation field's value.
+func (s *CreateClusterInput) SetAvailabilityZoneRelocation(v bool) *CreateClusterInput {
+	s.AvailabilityZoneRelocation = &v
 	return s
 }
 
@@ -18650,6 +19093,9 @@ type Endpoint struct {
 
 	// The port that the database engine is listening on.
 	Port *int64 `type:"integer"`
+
+	// Describes a connection endpoint.
+	VpcEndpoints []*VpcEndpoint `locationNameList:"VpcEndpoint" type:"list"`
 }
 
 // String returns the string representation
@@ -18671,6 +19117,12 @@ func (s *Endpoint) SetAddress(v string) *Endpoint {
 // SetPort sets the Port field's value.
 func (s *Endpoint) SetPort(v int64) *Endpoint {
 	s.Port = &v
+	return s
+}
+
+// SetVpcEndpoints sets the VpcEndpoints field's value.
+func (s *Endpoint) SetVpcEndpoints(v []*VpcEndpoint) *Endpoint {
+	s.VpcEndpoints = v
 	return s
 }
 
@@ -19768,6 +20220,14 @@ type ModifyClusterInput struct {
 	// Constraints: Must be a value from 0 to 35.
 	AutomatedSnapshotRetentionPeriod *int64 `type:"integer"`
 
+	// The option to initiate relocation for an Amazon Redshift cluster to the target
+	// Availability Zone.
+	AvailabilityZone *string `type:"string"`
+
+	// The option to enable relocation for an Amazon Redshift cluster between Availability
+	// Zones after the cluster modification is complete.
+	AvailabilityZoneRelocation *bool `type:"boolean"`
+
 	// The unique identifier of the cluster to be modified.
 	//
 	// Example: examplecluster
@@ -19928,7 +20388,7 @@ type ModifyClusterInput struct {
 	// in the Amazon Redshift Cluster Management Guide.
 	//
 	// Valid Values: ds2.xlarge | ds2.8xlarge | dc1.large | dc1.8xlarge | dc2.large
-	// | dc2.8xlarge | ra3.4xlarge | ra3.16xlarge
+	// | dc2.8xlarge | ra3.xlplus | ra3.4xlarge | ra3.16xlarge
 	NodeType *string `type:"string"`
 
 	// The new number of nodes of the cluster. If you specify a new number of nodes,
@@ -19940,6 +20400,9 @@ type ModifyClusterInput struct {
 	//
 	// Valid Values: Integer greater than 0.
 	NumberOfNodes *int64 `type:"integer"`
+
+	// The option to change the port of an Amazon Redshift cluster.
+	Port *int64 `type:"integer"`
 
 	// The weekly time range (in UTC) during which system maintenance can occur,
 	// if necessary. If system maintenance is necessary during the window, it may
@@ -20000,6 +20463,18 @@ func (s *ModifyClusterInput) SetAllowVersionUpgrade(v bool) *ModifyClusterInput 
 // SetAutomatedSnapshotRetentionPeriod sets the AutomatedSnapshotRetentionPeriod field's value.
 func (s *ModifyClusterInput) SetAutomatedSnapshotRetentionPeriod(v int64) *ModifyClusterInput {
 	s.AutomatedSnapshotRetentionPeriod = &v
+	return s
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *ModifyClusterInput) SetAvailabilityZone(v string) *ModifyClusterInput {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetAvailabilityZoneRelocation sets the AvailabilityZoneRelocation field's value.
+func (s *ModifyClusterInput) SetAvailabilityZoneRelocation(v bool) *ModifyClusterInput {
+	s.AvailabilityZoneRelocation = &v
 	return s
 }
 
@@ -20102,6 +20577,12 @@ func (s *ModifyClusterInput) SetNodeType(v string) *ModifyClusterInput {
 // SetNumberOfNodes sets the NumberOfNodes field's value.
 func (s *ModifyClusterInput) SetNumberOfNodes(v int64) *ModifyClusterInput {
 	s.NumberOfNodes = &v
+	return s
+}
+
+// SetPort sets the Port field's value.
+func (s *ModifyClusterInput) SetPort(v int64) *ModifyClusterInput {
+	s.Port = &v
 	return s
 }
 
@@ -22522,6 +23003,10 @@ type RestoreFromClusterSnapshotInput struct {
 	// Example: us-east-2a
 	AvailabilityZone *string `type:"string"`
 
+	// The option to enable relocation for an Amazon Redshift cluster between Availability
+	// Zones after the cluster is restored.
+	AvailabilityZoneRelocation *bool `type:"boolean"`
+
 	// The identifier of the cluster that will be created from restoring the snapshot.
 	//
 	// Constraints:
@@ -22737,6 +23222,12 @@ func (s *RestoreFromClusterSnapshotInput) SetAutomatedSnapshotRetentionPeriod(v 
 // SetAvailabilityZone sets the AvailabilityZone field's value.
 func (s *RestoreFromClusterSnapshotInput) SetAvailabilityZone(v string) *RestoreFromClusterSnapshotInput {
 	s.AvailabilityZone = &v
+	return s
+}
+
+// SetAvailabilityZoneRelocation sets the AvailabilityZoneRelocation field's value.
+func (s *RestoreFromClusterSnapshotInput) SetAvailabilityZoneRelocation(v bool) *RestoreFromClusterSnapshotInput {
+	s.AvailabilityZoneRelocation = &v
 	return s
 }
 
@@ -23799,6 +24290,10 @@ type Snapshot struct {
 	// using HSM keys.
 	EncryptedWithHSM *bool `type:"boolean"`
 
+	// The cluster version of the cluster used to create the snapshot. For example,
+	// 1.0.15503.
+	EngineFullVersion *string `type:"string"`
+
 	// An option that specifies whether to create the cluster with enhanced VPC
 	// routing enabled. To create a cluster that uses enhanced VPC routing, the
 	// cluster must be in a VPC. For more information, see Enhanced VPC Routing
@@ -23969,6 +24464,12 @@ func (s *Snapshot) SetEncrypted(v bool) *Snapshot {
 // SetEncryptedWithHSM sets the EncryptedWithHSM field's value.
 func (s *Snapshot) SetEncryptedWithHSM(v bool) *Snapshot {
 	s.EncryptedWithHSM = &v
+	return s
+}
+
+// SetEngineFullVersion sets the EngineFullVersion field's value.
+func (s *Snapshot) SetEngineFullVersion(v string) *Snapshot {
+	s.EngineFullVersion = &v
 	return s
 }
 
@@ -24795,6 +25296,32 @@ func (s *UsageLimit) SetTags(v []*Tag) *UsageLimit {
 // SetUsageLimitId sets the UsageLimitId field's value.
 func (s *UsageLimit) SetUsageLimitId(v string) *UsageLimit {
 	s.UsageLimitId = &v
+	return s
+}
+
+// The connection endpoint for connecting an Amazon Redshift cluster through
+// the proxy.
+type VpcEndpoint struct {
+	_ struct{} `type:"structure"`
+
+	// The connection endpoint ID for connecting an Amazon Redshift cluster through
+	// the proxy.
+	VpcEndpointId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s VpcEndpoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcEndpoint) GoString() string {
+	return s.String()
+}
+
+// SetVpcEndpointId sets the VpcEndpointId field's value.
+func (s *VpcEndpoint) SetVpcEndpointId(v string) *VpcEndpoint {
+	s.VpcEndpointId = &v
 	return s
 }
 

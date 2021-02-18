@@ -57,21 +57,20 @@ func (c *QLDBSession) SendCommandRequest(input *SendCommandInput) (req *request.
 //
 // Sends a command to an Amazon QLDB ledger.
 //
-// Instead of interacting directly with this API, we recommend that you use
-// the Amazon QLDB Driver or the QLDB Shell to execute data transactions on
-// a ledger.
+// Instead of interacting directly with this API, we recommend using the QLDB
+// driver or the QLDB shell to execute data transactions on a ledger.
 //
-//    * If you are working with an AWS SDK, use the QLDB Driver. The driver
-//    provides a high-level abstraction layer above this qldbsession data plane
+//    * If you are working with an AWS SDK, use the QLDB driver. The driver
+//    provides a high-level abstraction layer above this QLDB Session data plane
 //    and manages SendCommand API calls for you. For information and a list
 //    of supported programming languages, see Getting started with the driver
 //    (https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html)
 //    in the Amazon QLDB Developer Guide.
 //
 //    * If you are working with the AWS Command Line Interface (AWS CLI), use
-//    the QLDB Shell. The shell is a command line interface that uses the QLDB
-//    Driver to interact with a ledger. For information, see Accessing Amazon
-//    QLDB using the QLDB Shell (https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html).
+//    the QLDB shell. The shell is a command line interface that uses the QLDB
+//    driver to interact with a ledger. For information, see Accessing Amazon
+//    QLDB using the QLDB shell (https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -97,6 +96,9 @@ func (c *QLDBSession) SendCommandRequest(input *SendCommandInput) (req *request.
 //
 //   * LimitExceededException
 //   Returned if a resource limit such as number of active sessions is exceeded.
+//
+//   * CapacityExceededException
+//   Returned when the request exceeds the processing capacity of the ledger.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/qldb-session-2019-07-11/SendCommand
 func (c *QLDBSession) SendCommand(input *SendCommandInput) (*SendCommandOutput, error) {
@@ -138,6 +140,9 @@ func (s AbortTransactionRequest) GoString() string {
 // Contains the details of the aborted transaction.
 type AbortTransactionResult struct {
 	_ struct{} `type:"structure"`
+
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
 }
 
 // String returns the string representation
@@ -148,6 +153,12 @@ func (s AbortTransactionResult) String() string {
 // GoString returns the string representation
 func (s AbortTransactionResult) GoString() string {
 	return s.String()
+}
+
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *AbortTransactionResult) SetTimingInformation(v *TimingInformation) *AbortTransactionResult {
+	s.TimingInformation = v
+	return s
 }
 
 // Returned if the request is malformed or contains an error such as an invalid
@@ -209,6 +220,62 @@ func (s *BadRequestException) RequestID() string {
 	return s.RespMetadata.RequestID
 }
 
+// Returned when the request exceeds the processing capacity of the ledger.
+type CapacityExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s CapacityExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CapacityExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorCapacityExceededException(v protocol.ResponseMetadata) error {
+	return &CapacityExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *CapacityExceededException) Code() string {
+	return "CapacityExceededException"
+}
+
+// Message returns the exception's message.
+func (s *CapacityExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *CapacityExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *CapacityExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *CapacityExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *CapacityExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Contains the details of the transaction to commit.
 type CommitTransactionRequest struct {
 	_ struct{} `type:"structure"`
@@ -217,6 +284,11 @@ type CommitTransactionRequest struct {
 	// transaction, the commit digest must be passed. QLDB validates CommitDigest
 	// and rejects the commit with an error if the digest computed on the client
 	// does not match the digest computed by QLDB.
+	//
+	// The purpose of the CommitDigest parameter is to ensure that QLDB commits
+	// a transaction if and only if the server has processed the exact set of statements
+	// sent by the client, in the same order that client sent them, and with no
+	// duplicates.
 	//
 	// CommitDigest is automatically base64 encoded/decoded by the SDK.
 	//
@@ -279,6 +351,12 @@ type CommitTransactionResult struct {
 	// CommitDigest is automatically base64 encoded/decoded by the SDK.
 	CommitDigest []byte `type:"blob"`
 
+	// Contains metrics about the number of I/O requests that were consumed.
+	ConsumedIOs *IOUsage `type:"structure"`
+
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
+
 	// The transaction ID of the committed transaction.
 	TransactionId *string `min:"22" type:"string"`
 }
@@ -296,6 +374,18 @@ func (s CommitTransactionResult) GoString() string {
 // SetCommitDigest sets the CommitDigest field's value.
 func (s *CommitTransactionResult) SetCommitDigest(v []byte) *CommitTransactionResult {
 	s.CommitDigest = v
+	return s
+}
+
+// SetConsumedIOs sets the ConsumedIOs field's value.
+func (s *CommitTransactionResult) SetConsumedIOs(v *IOUsage) *CommitTransactionResult {
+	s.ConsumedIOs = v
+	return s
+}
+
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *CommitTransactionResult) SetTimingInformation(v *TimingInformation) *CommitTransactionResult {
+	s.TimingInformation = v
 	return s
 }
 
@@ -323,6 +413,9 @@ func (s EndSessionRequest) GoString() string {
 // Contains the details of the ended session.
 type EndSessionResult struct {
 	_ struct{} `type:"structure"`
+
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
 }
 
 // String returns the string representation
@@ -333,6 +426,12 @@ func (s EndSessionResult) String() string {
 // GoString returns the string representation
 func (s EndSessionResult) GoString() string {
 	return s.String()
+}
+
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *EndSessionResult) SetTimingInformation(v *TimingInformation) *EndSessionResult {
+	s.TimingInformation = v
+	return s
 }
 
 // Specifies a request to execute a statement.
@@ -417,8 +516,14 @@ func (s *ExecuteStatementRequest) SetTransactionId(v string) *ExecuteStatementRe
 type ExecuteStatementResult struct {
 	_ struct{} `type:"structure"`
 
+	// Contains metrics about the number of I/O requests that were consumed.
+	ConsumedIOs *IOUsage `type:"structure"`
+
 	// Contains the details of the first fetched page.
 	FirstPage *Page `type:"structure"`
+
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
 }
 
 // String returns the string representation
@@ -431,9 +536,21 @@ func (s ExecuteStatementResult) GoString() string {
 	return s.String()
 }
 
+// SetConsumedIOs sets the ConsumedIOs field's value.
+func (s *ExecuteStatementResult) SetConsumedIOs(v *IOUsage) *ExecuteStatementResult {
+	s.ConsumedIOs = v
+	return s
+}
+
 // SetFirstPage sets the FirstPage field's value.
 func (s *ExecuteStatementResult) SetFirstPage(v *Page) *ExecuteStatementResult {
 	s.FirstPage = v
+	return s
+}
+
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *ExecuteStatementResult) SetTimingInformation(v *TimingInformation) *ExecuteStatementResult {
+	s.TimingInformation = v
 	return s
 }
 
@@ -500,8 +617,14 @@ func (s *FetchPageRequest) SetTransactionId(v string) *FetchPageRequest {
 type FetchPageResult struct {
 	_ struct{} `type:"structure"`
 
+	// Contains metrics about the number of I/O requests that were consumed.
+	ConsumedIOs *IOUsage `type:"structure"`
+
 	// Contains details of the fetched page.
 	Page *Page `type:"structure"`
+
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
 }
 
 // String returns the string representation
@@ -514,9 +637,54 @@ func (s FetchPageResult) GoString() string {
 	return s.String()
 }
 
+// SetConsumedIOs sets the ConsumedIOs field's value.
+func (s *FetchPageResult) SetConsumedIOs(v *IOUsage) *FetchPageResult {
+	s.ConsumedIOs = v
+	return s
+}
+
 // SetPage sets the Page field's value.
 func (s *FetchPageResult) SetPage(v *Page) *FetchPageResult {
 	s.Page = v
+	return s
+}
+
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *FetchPageResult) SetTimingInformation(v *TimingInformation) *FetchPageResult {
+	s.TimingInformation = v
+	return s
+}
+
+// Contains I/O usage metrics for a command that was invoked.
+type IOUsage struct {
+	_ struct{} `type:"structure"`
+
+	// The number of read I/O requests that the command made.
+	ReadIOs *int64 `type:"long"`
+
+	// The number of write I/O requests that the command made.
+	WriteIOs *int64 `type:"long"`
+}
+
+// String returns the string representation
+func (s IOUsage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IOUsage) GoString() string {
+	return s.String()
+}
+
+// SetReadIOs sets the ReadIOs field's value.
+func (s *IOUsage) SetReadIOs(v int64) *IOUsage {
+	s.ReadIOs = &v
+	return s
+}
+
+// SetWriteIOs sets the WriteIOs field's value.
+func (s *IOUsage) SetWriteIOs(v int64) *IOUsage {
+	s.WriteIOs = &v
 	return s
 }
 
@@ -1033,6 +1201,9 @@ type StartSessionResult struct {
 	// Session token of the started session. This SessionToken is required for every
 	// subsequent command that is issued during the current session.
 	SessionToken *string `min:"4" type:"string"`
+
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
 }
 
 // String returns the string representation
@@ -1048,6 +1219,12 @@ func (s StartSessionResult) GoString() string {
 // SetSessionToken sets the SessionToken field's value.
 func (s *StartSessionResult) SetSessionToken(v string) *StartSessionResult {
 	s.SessionToken = &v
+	return s
+}
+
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *StartSessionResult) SetTimingInformation(v *TimingInformation) *StartSessionResult {
+	s.TimingInformation = v
 	return s
 }
 
@@ -1070,6 +1247,9 @@ func (s StartTransactionRequest) GoString() string {
 type StartTransactionResult struct {
 	_ struct{} `type:"structure"`
 
+	// Contains server-side performance information for the command.
+	TimingInformation *TimingInformation `type:"structure"`
+
 	// The transaction ID of the started transaction.
 	TransactionId *string `min:"22" type:"string"`
 }
@@ -1084,13 +1264,46 @@ func (s StartTransactionResult) GoString() string {
 	return s.String()
 }
 
+// SetTimingInformation sets the TimingInformation field's value.
+func (s *StartTransactionResult) SetTimingInformation(v *TimingInformation) *StartTransactionResult {
+	s.TimingInformation = v
+	return s
+}
+
 // SetTransactionId sets the TransactionId field's value.
 func (s *StartTransactionResult) SetTransactionId(v string) *StartTransactionResult {
 	s.TransactionId = &v
 	return s
 }
 
-// A structure that can contain an Amazon Ion value in multiple encoding formats.
+// Contains server-side performance information for a command. Amazon QLDB captures
+// timing information between the times when it receives the request and when
+// it sends the corresponding response.
+type TimingInformation struct {
+	_ struct{} `type:"structure"`
+
+	// The amount of time that QLDB spent on processing the command, measured in
+	// milliseconds.
+	ProcessingTimeMilliseconds *int64 `type:"long"`
+}
+
+// String returns the string representation
+func (s TimingInformation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TimingInformation) GoString() string {
+	return s.String()
+}
+
+// SetProcessingTimeMilliseconds sets the ProcessingTimeMilliseconds field's value.
+func (s *TimingInformation) SetProcessingTimeMilliseconds(v int64) *TimingInformation {
+	s.ProcessingTimeMilliseconds = &v
+	return s
+}
+
+// A structure that can contain a value in multiple encoding formats.
 type ValueHolder struct {
 	_ struct{} `type:"structure"`
 
